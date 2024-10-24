@@ -13,9 +13,10 @@ const Header = () => {
                 <h1>LearningHub</h1>
                 <div className="auth-buttons">
                     <button className="sign-up" onClick={() => navigate('/signup')}>Sign Up</button>
-                    <button className="login" onClick={() => navigate('/login')}>Login</button>
+                    <button className="login" onClick={() => navigate('/login')}>login</button>
                 </div>
             </div>
+            <div>this is my new modification</div>
         </header>
     );
 };
