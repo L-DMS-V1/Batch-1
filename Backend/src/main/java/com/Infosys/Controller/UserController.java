@@ -2,6 +2,7 @@ package com.Infosys.Controller;
 
 import com.Infosys.Entity.DTO.LoginDTO;
 import com.Infosys.Entity.DTO.UserDTO;
+import com.Infosys.Service.JWTService;
 import com.Infosys.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JWTService jwtService;
+
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO userDTO) {
         userService.createUser(userDTO);
@@ -29,7 +33,14 @@ public class UserController {
     public ResponseEntity<String> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
         String response = userService.login(loginDTO);
         if (response.equals("Login Successful")) {
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            // Generate JWT token after successful login
+            String token = jwtService.generateToken(loginDTO.getEmail()); // Assuming username is the subject
+
+            return ResponseEntity.ok()
+                    .header("Authorization", "Bearer " + token)
+                    .body("Login Successful");
+
+//            return new ResponseEntity<>(response, HttpStatus.OK);
         } else if (response.equals("User Not Found")) {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } else {

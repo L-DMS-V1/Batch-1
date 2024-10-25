@@ -8,11 +8,23 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "account_Id")
     private long accountId;
+
+    @Column(name = "account_Name")
     private String accountName;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "role")
     private String role;
 
     // Getters and setters
