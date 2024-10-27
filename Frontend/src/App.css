@@ -1,0 +1,24 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #242424;
+  color: white;
+}
+
+.card {
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.blue { background-color: blue; }
+.green { background-color: green; }
+.purple { background-color: purple; }
+
+.courses, .course-assignment, .requests {
+  margin: 2rem;
+}
