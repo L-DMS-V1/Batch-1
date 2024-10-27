@@ -1,9 +1,14 @@
 package com.Infosys.Service;
 
+import com.Infosys.Entity.Users;
+import com.Infosys.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -12,21 +17,35 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.cache.interceptor.SimpleKeyGenerator.generateKey;
 
 @Service
 public class JWTService {
 
+    // Hardcoded secret key (make sure it's base64-encoded for compatibility)
+    private static final String BASE64_SECRET_KEY = "3hRkY5F30Q9aE1/oRVFwT8N1DW3B/9+8OS1lDFGhfzs=";
+
     private Key key;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(JWTService.class);
+
     public JWTService() {
-        this.key = generateKey(); // Generate key on instantiation
+        this.key = Keys.hmacShaKeyFor(BASE64_SECRET_KEY.getBytes()); // Generate key on instantiation
     }
 
     public String generateToken(String subject) {
 
+        // Fetching role
+        Optional<Users> userOpt = userRepository.findByUsername(subject);
+        Users user = userOpt.get();
+
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", "ROLE_" + user.getRole());
 
         return Jwts.builder()
                 .setClaims(claims) // Add custom claims
@@ -45,7 +64,7 @@ public class JWTService {
         return Keys.secretKeyFor(SignatureAlgorithm.HS256); // Generate a key for HS256 algorithm
     }
 
-    public String extractEmail(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -65,8 +84,8 @@ public class JWTService {
 
     // Validate the token (Check if the token is valid and not expired)
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);  // Extract the email from the token
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));  // Validate if the email matches and token is not expired
+        final String username = extractUsername(token);  // Extract the email from the token
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));  // Validate if the email matches and token is not expired
     }
 
     // Check if the token has expired
@@ -79,4 +98,11 @@ public class JWTService {
         return extractClaim(token, Claims::getExpiration);  // Extract the expiration claim
     }
 
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+        return (String) claims.get("role");
+    }
 }

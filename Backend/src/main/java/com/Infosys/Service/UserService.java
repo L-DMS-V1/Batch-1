@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public String login(LoginDTO loginDTO) {
-        Optional<Users> userOpt = userRepository.findByEmail(loginDTO.getEmail());
+        Optional<Users> userOpt = userRepository.findByUsername(loginDTO.getUsername());
         if (userOpt.isPresent()) {
             Users user = userOpt.get();
             if (passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) { // Check hashed password

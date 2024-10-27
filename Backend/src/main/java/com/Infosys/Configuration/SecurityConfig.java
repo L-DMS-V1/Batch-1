@@ -4,6 +4,7 @@ import com.Infosys.Filter.JWTFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -26,6 +28,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/users/signup").permitAll()  // Allow signup without authentication
                         .requestMatchers("/api/users/login").permitAll()   // Allow login without authentication
+                        // Role-based access control
+                        .requestMatchers("/api/users/admin/**").hasRole("ADMIN")    // Only ADMINs can access /api/users/admin/**
+                        .requestMatchers("/api/users/manager/**").hasRole("MANAGER")  // Only MANAGER can access /api/users/manager/**
+                        .requestMatchers("/api/users/employee/**").hasRole("EMPLOYEE") // Only EMPLOYEEs can access /api/users/employee/**
+
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session

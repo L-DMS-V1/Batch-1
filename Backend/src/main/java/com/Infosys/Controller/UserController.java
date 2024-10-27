@@ -5,6 +5,7 @@ import com.Infosys.Entity.DTO.UserDTO;
 import com.Infosys.Service.JWTService;
 import com.Infosys.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +35,7 @@ public class UserController {
         String response = userService.login(loginDTO);
         if (response.equals("Login Successful")) {
             // Generate JWT token after successful login
-            String token = jwtService.generateToken(loginDTO.getEmail()); // Assuming username is the subject
+            String token = jwtService.generateToken(loginDTO.getUsername()); // Assuming username is the subject
 
             return ResponseEntity.ok()
                     .header("Authorization", "Bearer " + token)
@@ -47,4 +48,23 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public String adminAccess() {
+        return "Welcome, Admin!";
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/manager")
+    public String managerAccess() {
+        return "Welcome, Manager!";
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/employee")
+    public String employeeAccess() {
+        return "Welcome, Employee!";
+    }
+
 }

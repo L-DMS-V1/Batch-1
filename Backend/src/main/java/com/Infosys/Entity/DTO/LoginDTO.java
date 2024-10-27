@@ -1,25 +1,23 @@
 package com.Infosys.Entity.DTO;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginDTO {
 
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    private String email;
+    @NotBlank(message = "Username is mandatory")
+    private String username;
 
     @NotBlank(message = "Password is mandatory")
     private String password;
 
     // Getters and setters
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String email) {
+        this.username = email;
     }
 
     public String getPassword() {
@@ -33,7 +31,7 @@ public class LoginDTO {
     @Override
     public String toString() {
         return "LoginDTO{" +
-                "email='" + email + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
