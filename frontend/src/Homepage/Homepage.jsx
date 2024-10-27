@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Loginsignup.css';
+import "./homepage.css";
 
-const Home = () => {
-  const navigate = useNavigate();
+const Homepage = () => {
+    const navigate = useNavigate();
   const [action, setAction] = useState("Sign Up");
 
   const handleNavigation = () => {
-    setAction("Login");
     setAction("Sign up");
-    navigate('/loginsignup');
+    navigate('/signup');
   };
 
+  const handleNaviagtion2 = () =>{
+    setAction("Login");
+    navigate('/login')
+  };
   return (
     <div className="home">
       <div className='navbar'>
@@ -29,12 +32,12 @@ const Home = () => {
         <div className='submit2' onClick={handleNavigation}>
           Sign up
         </div>
-        <div className='submit3' onClick={handleNavigation}>
+        <div className='submit3' onClick={handleNaviagtion2}>
           Login
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Homepage
