@@ -1,24 +1,21 @@
-import React from 'react';
-import Dashboard from './components/Dashboard';
-import CourseList from './components/CourseList';
-import CourseAssignment from './components/CourseAssignment';
-import Requests from './components/Requests';
-import './App.css';
+// src/App.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SigninPage from "./pages/SigninPage";
+import WelcomePage from "./pages/WelcomePage";
+import SignupPage from "./pages/SignupPage"; // Import the SignupPage
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="navbar">
-        <h2>Learning Hub</h2>
-        <div className="user-info">Hey Admin! <button id="logout-btn">🔓</button></div>
-      </header>
-
-      <Dashboard />
-      <Requests />
-      <CourseList />
-      <CourseAssignment />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/signin" element={<SigninPage />} />
+        <Route path="/signup" element={<SignupPage />} />{" "}
+        {/* Add SignupPage route */}
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
