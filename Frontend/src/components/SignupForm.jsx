@@ -12,6 +12,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
 import { ScreenMode } from "../pages/SigninPage";
+import { Createemployee } from "../services/signupservices";
 
 const SignupForm = ({ onSwitchMode }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -119,6 +120,15 @@ const SignupForm = ({ onSwitchMode }) => {
       });
       // Handle signup logic
     }
+
+    e.preventDeafult();
+    const employee ={accountId,accountName, username,email, password, role,}
+    console.log(employee)
+    
+    Createemployee(employee).then((response) =>{
+    console.log(response.data);
+    })
+
   };
 
   return (

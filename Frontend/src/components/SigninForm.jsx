@@ -10,6 +10,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
 import { ScreenMode } from "../pages/SigninPage";
+import { Authemployee } from "../services/signinservices";
 
 const SigninForm = ({ onSwitchMode }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +62,14 @@ const SigninForm = ({ onSwitchMode }) => {
       console.log("Signing in with:", { email, password });
       // Handle sign-in logic
     }
+
+    e.preventDeafult();
+    const employee ={email,password}
+    console.log(employee)
+
+    Authemployee(employee).then((response) =>{
+      console.log(response.data);
+    })
   };
 
   return (
