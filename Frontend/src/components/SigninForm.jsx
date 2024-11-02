@@ -10,7 +10,8 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
 import { ScreenMode } from "../pages/SigninPage";
-import { Authemployee } from "../services/signinservices";
+import { jwtDecode } from 'jwt-decode';
+import { ENDPOINTS } from "../services/api"
 
 const SigninForm = ({ onSwitchMode }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,54 +24,35 @@ const SigninForm = ({ onSwitchMode }) => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSignIn = () => {
-    let isValid = true;
-    setEmailError("");
-    setPasswordError("");
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const response = await axios.post(ENDPOINTS.LOGIN, {
+        userName: username,
+        password
+      });
+      const { token } = response.data; // Assuming the response contains the token
+      const decodedToken = jwtDecode(token); // Decode the token to get user role
+      const userRole = decodedToken.role;
 
-    // Validate email
-    if (!email) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Email is not valid");
-      isValid = false;
+      localStorage.setItem('token', token);
+      localStorage.setItem('role', userRole);
+      
+      // Navigate to the respective dashboard based on the role
+      if (userRole === 'Admin') {
+        navigate('/admin-dashboard');
+      } else if (userRole === 'Manager') {
+        navigate('/manager-dashboard');
+      } else if (userRole === 'Employee') {
+        navigate('/employee-dashboard');
+      }
+    } catch (error) {
+      console.error('Login failed', error.response?.data);
+      setError('Login failed. Please check your credentials.');
     }
-
-    // Validate password
-    if (!password) {
-      setPasswordError("Password is required");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters long");
-      isValid = false;
-    } else if (!/[A-Z]/.test(password)) {
-      setPasswordError("Password must contain at least one uppercase letter");
-      isValid = false;
-    } else if (!/[a-z]/.test(password)) {
-      setPasswordError("Password must contain at least one lowercase letter");
-      isValid = false;
-    } else if (!/[0-9]/.test(password)) {
-      setPasswordError("Password must contain at least one number");
-      isValid = false;
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      setPasswordError("Password must contain at least one special character");
-      isValid = false;
-    }
-
-    if (isValid) {
-      console.log("Signing in with:", { email, password });
-      // Handle sign-in logic
-    }
-
-    e.preventDeafult();
-    const employee ={email,password}
-    console.log(employee)
-
-    Authemployee(employee).then((response) =>{
-      console.log(response.data);
-    })
   };
+
 
   return (
     <Stack

@@ -12,7 +12,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
 import { ScreenMode } from "../pages/SigninPage";
-import { Createemployee } from "../services/signupservices";
+import { ENDPOINTS } from "../services/api"
 
 const SignupForm = ({ onSwitchMode }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,102 +33,124 @@ const SignupForm = ({ onSwitchMode }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [error, setError] = useState('');
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const handleSignUp = () => {
-    let isValid = true;
-    setAccountIdError("");
-    setAccountNameError("");
-    setUsernameError("");
-    setEmailError("");
-    setPasswordError("");
-    setConfirmPasswordError("");
+  
+    // let isValid = true;
+    // setAccountIdError("");
+    // setAccountNameError("");
+    // setUsernameError("");
+    // setEmailError("");
+    // setPasswordError("");
+    // setConfirmPasswordError("");
 
-    // Validate Account ID (no specific validation needed for any characters)
-    if (!accountId) {
-      setAccountIdError("Account ID is required");
-      isValid = false;
-    }
+    // // Validate Account ID (no specific validation needed for any characters)
+    // if (!accountId) {
+    //   setAccountIdError("Account ID is required");
+    //   isValid = false;
+    // }
 
-    // Validate Account Name (uppercase, lowercase, '.', '_', no numbers)
-    if (!accountName) {
-      setAccountNameError("Account Name is required");
-      isValid = false;
-    } else if (!/^[a-zA-Z._]+$/.test(accountName)) {
-      setAccountNameError(
-        "Account Name can only contain letters, '.', and '_'"
-      );
-      isValid = false;
-    }
+    // // Validate Account Name (uppercase, lowercase, '.', '_', no numbers)
+    // if (!accountName) {
+    //   setAccountNameError("Account Name is required");
+    //   isValid = false;
+    // } else if (!/^[a-zA-Z._]+$/.test(accountName)) {
+    //   setAccountNameError(
+    //     "Account Name can only contain letters, '.', and '_'"
+    //   );
+    //   isValid = false;
+    // }
 
-    // Validate Username (uppercase, lowercase, numbers, special characters)
-    if (!username) {
-      setUsernameError("Username is required");
-      isValid = false;
-    } else if (!/^[a-zA-Z0-9._]+$/.test(username)) {
-      setUsernameError("Username can contain letters, numbers, '.', and '_'");
-      isValid = false;
-    }
+    // // Validate Username (uppercase, lowercase, numbers, special characters)
+    // if (!username) {
+    //   setUsernameError("Username is required");
+    //   isValid = false;
+    // } else if (!/^[a-zA-Z0-9._]+$/.test(username)) {
+    //   setUsernameError("Username can contain letters, numbers, '.', and '_'");
+    //   isValid = false;
+    // }
 
-    // Validate Email
-    if (!email) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Email is not valid");
-      isValid = false;
-    }
+    // // Validate Email
+    // if (!email) {
+    //   setEmailError("Email is required");
+    //   isValid = false;
+    // } else if (!/\S+@\S+\.\S+/.test(email)) {
+    //   setEmailError("Email is not valid");
+    //   isValid = false;
+    // }
 
-    // Validate Password
-    if (!password) {
-      setPasswordError("Password is required");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters long");
-      isValid = false;
-    } else if (!/[A-Z]/.test(password)) {
-      setPasswordError("Password must contain at least one uppercase letter");
-      isValid = false;
-    } else if (!/[a-z]/.test(password)) {
-      setPasswordError("Password must contain at least one lowercase letter");
-      isValid = false;
-    } else if (!/[0-9]/.test(password)) {
-      setPasswordError("Password must contain at least one number");
-      isValid = false;
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      setPasswordError("Password must contain at least one special character");
-      isValid = false;
-    }
+    // // Validate Password
+    // if (!password) {
+    //   setPasswordError("Password is required");
+    //   isValid = false;
+    // } else if (password.length < 8) {
+    //   setPasswordError("Password must be at least 8 characters long");
+    //   isValid = false;
+    // } else if (!/[A-Z]/.test(password)) {
+    //   setPasswordError("Password must contain at least one uppercase letter");
+    //   isValid = false;
+    // } else if (!/[a-z]/.test(password)) {
+    //   setPasswordError("Password must contain at least one lowercase letter");
+    //   isValid = false;
+    // } else if (!/[0-9]/.test(password)) {
+    //   setPasswordError("Password must contain at least one number");
+    //   isValid = false;
+    // } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    //   setPasswordError("Password must contain at least one special character");
+    //   isValid = false;
+    // }
 
-    // Validate Confirm Password
-    if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      isValid = false;
-    }
+    // // Validate Confirm Password
+    // if (password !== confirmPassword) {
+    //   setConfirmPasswordError("Passwords do not match");
+    //   isValid = false;
+    // }
 
-    if (isValid) {
-      console.log("Signing up with:", {
-        accountId,
-        accountName,
-        username,
-        email,
-        password,
-        role,
-      });
-      // Handle signup logic
-    }
+    // if (isValid) {
+    //   console.log("Signing up with:", {
+    //     accountId,
+    //     accountName,
+    //     username,
+    //     email,
+    //     password,
+    //     role,
+    //   });
+    //   // Handle signup logic
+    // }
 
-    e.preventDeafult();
-    const employee ={accountId,accountName, username,email, password, role,}
-    console.log(employee)
+    // e.preventDeafult();
+    // const employee ={accountId,accountName, username,email, password, role,}
+    // console.log(employee)
     
-    Createemployee(employee).then((response) =>{
-    console.log(response.data);
-    })
+    // Createemployee(employee).then((response) =>{
+    // console.log(response.data);
+    // })
 
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const response = await axios.post(ENDPOINTS.REGISTER, {
+        accountId: parseInt(accountId, 10), // Convert accountId to an integer
+        accountName,
+        userName:username,
+        password,
+        email,
+        role
+      });
+
+      
+      console.log('Registration successful', response.status);
+      navigate(ScreenMode.SIGN_IN)
+    } catch (error) {
+      console.error('Registration failed', error.response?.status);
+      setError('Registration failed. Please try again.');
+    }
   };
 
   return (
