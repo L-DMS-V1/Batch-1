@@ -3,6 +3,7 @@ package com.Infosys.Service;
 import com.Infosys.Entity.DTO.LoginDTO;
 import com.Infosys.Entity.DTO.UserDTO;
 import com.Infosys.Entity.Users;
+import com.Infosys.Repository.ManagerRepository;
 import com.Infosys.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,9 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private ManagerService managerService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void createUser(@Valid UserDTO userDTO) {
@@ -29,6 +33,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Hashing the password
         user.setRole(userDTO.getRole());
         userRepository.save(user);
+        if(userDTO.getRole().equals("MANAGER")){
+            managerService.addManager(userDTO);
+        }
     }
 
     public String login(LoginDTO loginDTO) {
