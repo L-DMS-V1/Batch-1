@@ -41,15 +41,4 @@ public class ManagerController {
         return ResponseEntity.ok(trainingRequest);
     }
 
-    @PutMapping("/acceptRequest/{id}")
-    public ResponseEntity<String> acceptRequest(@PathVariable("id") Long requestId) {
-        managerService.acceptRequest(requestId);
-        return ResponseEntity.ok("Request accepted successfully");
-    }
-
-    @PutMapping("/rejectRequest/{id}")
-    public ResponseEntity<String> rejectRequest(@PathVariable("id") Long requestId) {
-        managerService.rejectRequest(requestId);
-        return ResponseEntity.ok("Request rejected successfully");
-    }
 }

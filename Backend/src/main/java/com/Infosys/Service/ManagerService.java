@@ -57,19 +57,4 @@ public class ManagerService {
         return trainingRepository.findByRequestId(requestId);
     }
 
-    public void acceptRequest(Long requestId) {
-        TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
-        if (trainingRequest != null) {
-            trainingRequest.setStatus(RequestStatus.ACCEPTED);
-            trainingRepository.save(trainingRequest);
-        }
-    }
-
-    public void rejectRequest(Long requestId) {
-        TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
-        if (trainingRequest != null) {
-            trainingRequest.setStatus(RequestStatus.REJECTED);
-            trainingRepository.save(trainingRequest);
-        }
-    }
 }
