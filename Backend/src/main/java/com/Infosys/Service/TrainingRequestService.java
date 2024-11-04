@@ -6,6 +6,8 @@ import com.Infosys.Repository.TrainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TrainingRequestService {
 
@@ -26,5 +28,8 @@ public class TrainingRequestService {
             trainingRequest.setStatus(RequestStatus.REJECTED);
             trainingRepository.save(trainingRequest);
         }
+    }
+    public List<TrainingRequest> getAllRequests() {
+        return trainingRepository.findAll();
     }
 }
