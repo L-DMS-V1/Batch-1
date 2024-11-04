@@ -4,6 +4,7 @@ import com.Infosys.Entity.DTO.TrainingRequestDTO;
 import com.Infosys.Entity.DTO.UserDTO;
 import com.Infosys.Entity.Manager;
 import com.Infosys.Entity.TrainingRequest;
+import com.Infosys.Entity.RequestStatus;
 import com.Infosys.Repository.ManagerRepository;
 import com.Infosys.Repository.TrainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ManagerService {
     private ManagerRepository managerRepository;
 
     public void addManager(UserDTO userDTO) {
-        // This method is similar to createUser
+        // Add manager logic
         Manager manager = new Manager();
         manager.setAccountId(userDTO.getAccountId());
         manager.setAccountName(userDTO.getAccountName());
@@ -43,10 +44,9 @@ public class ManagerService {
         trainingRequest.setDuration(trainingRequestDTO.getDuration());
         trainingRequest.setEmployeePosition(trainingRequestDTO.getEmployeePosition());
         trainingRequest.setRequiredEmployees(trainingRequestDTO.getRequiredEmployees());
-        trainingRequest.setStatus("PENDING");
+        trainingRequest.setStatus(RequestStatus.PENDING);
         trainingRequest.setManagerUsername(username);
         trainingRepository.save(trainingRequest);
-
     }
 
     public List<TrainingRequest> getRequestByManagerName(String requestorname) {
@@ -57,5 +57,19 @@ public class ManagerService {
         return trainingRepository.findByRequestId(requestId);
     }
 
+    public void acceptRequest(Long requestId) {
+        TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
+        if (trainingRequest != null) {
+            trainingRequest.setStatus(RequestStatus.ACCEPTED);
+            trainingRepository.save(trainingRequest);
+        }
+    }
 
+    public void rejectRequest(Long requestId) {
+        TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
+        if (trainingRequest != null) {
+            trainingRequest.setStatus(RequestStatus.REJECTED);
+            trainingRepository.save(trainingRequest);
+        }
+    }
 }

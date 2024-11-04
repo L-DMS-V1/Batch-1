@@ -27,8 +27,9 @@ public class TrainingRequest {
     @Column(name = "required_Employees")
     private int requiredEmployees;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private RequestStatus status;
 
     @Column(name = "manager_Username")
     private String managerUsername;
@@ -89,9 +90,11 @@ public class TrainingRequest {
         this.requiredEmployees = requiredEmployees;
     }
 
-    public String getStatus() {return status;}
+    public RequestStatus getStatus() {
+        return status;
+    }
 
-    public void setStatus(String status) {
+    public void setStatus(RequestStatus status) {
         this.status = status;
     }
 
@@ -103,7 +106,6 @@ public class TrainingRequest {
         this.managerUsername = managerUsername;
     }
 
-
     @Override
     public String toString() {
         return "TrainingRequest{" +
@@ -113,9 +115,9 @@ public class TrainingRequest {
                 ", concepts='" + concepts + '\'' +
                 ", duration='" + duration + '\'' +
                 ", employeePosition='" + employeePosition + '\'' +
-                ", requiredEmployees=" + requiredEmployees + '\'' +
-                ", status='" + status + '\'' +
-                ", managerUsername='" + managerUsername +
+                ", requiredEmployees=" + requiredEmployees +
+                ", status=" + status +
+                ", managerUsername='" + managerUsername + '\'' +
                 '}';
     }
 }
