@@ -1,21 +1,22 @@
 // src/App.jsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SigninPage from "./pages/SigninPage";
-import WelcomePage from "./pages/WelcomePage";
-import SignupPage from "./pages/SignupPage"; // Import the SignupPage
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Welcome from './Welcome';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
+import Dashboard from './Dashboard';
 
-const App = () => {
+function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/signin" element={<SigninPage />} />
-        <Route path="/signup" element={<SignupPage />} />{" "}
-        {/* Add SignupPage route */}
+        <Route path="/" element={<Welcome />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
-};
+}
 
 export default App;
