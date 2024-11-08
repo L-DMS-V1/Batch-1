@@ -74,7 +74,7 @@ function SignUp() {
           <option value="MANAGER">MANAGER</option>
           <option value="EMPLOYEE">EMPLOYEE</option>
         </select>
-        <button type="submit">Sign Up</button>
+        <button type="submit" className='Sign'>Sign Up</button>
       </form>
       <div className='registerlink'>
           <p>Already have an account <Link to="/Signin">Signin</Link></p>
