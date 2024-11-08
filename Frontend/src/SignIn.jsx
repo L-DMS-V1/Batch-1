@@ -15,8 +15,8 @@ function SignIn() {
     e.preventDefault();
     try {
       const response = await loginUser(username, password);
-      if(response.data == "Login Successful"){
-        console.log(response.data)
+      if(response){
+        console.log("Login Successful")
         setMessage(response.message || 'Logged in successfully');
         navigator('/dashboard')
       }else{

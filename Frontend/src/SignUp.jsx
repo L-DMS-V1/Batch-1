@@ -10,7 +10,7 @@ function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('employee'); // Default role
+  const [role, setRole] = useState(''); 
   const [message, setMessage] = useState('');
 
   const navigator = useNavigate();
@@ -19,6 +19,7 @@ function SignUp() {
     e.preventDefault();
     try {
       const response = await registerUser({ accountId, accountName, username, email, password, role });
+      console.log({ accountId, accountName, username, email, password, role });
       if(response.data == "User registered successfully"){
         console.log(response.data)
         setMessage(response.message || 'Registered successfully');
@@ -67,6 +68,7 @@ function SignUp() {
           onChange={(e) => setPassword(e.target.value)} 
         />
         <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <option value="">--Select Role--</option>
           <option value="ADMIN">ADMIN</option>
           <option value="MANAGER">MANAGER</option>
           <option value="EMPLOYEE">EMPLOYEE</option>
