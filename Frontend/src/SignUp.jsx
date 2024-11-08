@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { registerUser } from './Api';
 import './styles.css';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
   const [accountId, setAccountId] = useState('');
@@ -75,6 +76,9 @@ function SignUp() {
         </select>
         <button type="submit">Sign Up</button>
       </form>
+      <div className='registerlink'>
+          <p>Already have an account <Link to="/Signin">Signin</Link></p>
+        </div>
       <p>{message}</p>
     </div>
   );

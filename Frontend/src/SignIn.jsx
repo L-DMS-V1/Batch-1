@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { loginUser } from './Api';
 import './styles.css';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function SignIn() {
   const [username, setUsername] = useState('');
@@ -45,8 +46,11 @@ function SignIn() {
           value={password} 
           onChange={(e) => setPassword(e.target.value)} 
         />
-        <button type="submit">Sign In</button>
+        <button type="submit" className='Sign'>Sign In</button>
       </form>
+      <div>
+          <p>Don't have an account? <Link to="/signup">Sign Up Now!</Link></p>
+        </div>
       <p>{message}</p>
     </div>
   );

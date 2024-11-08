@@ -1,11 +1,15 @@
 // src/ManagerPage.jsx
 import React from 'react';
-import './styles.css';
 
 function ManagerPage() {
   return (
-    <div className="center-container">
-      <h1>Hi Manager</h1>
+    <div className="centercontainer">
+      <header className="header">
+      <h1>Learning Hub</h1>
+      <div className="user-info">
+        <span>Hey Manager!</span>
+      </div>
+    </header>
     </div>
   );
 }
