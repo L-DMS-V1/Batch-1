@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './managerpage.css'
+import { useNavigate } from 'react-router-dom';
 
 function LearningHub() {
   const [requests, setRequests] = useState([]);
   const [totalRequests, setTotalRequests] = useState(0);
   const [completedRequests, setCompletedRequests] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
+  const navigator= useNavigate();
 
   useEffect(() => {
     // Fetch data from an API or mock data
@@ -27,6 +29,8 @@ function LearningHub() {
   const handleNewRequest = () => {
     // Handle creating a new request (e.g., open a modal or form)
     console.log('Creating new request...');
+    navigator('/newrequest')
+
   };
 
   return (

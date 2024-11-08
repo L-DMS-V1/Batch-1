@@ -1,7 +1,7 @@
 // src/Welcome.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './welcome.css'  
+// import './welcome.css'  
 
 function Welcome() {
   return (

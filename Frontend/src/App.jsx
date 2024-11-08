@@ -8,6 +8,8 @@ import Dashboard from './Dashboard';
 import AdminPage from './AdminPage';
 import EmployeePage from './EmployeePage';
 import ManagerPage from './ManagerPage';
+import Managerrequest from './Managerrequest';
+
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/manager" element={<ManagerPage />} />
-        <Route path="/employee" element={<EmployeePage />} />
+        <Route path='/newrequest' element={<Managerrequest />} />
+        <Route path="/employee" element={<EmployeePage />} />        
       </Routes>
     </Router>
   );
