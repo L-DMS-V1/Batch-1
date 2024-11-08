@@ -40,7 +40,7 @@ public class UserController {
 
             return ResponseEntity.ok()
                     .header("Authorization", "Bearer " + token)
-                    .body("Login Successful");
+                    .body(token);
 
 //            return new ResponseEntity<>(response, HttpStatus.OK);
         } else if (response.equals("User Not Found")) {
