@@ -2,11 +2,12 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-const API_URL = 'http://localhost:8080/api/users';
+const API_URL1 = 'http://localhost:8080/api/users';
+const API_URL2 = 'http://localhost:8080/api/manager';
 
 export const registerUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/signup`, userData);
+    const response = await axios.post(`${API_URL1}/signup`, userData);
     return response;
   } catch (error) {
     throw error;
@@ -15,7 +16,7 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async (username, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, { username, password });
+    const response = await axios.post(`${API_URL1}/login`, { username, password });
 
    // Check for Authorization header specifically
   //  console.log(response.headers)
@@ -37,22 +38,24 @@ export const loginUser = async (username, password) => {
   }
 };
 
-// Add a function to get the stored token
-export const getAuthToken = () => {
-  return localStorage.getItem('token');
-};
+// Function to retrieve the token from localStorage
+export const getAuthToken = () => localStorage.getItem('token');
 
-// Add an interceptor to include the token in headers of future requests
+// Set up Axios instance with interceptor to include the token in request headers
 const axiosInstance = axios.create();
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = getAuthToken();
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => Promise.reject(error));
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = getAuthToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
+// Function to get resource based on role
 export const getResource = async (role) => {
   const rolePathMap = {
     'ROLE_ADMIN': '/admin',
@@ -62,8 +65,28 @@ export const getResource = async (role) => {
   
   try {
     const path = rolePathMap[role] || '/employee';
-    const response = await axiosInstance.get(`${API_URL}${path}`);
-    console.log(response.data);
+    const response = await axiosInstance.get(`${API_URL1}${path}`);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRequests = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL2}/getRequests`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createRequest = async (requestData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL2}/createRequest`,requestData);
+    console.log("Response Data\n", response.data);
     return response;
   } catch (error) {
     throw error;
@@ -71,7 +94,10 @@ export const getResource = async (role) => {
 };
 
 
+
+
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('role');
 };
+

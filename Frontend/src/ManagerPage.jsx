@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './managerpage.css'
 import { useNavigate } from 'react-router-dom';
+import { getRequests } from './Api';
 
 function LearningHub() {
   const [requests, setRequests] = useState([]);
@@ -10,21 +11,22 @@ function LearningHub() {
   const navigator= useNavigate();
 
   useEffect(() => {
-    // Fetch data from an API or mock data
-    const mockRequests = [
-      {
-        trainingProgram: 'Java',
-        position: 'Developer',
-        status: 'COMPLETED',
-        createdDate: '15/9/2024',
-      },
-    ];
-
-    setRequests(mockRequests);
-    setTotalRequests(mockRequests.length);
-    setCompletedRequests(mockRequests.filter(r => r.status === 'COMPLETED').length);
-    setPendingRequests(mockRequests.filter(r => r.status !== 'COMPLETED').length);
+    // Define an async function to fetch data
+    const fetchRequests = async () => {
+      try {
+        const mockRequests = await getRequests(); // Await the async getRequests function
+        setRequests(mockRequests);
+        setTotalRequests(mockRequests.length);
+        setCompletedRequests(mockRequests.filter(r => r.status === 'COMPLETED').length);
+        setPendingRequests(mockRequests.filter(r => r.status !== 'COMPLETED').length);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+  
+    fetchRequests(); // Call the async function
   }, []);
+  
 
   const handleNewRequest = () => {
     // Handle creating a new request (e.g., open a modal or form)
@@ -32,7 +34,7 @@ function LearningHub() {
     navigator('/newrequest')
 
   };
-
+  
   return (
     <div className="learning-hub">
       <div className="header">
@@ -70,17 +72,17 @@ function LearningHub() {
             <th>Training Program</th>
             <th>Position</th>
             <th>Status</th>
-            <th>Created Date</th>
+            <th>Required Employees</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {requests.map((request, index) => (
             <tr key={index}>
-              <td>{request.trainingProgram}</td>
-              <td>{request.position}</td>
+              <td>{request.courseName}</td>
+              <td>{request.employeePosition}</td>
               <td>{request.status}</td>
-              <td>{request.createdDate}</td>
+              <td>{request.requiredEmployees}</td>
               <td><button className="view-button">View</button></td>
             </tr>
           ))}

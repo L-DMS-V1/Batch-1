@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
+import { getResource } from './Api';
 
 function Dashboard() {
   const [role, setRole] = useState('');
@@ -15,6 +16,7 @@ function Dashboard() {
 
   const handleButtonClick = () => {
     console.log(role)
+    getResource(role)
     if (role === 'ROLE_ADMIN') {
       navigate('/admin');
     } else if (role === 'ROLE_MANAGER') {
