@@ -8,7 +8,7 @@ import Dashboard from './Dashboard';
 import AdminPage from './AdminPage';
 import EmployeePage from './EmployeePage';
 import ManagerPage from './ManagerPage';
-import Managerrequest from './Managerrequest';
+import CreateRequest from './CreateRequest';
 
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/manager" element={<ManagerPage />} />
-        <Route path='/newrequest' element={<Managerrequest />} />
+        <Route path='/createrequest' element={<CreateRequest />} />
         <Route path="/employee" element={<EmployeePage />} />        
       </Routes>
     </Router>
