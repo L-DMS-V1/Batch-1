@@ -28,7 +28,8 @@ function App() {
       <header className="navbar">
         <h2>Learning Hub</h2>
         <div className="user-info">
-          Hey Admin! <button id="logout-btn" onClick={() => alert("Logged out!")}>🔓</button>
+          Admin
+          <button id="output-btn" onClick={() => alert("Logged Out Sucessfully!")}>Logout</button>
         </div>
       </header>
 
