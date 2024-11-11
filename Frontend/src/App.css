@@ -1,4 +1,3 @@
-/* App.css */
 
 * {
   margin: 0;
@@ -9,19 +8,8 @@
 html, body, #root, .App {
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f4f4f9;
-}
-
-.App {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff3f3;
 }
 
 .navbar {
@@ -40,65 +28,181 @@ html, body, #root, .App {
   align-items: center;
 }
 
-#logout-btn {
-  background: transparent;
+#output-btn {
+  background: hsl(1, 100%, 90%);
   border: none;
-  color: #ffcccb;
+  color: #333;
   margin-left: 10px;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
+#output-btn:hover {
+  background-color: #ff8c8c;
+}
 .centered-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  max-width: 1200px;
+  justify-content: center;
   padding: 20px;
 }
 
 h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  font-size: 3rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
 }
-
 .navigation-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin: 1rem 0;
 }
 
 .navigation-buttons button {
   padding: 0.75rem 2rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   border: none;
   background-color: #444;
   color: white;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .navigation-buttons button:hover {
   background-color: #666;
+  transform: translateY(-2px);
 }
 
 .section-content {
   width: 100%;
   max-width: 800px;
-  margin-top: 2rem;
-  background: #ffffff;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  text-align: left;
+  margin-top: 2rem;
+  transition: box-shadow 0.3s;
 }
 
-.section-content h2 {
+.section-content:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.course-assignment, .courses, .requests {
+  margin-top: 1rem;
+}
+
+.course-assignment h3,
+.courses h3,
+.requests h3 {
   font-size: 1.5rem;
+  color: #333;
   margin-bottom: 1rem;
+}
+
+.course-card, .request-box {
+  background: #f8f9fb;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.course-card:hover, .request-box:hover {
+  transform: translateY(-3px);
+}
+
+.course-card h4 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.course-card button, .requests button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #555;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.course-card button:hover, .requests button:hover {
+  background-color: #777;
+}
+
+/* Existing styles remain the same */
+
+/* Dashboard box styles */
+.dashboard-box-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-box {
+  flex: 1;
+  text-align: center;
+  padding: 1.5rem;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-box.courses {
+  background-color: #3498db; /* Blue color for Courses Created */
+}
+
+.dashboard-box.employees {
+  background-color: #2ecc71; /* Green color for Employees */
+}
+
+.dashboard-box.requests {
+  background-color: #9b59b6; /* Purple color for Requests */
+}
+
+/* Styling for add button */
+.add-button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+  align-self: flex-end;
+}
+
+.add-button:hover {
+  background-color: #2980b9;
+}
+
+/* Adjustments for centered dashboard title */
+.centered-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
 }
