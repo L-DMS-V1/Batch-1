@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './managerpage.css'
 import { useNavigate } from 'react-router-dom';
 import { getRequests } from './Api';
 
@@ -8,13 +7,12 @@ function LearningHub() {
   const [totalRequests, setTotalRequests] = useState(0);
   const [completedRequests, setCompletedRequests] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
-  const navigator= useNavigate();
+  const navigator = useNavigate();
 
   useEffect(() => {
-    // Define an async function to fetch data
     const fetchRequests = async () => {
       try {
-        const mockRequests = await getRequests(); // Await the async getRequests function
+        const mockRequests = await getRequests();
         setRequests(mockRequests);
         setTotalRequests(mockRequests.length);
         setCompletedRequests(mockRequests.filter(r => r.status === 'COMPLETED').length);
@@ -23,71 +21,77 @@ function LearningHub() {
         console.error("Error fetching requests:", error);
       }
     };
-  
-    fetchRequests(); // Call the async function
+
+    fetchRequests();
   }, []);
-  
 
   const handleNewRequest = () => {
-    // Handle creating a new request (e.g., open a modal or form)
-    console.log('Creating new request...');
-    navigator('/newrequest')
-
+    navigator('/newrequest');
   };
-  
+
   return (
-    <div className="learning-hub">
-      <div className="header">
-        <div className="title">Learning Hub</div>
-        <div className="manager-info">
-          Hey Manager!
-          <button className="power-button">
-            <i className="fa fa-power-off"></i>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded shadow">
+        <h1 className="text-2xl font-semibold">Learning Hub</h1>
+        <div className="flex items-center space-x-2">
+          <span className="text-lg">Hey Manager!</span>
+          <button className="text-red-500 hover:text-red-700">
+            <i className="fa fa-power-off text-xl"></i>
           </button>
         </div>
       </div>
 
-      <div className="request-summary">
-        <div className="request-card">
-          <h3>Total Requests</h3>
-          <p>{totalRequests}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-medium">Total Requests</h3>
+          <p className="text-2xl font-bold">{totalRequests}</p>
         </div>
-        <div className="request-card">
-          <h3>Completed Requests</h3>
-          <p>{completedRequests}</p>
+        <div className="bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-medium">Completed Requests</h3>
+          <p className="text-2xl font-bold">{completedRequests}</p>
         </div>
-        <div className="request-card">
-          <h3>Pending Requests</h3>
-          <p>{pendingRequests}</p>
+        <div className="bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-medium">Pending Requests</h3>
+          <p className="text-2xl font-bold">{pendingRequests}</p>
         </div>
       </div>
 
-      <button className="new-request-button" onClick={handleNewRequest}>
+      <div className='flex justify-center mb-4 ml-15'>
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded mb-4"
+        onClick={handleNewRequest}
+      >
         Create New Request
-      </button>
+      </button></div>
 
-      <table className="request-table">
-        <thead>
-          <tr>
-            <th>Training Program</th>
-            <th>Position</th>
-            <th>Status</th>
-            <th>Required Employees</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {requests.map((request, index) => (
-            <tr key={index}>
-              <td>{request.courseName}</td>
-              <td>{request.employeePosition}</td>
-              <td>{request.status}</td>
-              <td>{request.requiredEmployees}</td>
-              <td><button className="view-button">View</button></td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded shadow">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="py-2 px-4 border-b">Training Program</th>
+              <th className="py-2 px-4 border-b">Position</th>
+              <th className="py-2 px-4 border-b">Status</th>
+              <th className="py-2 px-4 border-b">Required Employees</th>
+              <th className="py-2 px-4 border-b">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {requests.map((request, index) => (
+              <tr key={index} className="hover:bg-gray-100">
+                <td className="py-2 px-4 border-b">{request.courseName}</td>
+                <td className="py-2 px-4 border-b">{request.employeePosition}</td>
+                <td className="py-2 px-4 border-b">{request.status}</td>
+                <td className="py-2 px-4 border-b">{request.requiredEmployees}</td>
+                <td className="py-2 px-4 border-b">
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
