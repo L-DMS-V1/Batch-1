@@ -83,7 +83,8 @@ function LearningHub() {
                 <td className="py-2 px-4 border-b">{request.status}</td>
                 <td className="py-2 px-4 border-b">{request.requiredEmployees}</td>
                 <td className="py-2 px-4 border-b">
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+                  <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                 onClick={() => alert(`Status: ${request.status}`)}>
                     View
                   </button>
                 </td>
