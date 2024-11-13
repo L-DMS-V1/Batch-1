@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createRequest } from "./Api";
+import { createRequest } from "../Api";
 
 function CreateRequestForm() {
   const [formData, setFormData] = useState({
