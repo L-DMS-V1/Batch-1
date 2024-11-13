@@ -2,14 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
 
-function Dashboard() {
+function Admin() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-300">
-    {/* Navbar */}
-    <Navbar />
-  
+      {/* Navbar */}
+      <Navbar />
 
       {/* Dashboard Content */}
       <div className="p-6">
@@ -17,18 +16,15 @@ function Dashboard() {
 
         {/* Dashboard Summary */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl
-">
+          <div className="bg-blue-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
             <p className="text-3xl font-bold">1</p>
             <p>Courses Created</p>
           </div>
-          <div className="bg-green-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl
-">
+          <div className="bg-green-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
             <p className="text-3xl font-bold">1</p>
             <p>Employees</p>
           </div>
-          <div className="bg-purple-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl
-">
+          <div className="bg-purple-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
             <p className="text-3xl font-bold">1</p>
             <p>Requests</p>
           </div>
@@ -95,4 +91,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Admin;

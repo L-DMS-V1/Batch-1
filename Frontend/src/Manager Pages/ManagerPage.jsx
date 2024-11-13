@@ -30,6 +30,12 @@ function LearningHub() {
     navigator('/newrequest');
   };
 
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log("Logging out...");
+    navigator('/signin');
+  };
+
   const handleViewRequest = (request) => {
     setSelectedRequest(request);
   };
@@ -39,13 +45,16 @@ function LearningHub() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen relative">
+    <div className="p-6 bg-gray-300 min-h-screen relative">
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded shadow">
         <h1 className="text-2xl font-semibold">Learning Hub</h1>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           <span className="text-lg">Hey Manager!</span>
-          <button className="text-red-500 hover:text-red-700">
-            <i className="fa fa-power-off text-xl"></i>
+          <button 
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded flex items-center space-x-2"
+          >
+            <span>Logout</span>
           </button>
         </div>
       </div>

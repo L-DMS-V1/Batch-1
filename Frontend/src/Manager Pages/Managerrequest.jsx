@@ -1,8 +1,10 @@
+//src/Manager Page/Managerpage.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createRequest } from "../Api";
 
-function CreateRequestForm() {
+function Managerrequest() {
   const [formData, setFormData] = useState({
     courseName: "",
     description: "",
@@ -38,7 +40,7 @@ function CreateRequestForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-gray-400 flex items-center justify-center p-8">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
         <h2 className="text-center text-2xl font-bold mb-6">Create Request</h2>
         <form onSubmit={handleSubmit}>
@@ -114,4 +116,4 @@ function CreateRequestForm() {
   );
 }
 
-export default CreateRequestForm;
+export default Managerrequest;
