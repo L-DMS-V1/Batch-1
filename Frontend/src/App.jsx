@@ -1,53 +1,23 @@
-import React, { useState } from 'react';
+import './index.css'; 
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import CourseList from './components/CourseList';
 import CourseAssignment from './components/CourseAssignment';
-import Requests from './components/Requests';
-import './App.css';
+
+
 
 function App() {
-  const [activeSection, setActiveSection] = useState('Dashboard');
-
-  const renderSection = () => {
-    switch (activeSection) {
-      case 'Dashboard':
-        return <Dashboard />;
-      case 'CourseList':
-        return <CourseList />;
-      case 'CourseAssignment':
-        return <CourseAssignment />;
-      case 'Requests':
-        return <Requests />;
-      default:
-        return <Dashboard />;
-    }
-  };
 
   return (
-    <div className="App">
-      <header className="navbar">
-        <h2>Learning Hub</h2>
-        <div className="user-info">
-          Admin
-          <button id="output-btn" onClick={() => alert("Logged Out Sucessfully!")}>Logout</button>
-        </div>
-      </header>
-
-      <main className="centered-content">
-        <h1>Learning Hub</h1>
-        <div className="navigation-buttons">
-          <button onClick={() => setActiveSection('Dashboard')}>Dashboard</button>
-          <button onClick={() => setActiveSection('CourseList')}>Course List</button>
-          <button onClick={() => setActiveSection('CourseAssignment')}>Course Assignment</button>
-          <button onClick={() => setActiveSection('Requests')}>Requests</button>
-        </div>
-        
-        <div className="section-content">
-          {renderSection()}
-        </div>
-      </main>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Dashboard/>}/>
+        <Route path='/courselist' element={<CourseList/>}/>
+        <Route path='/Courseassign' element={<CourseAssignment/>}/>
+      </Routes>
+    </Router>
   );
 }
 
-export default App;
+export default App
