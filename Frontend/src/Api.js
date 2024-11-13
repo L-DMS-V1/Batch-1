@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 
 const API_URL1 = 'http://localhost:8080/api/users';
 const API_URL2 = 'http://localhost:8080/api/manager';
+const API_URL3 = 'http://localhost:8080/api/admin';
+const API_URL4 = 'http://localhost:8080/api/courses';
 
 export const registerUser = async (userData) => {
   try {
@@ -86,6 +88,93 @@ export const getRequests = async () => {
 export const createRequest = async (requestData) => {
   try {
     const response = await axiosInstance.post(`${API_URL2}/createRequest`,requestData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Admin related API request handlers
+export const getAllRequests = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL3}/getAllRequests`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRequestById = async (requestId) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL3}/getRequest/${requestId}`);
+    console.log("Request Data:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching request:", error);
+    throw error;
+  }
+};
+
+// Accept Request
+export const acceptRequest = async (requestId) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL3}/acceptRequest/${requestId}`);
+    console.log("Accept Request Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error accepting request:", error);
+    throw error;
+  }
+};
+
+// Reject Request
+export const rejectRequest = async (requestId) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL3}/rejectRequest/${requestId}`);
+    console.log("Reject Request Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error rejecting request:", error);
+    throw error;
+  }
+};
+
+// Course related API request handlers
+export const getAllCourses = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL4}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createCourse = async (requestId, formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL4}/${requestId}`,formData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCourse = async (courseId) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL4}/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const editCourse = async (courseId, formData) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL4}/${courseId}`, formData);
     console.log("Response Data\n", response.data);
     return response;
   } catch (error) {

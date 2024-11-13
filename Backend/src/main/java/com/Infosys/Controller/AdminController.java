@@ -29,9 +29,16 @@ public class AdminController {
         trainingRequestService.rejectRequest(requestId);
         return ResponseEntity.ok("Request rejected successfully");
     }
+
     @GetMapping("/getAllRequests")
     public ResponseEntity<List<TrainingRequest>> getAllRequests() {
         List<TrainingRequest> requests = trainingRequestService.getAllRequests();
         return ResponseEntity.ok(requests);
+    }
+
+    @GetMapping("/getRequest/{requestId}")
+    public ResponseEntity<TrainingRequest> getAllRequests(@PathVariable("requestId") Long requestId) {
+        TrainingRequest trainingRequest = trainingRequestService.getRequestByRequestId(requestId);
+        return ResponseEntity.ok(trainingRequest);
     }
 }

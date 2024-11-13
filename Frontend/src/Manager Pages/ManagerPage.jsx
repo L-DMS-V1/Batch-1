@@ -17,7 +17,7 @@ function LearningHub() {
         setRequests(mockRequests);
         setTotalRequests(mockRequests.length);
         setCompletedRequests(mockRequests.filter(r => r.status === 'COMPLETED').length);
-        setPendingRequests(mockRequests.filter(r => r.status !== 'COMPLETED').length);
+        setPendingRequests(mockRequests.filter(r => r.status === 'PENDING').length);
       } catch (error) {
         console.error("Error fetching requests:", error);
       }

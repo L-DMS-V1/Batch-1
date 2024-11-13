@@ -3,6 +3,7 @@ package com.Infosys.Controller;
 import com.Infosys.Entity.Course;
 import com.Infosys.Entity.DTO.CourseDTO;
 import com.Infosys.Service.CourseService;
+import com.Infosys.Service.TrainingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,13 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private TrainingRequestService trainingRequestService;
+
     @PostMapping("/{requestId}")
     public ResponseEntity<String> createCourse(@PathVariable("requestId") Long requestId, @RequestBody CourseDTO courseDTO) {
         courseService.createCourse(requestId,courseDTO);
+        trainingRequestService.updateRequest(requestId);
         return new ResponseEntity<>("Course Created Successfully", HttpStatus.CREATED);
     }
 
@@ -42,11 +47,11 @@ public class CourseController {
     }
 
     @PutMapping("/{courseId}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long courseId, @RequestBody CourseDTO courseDTO) {
+    public ResponseEntity<String> updateCourse(@PathVariable Long courseId, @RequestBody CourseDTO courseDTO) {
 
         Course updatedCourse = courseService.updateCourse(courseId, courseDTO);
         if (updatedCourse != null) {
-            return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
+            return new ResponseEntity<>("Course Updated Successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

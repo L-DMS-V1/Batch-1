@@ -13,6 +13,9 @@ import ProtectedRoute from './ProtectedRoute';
 import Forbidden from './Forbidden';
 import CourseList from './Admin Pages/CourseList';
 import CourseAssignment from './Admin Pages/CourseAssignment';
+import ViewRequest from './Admin Pages/ViewRequest';
+import CreateCourse from './Admin Pages/CreateCourse';
+import EditCourse from './Admin Pages/EditCourse';
 
 function App() {
   const userRole = localStorage.getItem('role'); // or from Context
@@ -38,6 +41,9 @@ function App() {
         
         <Route path='/courselist' element={<CourseList/>}/>
         <Route path='/Courseassign' element={<CourseAssignment/>}/>
+        <Route path='/viewRequest' element={<ViewRequest/>}/>
+        <Route path='/createCourse' element={<CreateCourse/>}/>
+        <Route path='/editCourse' element={<EditCourse/>}/>
       </Routes>
     </Router>
   );

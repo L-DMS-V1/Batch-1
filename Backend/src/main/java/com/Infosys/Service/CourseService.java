@@ -32,7 +32,6 @@ public class CourseService {
 
         TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
         course.setTrainingRequest(trainingRequest);
-
         courseRepository.save(course);
         return course;
     }

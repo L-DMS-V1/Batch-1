@@ -1,9 +1,43 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
+import { getAllRequests, getRequestById } from '../Api';
 
 function Admin() {
-  const navigate = useNavigate();
+  const [allrequests, setAllRequests] = useState([]);
+  const [totalRequestsCount, setTotalRequestsCount] = useState(0);
+  const [respondedRequests, setRespondedRequests] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [completedRequests, setCompletedRequests] = useState(0);
+  const navigator = useNavigate();
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const mockAllRequests = await getAllRequests();
+        setAllRequests(mockAllRequests);
+        setTotalRequestsCount(mockAllRequests.length);
+        setRespondedRequests(mockAllRequests.filter(r => r.status !== 'PENDING'));
+        setPendingRequests(mockAllRequests.filter(r => r.status === 'PENDING'));
+        setCompletedRequests(mockAllRequests.filter(r => r.status === 'COMPLETED').length);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  // Button handler
+const handleViewRequest = async (request) => {
+  try {
+    const requestData = await getRequestById(request.requestId); // Call API handler with requestId
+    navigator('/viewRequest', { state: { requestData } }); // Pass data to the route
+  } catch (error) {
+    console.error("Failed to fetch request details:", error);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-300">
@@ -17,7 +51,7 @@ function Admin() {
         {/* Dashboard Summary */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-blue-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
-            <p className="text-3xl font-bold">1</p>
+            <p className="text-3xl font-bold">{completedRequests}</p>
             <p>Courses Created</p>
           </div>
           <div className="bg-green-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
@@ -25,7 +59,7 @@ function Admin() {
             <p>Employees</p>
           </div>
           <div className="bg-purple-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
-            <p className="text-3xl font-bold">1</p>
+            <p className="text-3xl font-bold">{totalRequestsCount}</p>
             <p>Requests</p>
           </div>
         </div>
@@ -50,11 +84,21 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="p-2 text-center" colSpan="4">
-                    No Pending Requests
-                  </td>
-                </tr>
+                  {pendingRequests.map((request, index) => (
+                  <tr key={index} className="hover:bg-gray-100 text-left">
+                    <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
+                    <td className="py-2 px-4 border-b">{request.managerUsername}</td>
+                    <td className="py-2 px-4 border-b">{request.courseName}</td>
+                    <td className="py-2 px-4 border-b">
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                        onClick={() => handleViewRequest(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -72,16 +116,21 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="p-2">1</td>
-                  <td className="p-2">Kartick</td>
-                  <td className="p-2">Java</td>
-                  <td className="p-2">
-                    <button className="bg-blue-500 text-white px-4 py-1 rounded-lg">
-                      View
-                    </button>
-                  </td>
-                </tr>
+                {respondedRequests.map((request, index) => (
+                    <tr key={index} className="hover:bg-gray-100 text-left">
+                      <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
+                      <td className="py-2 px-4 border-b">{request.managerUsername}</td>
+                      <td className="py-2 px-4 border-b">{request.courseName}</td>
+                      <td className="py-2 px-4 border-b">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                          onClick={() => handleViewRequest(request)}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
