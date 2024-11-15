@@ -22,6 +22,9 @@ public class UserService {
     private ManagerService managerService;
 
     @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void createUser(@Valid UserDTO userDTO) {
@@ -35,6 +38,8 @@ public class UserService {
         userRepository.save(user);
         if(userDTO.getRole().equals("MANAGER")){
             managerService.addManager(userDTO);
+        } else if(userDTO.getRole().equals("EMPLOYEE")) {
+            employeeService.addEmployee(userDTO);
         }
     }
 

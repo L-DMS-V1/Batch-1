@@ -9,6 +9,7 @@ import com.Infosys.Repository.ManagerRepository;
 import com.Infosys.Repository.TrainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class ManagerService {
     @Autowired
     private ManagerRepository managerRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void addManager(UserDTO userDTO) {
         // Add manager logic
         Manager manager = new Manager();
@@ -29,7 +33,7 @@ public class ManagerService {
         manager.setAccountName(userDTO.getAccountName());
         manager.setUsername(userDTO.getUsername());
         manager.setEmail(userDTO.getEmail());
-        manager.setPassword(userDTO.getPassword());
+        manager.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Hashing password
         managerRepository.save(manager);
     }
 

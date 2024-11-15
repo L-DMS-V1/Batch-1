@@ -1,6 +1,7 @@
 package com.Infosys.Controller;
 
 import com.Infosys.Entity.CourseAssignment;
+import com.Infosys.Entity.DTO.CourseAssignmentDTO;
 import com.Infosys.Service.CourseAssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,8 +18,8 @@ public class CourseAssignmentController {
     private CourseAssignmentService courseAssignmentService;
 
     @PostMapping
-    public CourseAssignment assignCourse(@RequestBody CourseAssignment courseAssignment) {
-        return courseAssignmentService.assignCourse(courseAssignment);
+    public CourseAssignment assignCourse(@RequestBody CourseAssignmentDTO courseAssignmentDTO) {
+        return courseAssignmentService.assignCourse(courseAssignmentDTO);
     }
 
     @GetMapping
@@ -27,7 +28,7 @@ public class CourseAssignmentController {
     }
 
     @PatchMapping("/{assignmentId}/status")
-    public CourseAssignment updateAssignmentStatus(@PathVariable int assignmentId, @RequestParam String status) {
+    public CourseAssignment updateAssignmentStatus(@PathVariable Long assignmentId, @RequestParam String status) {
         return courseAssignmentService.updateAssignmentStatus(assignmentId, status);
     }
 }

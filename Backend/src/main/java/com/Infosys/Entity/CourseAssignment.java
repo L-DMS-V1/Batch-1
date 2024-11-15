@@ -7,37 +7,42 @@ import jakarta.persistence.*;
 public class CourseAssignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int assignmentId;
+    private Long assignmentId;
 
-    private int employeeId;
-    private String courseName;
+    @ManyToOne
+    @JoinColumn(name = "employeeId", referencedColumnName = "employeeId")
+    private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "courseId", referencedColumnName = "courseId")
+    private Course course;
+
     private String courseDuration;
     private String status;
     private String deadline;
 
-    // Getters and Setters
-    public int getAssignmentId() {
+    public Long getAssignmentId() {
         return assignmentId;
     }
 
-    public void setAssignmentId(int assignmentId) {
+    public void setAssignmentId(Long assignmentId) {
         this.assignmentId = assignmentId;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public String getCourseDuration() {
@@ -62,5 +67,17 @@ public class CourseAssignment {
 
     public void setDeadline(String deadline) {
         this.deadline = deadline;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseAssignment{" +
+                "assignmentId=" + assignmentId +
+                ", employeeId=" + employee.getEmployeeId() +
+                ", courseId=" + course.getCourseId() +
+                ", courseDuration='" + courseDuration + '\'' +
+                ", status='" + status + '\'' +
+                ", deadline='" + deadline + '\'' +
+                '}';
     }
 }

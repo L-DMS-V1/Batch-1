@@ -7,21 +7,28 @@ import jakarta.persistence.*;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int employeeId;
+    private Long employeeId;
 
+    @Column(name = "username", unique = true)
     private String username;
-    private String password;
-    private String email;
-    private String role;
-    private String position;
-    private String contact;
 
-    // Getters and Setters
-    public int getEmployeeId() {
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "account_Id")
+    private long accountId;
+
+    @Column(name = "account_Name")
+    private String accountName;
+
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -49,27 +56,31 @@ public class Employee {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public long getAccountId() {
+        return accountId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
     }
 
-    public String getPosition() {
-        return position;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", accountId=" + accountId +
+                ", accountName='" + accountName + '\'' +
+                '}';
     }
 }
