@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllCourses, getCourse } from '../Api';
-import Navbar from './navbar';
+import Navbar from './AdminNavbar';
 
 const CourseList = () => {
   const [allCourses, setAllCourses] = useState([]);

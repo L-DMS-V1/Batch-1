@@ -6,7 +6,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Dashboard from './Dashboard';
 import AdminPage from './Admin Pages/Admin';
-import EmployeePage from './EmployeePage';
+import EmployeePage from './Employee Pages/EmployeePage';
 import ManagerPage from './Manager Pages/ManagerPage';
 import Managerrequest from './Manager Pages/Managerrequest';
 import ProtectedRoute from './ProtectedRoute';
@@ -16,6 +16,7 @@ import CourseAssignment from './Admin Pages/CourseAssignment';
 import ViewRequest from './Admin Pages/ViewRequest';
 import CreateCourse from './Admin Pages/CreateCourse';
 import EditCourse from './Admin Pages/EditCourse';
+import EmployeeProgresses from './Admin Pages/EmployeeProgresses';
 
 function App() {
   const userRole = localStorage.getItem('role'); // or from Context
@@ -32,18 +33,23 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['ROLE_MANAGER']} userRole={userRole} />}>
-          <Route path="/manager" element={<ManagerPage />} />
+        <Route path="/manager" element={<ManagerPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['ROLE_EMPLOYEE']} userRole={userRole} />}>
-          <Route path="/employee" element={<EmployeePage />} />
+        <Route path="/employee" element={<EmployeePage />} />
         </Route>
         <Route path='/newrequest' element={<Managerrequest />} />
         
         <Route path='/courselist' element={<CourseList/>}/>
         <Route path='/Courseassign' element={<CourseAssignment/>}/>
+        <Route path='/employeeprogress' element={<EmployeeProgresses/>}/>
         <Route path='/viewRequest' element={<ViewRequest/>}/>
         <Route path='/createCourse' element={<CreateCourse/>}/>
         <Route path='/editCourse' element={<EditCourse/>}/>
+
+        
+        
+        
       </Routes>
     </Router>
   );

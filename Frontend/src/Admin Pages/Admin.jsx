@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './navbar';
+import Navbar from './AdminNavbar';
 import { getAllRequests, getRequestById } from '../Api';
 
 function Admin() {
