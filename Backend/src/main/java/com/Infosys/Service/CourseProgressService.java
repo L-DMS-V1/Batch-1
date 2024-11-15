@@ -38,7 +38,10 @@ public class CourseProgressService {
         if (courseProgressOpt.isPresent()) {
             CourseProgress courseProgress = courseProgressOpt.get();
             courseProgress.setProgressPercentage(courseProgressDTO.getProgressPercentage());
-            courseProgress.setStatus(courseProgressDTO.getStatus());
+            if(courseProgressDTO.getProgressPercentage() == 100L)
+                courseProgress.setStatus("COMPLETED");
+            else
+                courseProgress.setStatus(courseProgressDTO.getStatus());
             courseProgress.setLastAccessedDate(LocalDateTime.now());
             courseProgressRepository.save(courseProgress);
         } else {
@@ -57,9 +60,13 @@ public class CourseProgressService {
         }
     }
 
-    public List<CourseProgress> getCourseProgress(Long employeeId) {
-        List<CourseProgress> listOfCourseProgress = courseProgressRepository.findByEmployeeEmployeeId(employeeId);
-        logger.info("Course progress retrieved: {}", listOfCourseProgress);
-        return listOfCourseProgress;
+    public List<CourseProgress> getCourseProgress(String username) {
+        List<CourseProgress> courseProgressList = courseProgressRepository.findByEmployeeUsername(username);
+        logger.info("Course progress retrieved: {}", courseProgressList);
+        return courseProgressList;
+    }
+
+    public List<CourseProgress> getAllCourseProgress() {
+        return courseProgressRepository.findAll();
     }
 }

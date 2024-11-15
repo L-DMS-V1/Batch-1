@@ -1,14 +1,54 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './AdminNavbar';
+import { getAllEmployees, assignCourse, getAssignedEmployees } from '../Api';
 
 const CourseAssignment = () => {
+  const [allEmployees, setallEmployees] = useState([]);
+  const [assignedEmployees, setAssignedEmployees] = useState([]);  // To store employees already assigned to the course
+  const [unassignedEmployees, setUnAssignedEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [deadline, setDeadline] = useState("");
+
+  const location = useLocation();
+  const { course } = location.state || {};
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/admin');
+    navigate('/courselist');
   };
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const mockAllEmployees = await getAllEmployees();
+        setallEmployees(mockAllEmployees);
+        const mockAssignedEmployees = await getAssignedEmployees(course.courseId);  // Replace with your API call
+        setAssignedEmployees(mockAssignedEmployees);  // Set the assigned employees
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    if (allEmployees.length > 0) {
+      if (assignedEmployees.length === 0) {
+        // If no employees are assigned, all employees are unassigned
+        setUnAssignedEmployees(allEmployees);
+      } else {
+        // Filter out assigned employees
+        const filteredEmployees = allEmployees.filter(employee => 
+          !assignedEmployees.some(assignedEmp => assignedEmp.employeeId === employee.employeeId)
+        );
+        setUnAssignedEmployees(filteredEmployees);  // Update the list of unassigned employees
+      }
+    }
+  }, [allEmployees, assignedEmployees]);
+  
+
 
   const handleEmployeeChange = (e) => {
     const { value, checked } = e.target;
@@ -19,9 +59,35 @@ const CourseAssignment = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleDeadlineChange = (e) => {
+    setDeadline(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Assigned course to: ${selectedEmployees.join(', ')}`);
+
+    // Create and send the courseAssignmentDTO for each selected employee
+    try {
+      const courseAssignments = selectedEmployees.map((employeeUsername) => {
+        return {
+          employeeId: allEmployees.find(emp => emp.username === employeeUsername).employeeId,
+          courseId: course.courseId,
+          status: "ASSIGNED",
+          deadline: deadline, // The deadline from input field
+        };
+      });
+
+      // Call assignCourse API for each employee
+      for (let dto of courseAssignments) {
+        console.log("Selected Deadline:", deadline); // This will log the value of the deadline.
+        await assignCourse(dto); // Call the backend API for each DTO
+      }
+
+      alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
+      navigate('/courselist');
+    } catch (error) {
+      console.error("Error assigning course:", error);
+    }
   };
 
   return (
@@ -45,16 +111,19 @@ const CourseAssignment = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Course Details:</label>
-            <p className="text-gray-600"><b>Course Name:</b> Java</p>
-            <p className="text-gray-600"><b>Description:</b> Basic</p>
-            <p className="text-gray-600"><b>Duration:</b> 2 weeks</p>
+            <p className="text-gray-600"><b>Course Id:</b> {course.courseId}</p>
+            <p className="text-gray-600"><b>Course Name:</b> {course.courseName}</p>
+            <p className="text-gray-600"><b>Key Concepts:</b> {course.keyConcepts}</p>
+            <p className="text-gray-600"><b>Duration:</b> {course.duration}</p>
           </div>
 
           <div>
-            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">Start Date:</label>
+            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">Dead Line:</label>
             <input
               type="date"
               id="start-date"
+              value={deadline}
+              onChange={handleDeadlineChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -63,36 +132,18 @@ const CourseAssignment = () => {
           <div>
             <h4 className="text-xl font-semibold text-gray-800 mb-2">Select Employees:</h4>
             <div className="space-y-2">
-              <div>
-                <input
-                  type="checkbox"
-                  id="emp1"
-                  value="raja@gmail.com"
-                  onChange={handleEmployeeChange}
-                  className="mr-2"
-                />
-                <label htmlFor="emp1" className="text-gray-700">Raja (raja@gmail.com)</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="emp2"
-                  value="ram@gmail.com"
-                  onChange={handleEmployeeChange}
-                  className="mr-2"
-                />
-                <label htmlFor="emp2" className="text-gray-700">Ram (ram@gmail.com)</label>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="emp3"
-                  value="siva@gmail.com"
-                  onChange={handleEmployeeChange}
-                  className="mr-2"
-                />
-                <label htmlFor="emp3" className="text-gray-700">Siva (siva@gmail.com)</label>
-              </div>
+              {unassignedEmployees.map((employee, index) => (
+                <div>
+                  <input
+                    type="checkbox"
+                    id="emp3"
+                    value={employee.username}
+                    onChange={handleEmployeeChange}
+                    className="mr-2"
+                  />
+                  <label htmlFor="emp3" className="text-gray-700">{employee.username} ({employee.email})</label>
+                </div>
+              ))}
             </div>
           </div>
 

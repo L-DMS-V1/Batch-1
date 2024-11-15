@@ -1,8 +1,11 @@
 package com.Infosys.Controller;
 
+import com.Infosys.Entity.CourseProgress;
 import com.Infosys.Entity.TrainingRequest;
+import com.Infosys.Service.CourseProgressService;
 import com.Infosys.Service.TrainingRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,9 @@ public class AdminController {
 
     @Autowired
     private TrainingRequestService trainingRequestService;
+
+    @Autowired
+    private CourseProgressService courseProgressService;
 
     @PutMapping("/acceptRequest/{id}")
     public ResponseEntity<String> acceptRequest(@PathVariable("id") Long requestId) {
@@ -40,5 +46,11 @@ public class AdminController {
     public ResponseEntity<TrainingRequest> getAllRequests(@PathVariable("requestId") Long requestId) {
         TrainingRequest trainingRequest = trainingRequestService.getRequestByRequestId(requestId);
         return ResponseEntity.ok(trainingRequest);
+    }
+
+    @GetMapping("/getAllCourseProgress")
+    public ResponseEntity<List<CourseProgress>> getAllCourseProgress() {
+        List<CourseProgress> courseProgressList = courseProgressService.getAllCourseProgress();
+        return new ResponseEntity<>(courseProgressList, HttpStatus.OK);
     }
 }

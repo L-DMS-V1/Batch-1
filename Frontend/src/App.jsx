@@ -30,25 +30,21 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']} userRole={userRole} />}>
-        <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path='/courselist' element={<CourseList/>}/>
+          <Route path='/employeeprogress' element={<EmployeeProgresses/>}/>
+          <Route path='/viewRequest' element={<ViewRequest/>}/>
+          <Route path='/createCourse' element={<CreateCourse/>}/>
+          <Route path='/editCourse' element={<EditCourse/>}/>
+          <Route path='/courseassign' element={<CourseAssignment/>}/>
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['ROLE_MANAGER']} userRole={userRole} />}>
-        <Route path="/manager" element={<ManagerPage />} />
+          <Route path="/manager" element={<ManagerPage />} />
+          <Route path='/newrequest' element={<Managerrequest />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['ROLE_EMPLOYEE']} userRole={userRole} />}>
-        <Route path="/employee" element={<EmployeePage />} />
+          <Route path="/employee" element={<EmployeePage />} />
         </Route>
-        <Route path='/newrequest' element={<Managerrequest />} />
-        
-        <Route path='/courselist' element={<CourseList/>}/>
-        <Route path='/Courseassign' element={<CourseAssignment/>}/>
-        <Route path='/employeeprogress' element={<EmployeeProgresses/>}/>
-        <Route path='/viewRequest' element={<ViewRequest/>}/>
-        <Route path='/createCourse' element={<CreateCourse/>}/>
-        <Route path='/editCourse' element={<EditCourse/>}/>
-
-        
-        
         
       </Routes>
     </Router>

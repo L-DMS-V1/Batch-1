@@ -65,9 +65,9 @@ const handleViewRequest = async (request) => {
         </div>
 
         {/* Add Employees Button */}
-        <div className="flex justify-end mb-4">
+        {/* <div className="flex justify-end mb-4">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">+ Add Employees</button>
-        </div>
+        </div> */}
 
         {/* Pending and Completed Requests */}
         <div className="grid grid-cols-2 gap-4">

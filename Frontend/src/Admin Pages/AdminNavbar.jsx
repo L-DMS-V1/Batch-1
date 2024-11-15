@@ -34,12 +34,12 @@ const AdminNavbar = () => {
         >
           Course List
         </button>
-        <button
+        {/* <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           onClick={handleCourseassign}
         >
           Course Assignment
-        </button>
+        </button> */}
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           onClick={handleEmployeeProgress}

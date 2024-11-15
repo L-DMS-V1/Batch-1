@@ -11,8 +11,10 @@ import com.Infosys.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseAssignmentService {
@@ -69,5 +71,21 @@ public class CourseAssignmentService {
     public List<CourseAssignment> getAssignmentsByUsername(String username) {
         Employee employee = employeeRepository.findByUsername(username);
         return courseAssignmentRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+    }
+
+    // New method to get employees assigned to a specific course
+    public List<Employee> getAssignedEmployeesByCourseId(Long courseId) {
+        // Find course by courseId
+        Optional<Course> courseOpt = courseRepository.findByCourseId(courseId);
+        if (courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+            // Find all assignments for the course
+            List<CourseAssignment> assignments = courseAssignmentRepository.findByCourse(course);
+            // Extract employee details from the assignments
+            return assignments.stream()
+                    .map(CourseAssignment::getEmployee)  // Get employee for each assignment
+                    .collect(Collectors.toList());  // Return list of employees
+        }
+        return Collections.emptyList();  // Return empty list if course is not found
     }
 }

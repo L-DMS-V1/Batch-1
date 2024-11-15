@@ -35,15 +35,18 @@ const CourseList = () => {
 
   const handleEditCourse = async (course) => {
     try {
-      const courseData = await getCourse(course.courseId); // Call API handler with courseId
       navigator('/editCourse', { state: { course } }); // Pass data to the route
     } catch (error) {
       console.error("Failed to fetch course details:", error);
     }
   };
 
-  const handleAddLearners = (courseId) => {
-    navigator(`/addlearners/${courseId}`);
+  const handleAddLearners = (course) => {
+    try {
+      navigator('/courseassign', { state: { course } }); // Pass data to the route
+    } catch (error) {
+      console.error("Failed to fetch course details:", error);
+    }
   };
 
   const handleViewCourse = (course) => {
@@ -67,12 +70,12 @@ const CourseList = () => {
         >
           Back to Dashboard
         </button>
-        <button
+        {/* <button
           onClick={handleAddCourse}
           className="mb-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
         >
           Add Course
-        </button>
+        </button> */}
       </div>
       
       {/* Course List Content with Grid Layout */}

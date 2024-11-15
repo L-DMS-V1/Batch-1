@@ -6,6 +6,9 @@ const API_URL1 = 'http://localhost:8080/api/users';
 const API_URL2 = 'http://localhost:8080/api/manager';
 const API_URL3 = 'http://localhost:8080/api/admin';
 const API_URL4 = 'http://localhost:8080/api/courses';
+const API_URL5 = 'http://localhost:8080/api/course-assignments';
+const API_URL6 = 'http://localhost:8080/api/employees';
+const API_URL7 = 'http://localhost:8080/api/course-progress';
 
 export const registerUser = async (userData) => {
   try {
@@ -141,6 +144,17 @@ export const rejectRequest = async (requestId) => {
   }
 };
 
+export const getAllCourseProgress = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL3}/getAllCourseProgress`);
+    console.log("Reject Request Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all course progress:", error);
+    throw error;
+  }
+};
+
 // Course related API request handlers
 export const getAllCourses = async () => {
   try {
@@ -182,7 +196,68 @@ export const editCourse = async (courseId, formData) => {
   }
 };
 
+// Course Assignment realated API requests
+export const getAllEmployees = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL5}/getAllEmployees`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
+export const assignCourse = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL5}`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAssignedEmployees = async (courseId) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL5}/assigned-employees/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Employee related API endpoints
+export const getAssignments = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL6}/getAssignments`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Progress realted API endpoints
+export const getCourseProgress = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL7}/getCourseProgress`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCourseProgress = async (formData) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL7}/update`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export const logout = () => {

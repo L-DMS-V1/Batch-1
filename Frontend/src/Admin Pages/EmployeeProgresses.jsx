@@ -1,25 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Navbar from './AdminNavbar';
 import { useNavigate } from 'react-router-dom';
+import { getAllCourseProgress } from "../Api";
 
 const EmployeeProgresses = () => {
-  // Sample data
-  const employeeData = [
-    { name: "John Doe", course: "React Basics", progress: 80 },
-    { name: "Jane Smith", course: "React Basics", progress: 60 },
-    { name: "Mike Johnson", course: "React Basics", progress: 90 },
-    { name: "John Doe", course: "Java Spring Boot", progress: 70 },
-    { name: "Jane Smith", course: "Java Spring Boot", progress: 50 },
-    { name: "Mike Johnson", course: "Java Spring Boot", progress: 30 },
-    { name: "John Doe", course: "Microservices Architecture", progress: 60 },
-    { name: "Jane Smith", course: "Microservices Architecture", progress: 40 },
-    { name: "John Doe", course: "AWS Cloud Essentials", progress: 90 },
-    { name: "Jane Smith", course: "AWS Cloud Essentials", progress: 80 },
-    { name: "Mike Johnson", course: "AWS Cloud Essentials", progress: 100 },
-    { name: "John Doe", course: "Docker and Kubernetes", progress: 50 },
-    { name: "Jane Smith", course: "Docker and Kubernetes", progress: 70 },
-    { name: "Mike Johnson", course: "Docker and Kubernetes", progress: 60 },
-  ];
+  const [ProgressData, setProgressData] = useState([]);
+
+  useEffect(() => {
+    const fetchCourseProgress = async () => {
+      try {
+        const data = await getAllCourseProgress();
+        setProgressData(data);
+      } catch (error) {
+        console.error("Error fetching course progress:", error);
+      }
+    };
+
+    fetchCourseProgress();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -52,14 +50,14 @@ const EmployeeProgresses = () => {
             </tr>
           </thead>
           <tbody>
-            {employeeData.map((item, index) => (
+            {ProgressData.map((item, index) => (
               <tr
                 key={index}
                 className={`border-b ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}`}
               >
-                <td className="py-3 px-6">{item.name}</td>
-                <td className="py-3 px-6">{item.course}</td>
-                <td className="py-3 px-6">{item.progress}%</td>
+                <td className="py-3 px-6">{item.employee.username}</td>
+                <td className="py-3 px-6">{item.course.courseName}</td>
+                <td className="py-3 px-6">{item.progressPercentage}%</td>
               </tr>
             ))}
           </tbody>

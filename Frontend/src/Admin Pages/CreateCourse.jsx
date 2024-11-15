@@ -48,7 +48,7 @@ function CreateCourse() {
   return (
     <div className="min-h-screen bg-gray-400 flex items-center justify-center p-8">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
-        <h2 className="text-center text-2xl font-bold mb-6">Create Request</h2>
+        <h2 className="text-center text-2xl font-bold mb-6">Create Course</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
