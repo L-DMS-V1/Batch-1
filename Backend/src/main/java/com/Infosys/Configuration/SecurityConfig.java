@@ -32,18 +32,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with custom config
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll() // Allow Swagger UI and OpenAPI
                         .requestMatchers("/api/users/signup").permitAll()  // Allow signup without authentication
                         .requestMatchers("/api/users/login").permitAll()   // Allow login without authentication
                         // Role-based access control
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")    // Only ADMINs can access /api/users/admin/**
                         .requestMatchers("/api/users/manager/**").hasRole("MANAGER")  // Only MANAGER can access /api/users/manager/**
                         .requestMatchers("/api/users/employee/**").hasRole("EMPLOYEE") // Only EMPLOYEEs can access /api/users/employee/**
-
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Ensure stateless session management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session management
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter before authentication
 
         return http.build();
     }
@@ -64,6 +64,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // BCrypt for password encoding
+        return new BCryptPasswordEncoder(); // BCrypt for password encoding
     }
 }
