@@ -23,25 +23,37 @@ export const loginUser = async (username, password) => {
   try {
     const response = await axios.post(`${API_URL1}/login`, { username, password });
 
-   // Check for Authorization header specifically
-  //  console.log(response.headers)
-  //  const authHeader = response.headers['Authorization'];
-   if (response) {
-    //  const token = authHeader.split(' ')[1]; // Extract token
-    //  console.log("JWT Token:", token);
-    const token = response.data;
-     localStorage.setItem('token', response.data);
-       // Decode the token to extract the role
-       const decodedToken = jwtDecode(token);
-       localStorage.setItem('role', decodedToken.role);
-   } else {
-     console.log("Token Generation Failed.");
-   }
+    if (response.data) {
+      console.log("Login Response Data:", response.data);
+
+      // Assuming response.data contains the JWT token
+      const token = response.data;
+
+      // Store token in localStorage
+      localStorage.setItem('token', token);
+      console.log("JWT Token stored in localStorage:", token);
+
+      // Decode token to extract role
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded Token:", decodedToken);
+
+      if (decodedToken.role) {
+        localStorage.setItem('role', decodedToken.role);
+        console.log("Role stored in localStorage:", decodedToken.role);
+      } else {
+        console.error("Role not found in decoded token.");
+      }
+    } else {
+      console.error("Response does not contain token.");
+    }
+
     return response;
   } catch (error) {
+    console.error("Login Error:", error.message);
     throw error;
   }
 };
+
 
 // Function to retrieve the token from localStorage
 export const getAuthToken = () => localStorage.getItem('token');

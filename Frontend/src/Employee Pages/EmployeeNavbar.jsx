@@ -15,7 +15,7 @@ const Navbar = () => {
     <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
       <h1 className="text-lg font-semibold">Learning Hub</h1>
       <div className="flex items-center space-x-4">
-        <span className="mr-4">Hey Admin!</span>
+        <span className="mr-4">Hey Employee!</span>
         
         {/* Logout Button */}
         <button

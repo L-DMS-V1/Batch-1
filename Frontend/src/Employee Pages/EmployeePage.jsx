@@ -13,7 +13,7 @@ function EmployeePage() {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedProgress, setSelectedProgress] = useState(null);
   const [newProgressPercentage, setNewProgressPercentage] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [ongoingAssignmentsCount, setongoingAssignmentsCount] = useState(0);
   const [completedAssignmentsCount, setcompletedAssignmentsCount] = useState(0);
   const [totalAssignmentsCount, settotalAssignmentsCount] = useState(0);
@@ -119,12 +119,12 @@ function EmployeePage() {
     }
   };
 
-  const handleViewClick = (course) => {
-    setSelectedCourse(course);
+  const handleViewClick = (assignment) => {
+    setSelectedAssignment(assignment);
   };
 
   const handleClosePopup = () => {
-    setSelectedCourse(null);
+    setSelectedAssignment(null);
   };
 
 
@@ -185,7 +185,7 @@ function EmployeePage() {
                 Course {String.fromCharCode(65 + index)} : {assignment.course.courseName}
               </span>
                 <button
-                  onClick={() => handleViewClick(assignment.course)}
+                  onClick={() => handleViewClick(assignment)}
                   className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
                 >
                   View
@@ -331,17 +331,18 @@ function EmployeePage() {
       )}
 
       {/* Pop-Up for Course Details */}
-      {selectedCourse && (
+      {selectedAssignment && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 className="text-lg font-semibold mb-4">
-              {selectedCourse.courseName}
+              {selectedAssignment.course.courseName}
             </h3>
-            <p><strong>KeyConcepts:</strong> {selectedCourse.keyConcepts}</p>
-            <p><strong>Duration:</strong> {selectedCourse.duration}</p>
-            <p><strong>Resource Links:</strong> {selectedCourse.resourceLinks}</p>
-            <p><strong>Other Links:</strong> {selectedCourse.otherLinks}</p>
-            <p><strong>Outcomes:</strong> {selectedCourse.outcomes}</p>
+            <p><strong>KeyConcepts:</strong> {selectedAssignment.course.keyConcepts}</p>
+            <p><strong>Duration:</strong> {selectedAssignment.course.duration}</p>
+            <p><strong>Resource Links:</strong> {selectedAssignment.course.resourceLinks}</p>
+            <p><strong>Other Links:</strong> {selectedAssignment.course.otherLinks}</p>
+            <p><strong>Outcomes:</strong> {selectedAssignment.course.outcomes}</p>
+            <p><strong>Deadline:</strong> {selectedAssignment.deadline}</p>
             <button
               onClick={handleClosePopup}
               className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
