@@ -37,7 +37,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-fixed bg-no-repeat" style={{ backgroundImage: `url(assets/images/backgroundimage.jpg)` }}>
+    <div className="bg-gray-300 min-h-screen flex items-center justify-center bg-cover bg-fixed bg-no-repeat">
       <div className="bg-white p-6 rounded-lg shadow-md w-80 text-center">
         <h1 className="text-2xl font-bold text-green-500">Welcome to the Dashboard</h1>
         <p className="text-lg text-gray-700">You have successfully logged in!</p>

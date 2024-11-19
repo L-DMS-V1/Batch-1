@@ -10,8 +10,8 @@ const AdminNavbar = () => {
   };
 
   // Handle navigating to course assignment page
-  const handleCourseassign = () => {
-    navigate('/courseassign');
+  const handleFeedbacks = () => {
+    navigate('/feedbacks');
   };
 
   // Handle navigating to employee progress page
@@ -34,17 +34,19 @@ const AdminNavbar = () => {
         >
           Course List
         </button>
-        {/* <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          onClick={handleCourseassign}
-        >
-          Course Assignment
-        </button> */}
+        
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           onClick={handleEmployeeProgress}
         >
           Employee Progresses
+        </button>
+
+        <button
+          className="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition"
+          onClick={handleFeedbacks}
+        >
+          Feedbacks
         </button>
         <span className="mr-4">Hey Admin!</span>
         
