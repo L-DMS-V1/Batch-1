@@ -12,7 +12,7 @@ import Managerrequest from './Manager Pages/Managerrequest';
 import ProtectedRoute from './ProtectedRoute';
 import Forbidden from './Forbidden';
 import CourseList from './Admin Pages/CourseList';
-import CourseAssignment from './Admin Pages/CourseAssignment';
+import Feedbacks from './Admin Pages/Feedback';
 import ViewRequest from './Admin Pages/ViewRequest';
 import CreateCourse from './Admin Pages/CreateCourse';
 import EditCourse from './Admin Pages/EditCourse';
@@ -35,7 +35,7 @@ function App() {
           <Route path='/viewRequest' element={<ViewRequest/>}/>
           <Route path='/createCourse' element={<CreateCourse/>}/>
           <Route path='/editCourse' element={<EditCourse/>}/>
-          <Route path='/courseassign' element={<CourseAssignment/>}/>
+          <Route path='/feedbacks' element={<Feedbacks/>}/>
         </Route>
         <Route element={<ProtectedRoute allowedRole="ROLE_MANAGER"/>}>
           <Route path="/manager" element={<ManagerPage />} />
