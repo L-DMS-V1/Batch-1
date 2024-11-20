@@ -57,4 +57,15 @@ public class CourseAssignmentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);  // Handle errors
         }
     }
+
+    // New endpoint to reassign course based on assessment score
+    @PutMapping("/reassign/{employeeId}")
+    public ResponseEntity<String> reassignCourseBasedOnAssessment(@PathVariable Long employeeId) {
+        boolean reassigned = courseAssignmentService.reassignCourseBasedOnAssessmentScore(employeeId);
+        if (reassigned) {
+            return ResponseEntity.ok("Course reassigned successfully based on the assessment score.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reassignment criteria not met (score below 60%).");
+        }
+    }
 }

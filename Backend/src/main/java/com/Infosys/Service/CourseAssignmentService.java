@@ -1,17 +1,18 @@
 package com.Infosys.Service;
 
+import com.Infosys.Entity.Assessment;
 import com.Infosys.Entity.Course;
 import com.Infosys.Entity.CourseAssignment;
 import com.Infosys.Entity.DTO.CourseAssignmentDTO;
-import com.Infosys.Entity.DTO.CourseProgressDTO;
 import com.Infosys.Entity.Employee;
+import com.Infosys.Repository.AssessmentRepository;
 import com.Infosys.Repository.CourseAssignmentRepository;
 import com.Infosys.Repository.CourseRepository;
 import com.Infosys.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,66 +27,96 @@ public class CourseAssignmentService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private CourseRepository courseRepository;
+    private AssessmentRepository assessmentRepository;
 
     @Autowired
-    private CourseProgressService courseProgressService;
+    private CourseRepository courseRepository;
 
+    // Existing method to assign course
     public CourseAssignment assignCourse(CourseAssignmentDTO courseAssignmentDTO) {
+        Course course = courseRepository.findById(courseAssignmentDTO.getCourseId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        Employee employee = employeeRepository.findById(courseAssignmentDTO.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
         CourseAssignment courseAssignment = new CourseAssignment();
-
-        Optional<Course> courseOpt = courseRepository.findByCourseId(courseAssignmentDTO.getCourseId());
-        courseOpt.ifPresent(courseAssignment::setCourse);
-        courseOpt.ifPresent(course -> courseAssignment.setCourseDuration(course.getDuration()));
-
-        Optional<Employee> employeeOpt = employeeRepository.findByEmployeeId(courseAssignmentDTO.getEmployeeId());
-        employeeOpt.ifPresent(courseAssignment::setEmployee);
-
-        courseAssignment.setStatus(courseAssignmentDTO.getStatus());
-        courseAssignment.setDeadline(courseAssignmentDTO.getDeadline());
-
-        // Creating a CourseProgress with 0 Progress
-        CourseProgressDTO courseProgressDTO = new CourseProgressDTO();
-        employeeOpt.ifPresent(employee -> courseProgressDTO.setEmployeeId(employee.getEmployeeId()));
-        courseOpt.ifPresent(course -> courseProgressDTO.setCourseId(course.getCourseId()));
-        courseProgressDTO.setProgressPercentage(0L);
-        courseProgressDTO.setStatus(courseAssignmentDTO.getStatus());
-        courseProgressService.updateCourseProgress(courseProgressDTO);
-
+        courseAssignment.setCourse(course);
+        courseAssignment.setEmployee(employee);
         return courseAssignmentRepository.save(courseAssignment);
     }
 
+    // Existing method to get all assignments
     public List<CourseAssignment> getAllAssignments() {
         return courseAssignmentRepository.findAll();
     }
 
+    // Existing method to update assignment status
     public CourseAssignment updateAssignmentStatus(Long assignmentId, String status) {
-        CourseAssignment assignment = courseAssignmentRepository.findById(assignmentId).orElse(null);
-        if (assignment != null) {
-            assignment.setStatus(status);
-            return courseAssignmentRepository.save(assignment);
-        }
-        return null;
+        CourseAssignment courseAssignment = courseAssignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        courseAssignment.setStatus(status);
+        return courseAssignmentRepository.save(courseAssignment);
     }
 
-    public List<CourseAssignment> getAssignmentsByUsername(String username) {
-        Employee employee = employeeRepository.findByUsername(username);
-        return courseAssignmentRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
-    }
-
-    // New method to get employees assigned to a specific course
+    // Updated method to get all employees assigned to a course
     public List<Employee> getAssignedEmployeesByCourseId(Long courseId) {
-        // Find course by courseId
-        Optional<Course> courseOpt = courseRepository.findByCourseId(courseId);
-        if (courseOpt.isPresent()) {
-            Course course = courseOpt.get();
-            // Find all assignments for the course
-            List<CourseAssignment> assignments = courseAssignmentRepository.findByCourse(course);
-            // Extract employee details from the assignments
-            return assignments.stream()
-                    .map(CourseAssignment::getEmployee)  // Get employee for each assignment
-                    .collect(Collectors.toList());  // Return list of employees
+        List<CourseAssignment> assignments = courseAssignmentRepository.findByCourse_CourseId(courseId);  // Use the updated method
+        // Extract employees from course assignments
+        List<Employee> employees = assignments.stream()
+                .map(CourseAssignment::getEmployee)
+                .collect(Collectors.toList());
+        return employees;
+    }
+
+    public boolean reassignCourseBasedOnAssessmentScore(Long employeeId) {
+        // Fetch the employee by ID
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+        if (employee == null) {
+            return false; // Employee not found
         }
-        return Collections.emptyList();  // Return empty list if course is not found
+
+        // Fetch the latest assessment for the employee
+        Assessment assessment = assessmentRepository.findByEmployee(employee).stream()
+                .max(Comparator.comparing(Assessment::getAssessmentId)) // Get the latest assessment
+                .orElse(null);
+
+        if (assessment == null || assessment.getScore() >= 60) {
+            return false; // No reassignment needed, score is above 60% or no assessment found
+        }
+
+        // Find the course assigned to the employee (assume a single assignment for simplicity)
+        List<CourseAssignment> courseAssignments = courseAssignmentRepository.findByEmployee(employee);
+        if (courseAssignments.isEmpty()) {
+            return false; // No course assignments found for the employee
+        }
+
+        // Find the first course assignment to reassign
+        CourseAssignment courseAssignment = courseAssignments.get(0); // For simplicity, reassigning the first course found
+        if (courseAssignment != null) {
+            // Reassign the course if the score is below 60%
+            Course newCourse = courseRepository.findById(courseAssignment.getCourse().getCourseId())
+                    .orElseThrow(() -> new RuntimeException("Course not found"));
+            CourseAssignment newAssignment = new CourseAssignment();
+            newAssignment.setCourse(newCourse);  // This can be customized to assign a new course
+            newAssignment.setEmployee(employee);
+            courseAssignmentRepository.save(newAssignment);
+            return true; // Course reassigned
+        }
+
+        return false; // No assignment found for the employee
+    }
+
+
+    // New method to get assignments by username
+    public List<CourseAssignment> getAssignmentsByUsername(String username) {
+        // Fetch the employee using the username
+        Employee employee = employeeRepository.findByUsername(username);
+
+        if (employee == null) {
+            throw new RuntimeException("Employee not found for username: " + username);
+        }
+
+        // Return all course assignments for the found employee
+        return courseAssignmentRepository.findByEmployee(employee);
     }
 }
