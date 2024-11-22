@@ -9,6 +9,7 @@ const API_URL4 = 'http://localhost:8080/api/courses';
 const API_URL5 = 'http://localhost:8080/api/course-assignments';
 const API_URL6 = 'http://localhost:8080/api/employees';
 const API_URL7 = 'http://localhost:8080/api/course-progress';
+const API_URL8 = 'http://localhost:8080/api/assessments';
 
 export const registerUser = async (userData) => {
   try {
@@ -266,6 +267,37 @@ export const updateCourseProgress = async (formData) => {
     const response = await axiosInstance.put(`${API_URL7}/update`,formData);
     console.log("Response Data\n", response.data);
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Assessment related API endpoints
+export const createAssessmet = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL8}/create`,formData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAssessment = async (formData) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL8}/update`,formData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllAssessments = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL8}/getAllAssessments`);
+    console.log("Response Data\n", response.data);
+    return response;
   } catch (error) {
     throw error;
   }

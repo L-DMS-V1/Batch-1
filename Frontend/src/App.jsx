@@ -17,6 +17,9 @@ import ViewRequest from './Admin Pages/ViewRequest';
 import CreateCourse from './Admin Pages/CreateCourse';
 import EditCourse from './Admin Pages/EditCourse';
 import EmployeeProgresses from './Admin Pages/EmployeeProgresses';
+import CourseAssignment from './Admin Pages/CourseAssignment';
+import DynamicForm from './Admin Pages/Createassesments';
+import UpdateAssessment from './Admin Pages/updateAssessment';
 
 function App() {
 
@@ -35,7 +38,10 @@ function App() {
           <Route path='/viewRequest' element={<ViewRequest/>}/>
           <Route path='/createCourse' element={<CreateCourse/>}/>
           <Route path='/editCourse' element={<EditCourse/>}/>
+          <Route path='/courseassign' element={<CourseAssignment/>}/>
           <Route path='/feedbacks' element={<Feedbacks/>}/>
+          <Route path='/createassessment' element={<DynamicForm/>}/>
+          <Route path='/updateassessment' element={<UpdateAssessment/>}/>
         </Route>
         <Route element={<ProtectedRoute allowedRole="ROLE_MANAGER"/>}>
           <Route path="/manager" element={<ManagerPage />} />

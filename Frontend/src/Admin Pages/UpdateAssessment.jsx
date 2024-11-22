@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { createAssessmet } from '../Api';
+import { updateAssessment } from '../Api';
 
-const DynamicForm = () => {
-  const [totalMarks, setTotalMarks] = useState(0);
-  const [passingMarks, setPassingMarks] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
+const UpdateAssessment = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { assessmentDetails } = location.state || {};
+
+  const [totalMarks, setTotalMarks] = useState(assessmentDetails?.totalMarks || 0);
+  const [passingMarks, setPassingMarks] = useState(assessmentDetails?.passingMarks || 0);
+  const [duration, setDuration] = useState(assessmentDetails?.duration || 0);
   const [formQuestions, setFormQuestions] = useState([]);
 
-  const location = useLocation();
-  const { course } = location.state || {};
-  const navigator = useNavigate();
-
-  const handleSetTotalQuestions = (e) => {
-    const value = parseInt(e.target.value, 10);
-    // setTotalQuestions(value > 0 ? value : 0);
-    setTotalQuestions(value);
-    // Initialize blank questions with four blank options each
-    const initialQuestions = Array(value).fill(null).map(() => ({
-      questionText: '',
-      options: Array(4).fill(''),
-      correctAnswer: '',
-    }));
-    setFormQuestions(initialQuestions);
-  };
+  useEffect(() => {
+    if (assessmentDetails?.questions) {
+      const formattedQuestions = assessmentDetails.questions.map((q) => ({
+        questionText: q.questionText,
+        options: [q.optionA, q.optionB, q.optionC, q.optionD],
+        correctAnswer: q.correctOption,
+      }));
+      setFormQuestions(formattedQuestions);
+    }
+  }, [assessmentDetails]);
 
   const handleQuestionChange = (index, value) => {
     const updatedQuestions = [...formQuestions];
@@ -44,20 +41,25 @@ const DynamicForm = () => {
     setFormQuestions(updatedQuestions);
   };
 
-  const handlesetTotalMarks = (e) => {
-    setTotalMarks(e.target.value);
-  }
+  const handleRemoveQuestion = (index) => {
+    const updatedQuestions = [...formQuestions];
+    updatedQuestions.splice(index, 1);
+    setFormQuestions(updatedQuestions);
+  };
 
-  const handlesetPassingMarks = (e) => {
-    setPassingMarks(e.target.value);
-  }
-
-  const handlesetDuration = (e) => {
-    setDuration(e.target.value);
-  }
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      questionText: '',
+      options: ['', '', '', ''],
+      correctAnswer: '',
+    };
+    setFormQuestions([...formQuestions, newQuestion]);
+  };
 
   const handleSubmitForm = async (e) => {
-    const isValid = formQuestions.every((q) => 
+    e.preventDefault();
+
+    const isValid = formQuestions.every((q) =>
       q.questionText.trim() &&
       q.options.every((opt) => opt.trim()) &&
       q.correctAnswer.trim()
@@ -68,7 +70,6 @@ const DynamicForm = () => {
       return;
     }
 
-      // Construct the JSON object
     const formattedQuestions = formQuestions.map((q) => ({
       questionText: q.questionText,
       optionA: q.options[0],
@@ -79,7 +80,7 @@ const DynamicForm = () => {
     }));
 
     const payload = {
-      courseId: course.courseId,
+      courseId: assessmentDetails.course.courseId,
       questions: formattedQuestions,
       totalMarks: Number(totalMarks),
       passingMarks: Number(passingMarks),
@@ -87,44 +88,30 @@ const DynamicForm = () => {
     };
 
     try {
-      const response = await createAssessmet(payload);
-      console.log("Assessment created successfully:", response.data);
-      alert("Assessment created successfully!");
-      navigator('/courselist');
+      const response = await updateAssessment(payload);
+      console.log('Assessment updated successfully:', response.data);
+      alert('Assessment updated successfully!');
+      navigate('/courselist');
     } catch (error) {
-      console.error("Error creating assessment:", error);
-      alert("Failed to create assessment. Please try again.");
+      console.error('Error updating assessment:', error);
+      alert('Failed to update assessment. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-200 p-6">
       <div className="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Create Assessments</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Update Assessment</h1>
 
-        {/* Select Number of Questions */}
-        <div className="mb-6">
-          <label className="block font-medium text-gray-700 mb-2">Number of Questions</label>
-          <input
-            type="number"
-            onChange={handleSetTotalQuestions}
-            value={totalQuestions}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter number of questions"
-            min="1"
-          />
-        </div>
-
-        {/* TotalMarks */}
+        {/* Total Marks */}
         <div className="mb-6">
           <label className="block font-medium text-gray-700 mb-2">Total Marks</label>
           <input
             type="number"
-            onChange={handlesetTotalMarks}
+            onChange={(e) => setTotalMarks(e.target.value)}
             value={totalMarks}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter total marks"
-            min="1"
           />
         </div>
 
@@ -133,34 +120,31 @@ const DynamicForm = () => {
           <label className="block font-medium text-gray-700 mb-2">Passing Marks</label>
           <input
             type="number"
-            onChange={handlesetPassingMarks}
+            onChange={(e) => setPassingMarks(e.target.value)}
             value={passingMarks}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter Passing Marks"
-            min="1"
+            placeholder="Enter passing marks"
           />
         </div>
 
         {/* Duration */}
         <div className="mb-6">
-          <label className="block font-medium text-gray-700 mb-2">Duration of the assessment</label>
+          <label className="block font-medium text-gray-700 mb-2">Duration (in minutes)</label>
           <input
             type="number"
-            onChange={handlesetDuration}
+            onChange={(e) => setDuration(e.target.value)}
             value={duration}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter duration of the assessment(in minutes)"
-            min="1"
+            placeholder="Enter duration"
           />
         </div>
 
-        {/* Display Generated Question Inputs */}
+        {/* Questions */}
         {formQuestions.map((question, qIndex) => (
           <div key={qIndex} className="mb-6 p-4 border rounded-lg bg-gray-50 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-700 mb-4">
               Question {qIndex + 1}
             </h3>
-            
             {/* Question Text */}
             <input
               type="text"
@@ -169,7 +153,6 @@ const DynamicForm = () => {
               className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter the question"
             />
-
             {/* Options */}
             <div className="space-y-4">
               {question.options.map((option, optIndex) => (
@@ -185,7 +168,6 @@ const DynamicForm = () => {
                 </div>
               ))}
             </div>
-
             {/* Correct Answer */}
             <div className="mt-4">
               <label className="block font-medium text-gray-700 mb-2">Correct Answer</label>
@@ -202,21 +184,37 @@ const DynamicForm = () => {
                 ))}
               </select>
             </div>
+            {/* Remove Button */}
+            <button
+              onClick={() => handleRemoveQuestion(qIndex)}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Remove This Question
+            </button>
           </div>
         ))}
 
+        {/* Add New Question Button */}
+        <div className="flex justify-center mt-6">
+        <button
+            onClick={handleAddQuestion}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        >
+            Add New Question
+        </button>
+        </div>
+
+
         {/* Submit Button */}
-        {totalQuestions > 0 && (
-          <button
-            onClick={handleSubmitForm}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Submit Form
-          </button>
-        )}
+        <button
+          onClick={handleSubmitForm}
+          className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Update Assessment
+        </button>
       </div>
     </div>
   );
 };
 
-export default DynamicForm;
+export default UpdateAssessment;

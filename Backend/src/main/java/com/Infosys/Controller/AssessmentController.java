@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/assessments")
 public class AssessmentController {
@@ -29,6 +31,13 @@ public class AssessmentController {
     public ResponseEntity<String> updateAssessment(@RequestBody AssessmentDTO assessmentDTO) {
         assessmentService.updateAssessment(assessmentDTO);
         return new ResponseEntity<>("Assessment updated successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAllAssessments")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Assessment>> getAllAssessments() {
+        List<Assessment> assessmentList =  assessmentService.getAllAssessment();
+        return new ResponseEntity<>(assessmentList, HttpStatus.CREATED);
     }
 
     @GetMapping("/getAssessment/{courseId}")
