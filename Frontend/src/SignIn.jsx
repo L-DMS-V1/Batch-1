@@ -19,7 +19,11 @@ function SignIn() {
       if (response) {
         console.log("Login Successful");
         toast.success(response.message || 'Logged in successfully');
-        navigator('/dashboard');
+        
+        // Add a 2-second delay before navigating
+        setTimeout(() => {
+          navigator('/dashboard');
+        }, 2000);
       } else {
         console.log("Error : " + response.data);
         toast.error('Invalid credentials');
@@ -37,7 +41,7 @@ function SignIn() {
         progress: undefined,
         theme: "colored",
         transition: Bounce,
-        });
+      });
     }
   };
 

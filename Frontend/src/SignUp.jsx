@@ -3,6 +3,8 @@ import { registerUser } from "./Api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import img from "../src/assets/images/back2.jpg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignUp() {
   const [accountId, setAccountId] = useState("");
@@ -27,16 +29,28 @@ function SignUp() {
         role,
       });
       console.log({ accountId, accountName, username, email, password, role });
+
       if (response.data === "User registered successfully") {
-        console.log(response.data);
-        setMessage(response.message || "Registered successfully");
-        navigator("/signin");
+        // Display success toast with delay of 2 seconds
+        toast.success("Registered successfully!", {
+          autoClose: 2000, // auto close after 2 seconds
+        });
+        
+        setTimeout(() => {
+          navigator("/signin"); // Navigate after 2 seconds
+        }, 2000);
       } else {
-        console.log("Error : " + response.data);
+        // Error handling
+        toast.error("Error: " + response.data, {
+          autoClose: 2000,
+        });
         navigator("/");
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed");
+      toast.error("Registration failed", {
+        autoClose: 2000,
+      });
     }
   };
 
@@ -116,6 +130,9 @@ function SignUp() {
         </div>
         <p className="mt-4 text-center text-white">{message}</p>
       </div>
+
+      {/* Toast container to show notifications */}
+      <ToastContainer />
     </div>
   );
 }
