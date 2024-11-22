@@ -17,6 +17,7 @@ import ViewRequest from './Admin Pages/ViewRequest';
 import CreateCourse from './Admin Pages/CreateCourse';
 import EditCourse from './Admin Pages/EditCourse';
 import EmployeeProgresses from './Admin Pages/EmployeeProgresses';
+import CourseAssignment from './Admin Pages/CourseAssignment';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='/createCourse' element={<CreateCourse/>}/>
           <Route path='/editCourse' element={<EditCourse/>}/>
           <Route path='/feedbacks' element={<Feedbacks/>}/>
+          <Route path='/courseassign' element={<CourseAssignment/>}/>
         </Route>
         <Route element={<ProtectedRoute allowedRole="ROLE_MANAGER"/>}>
           <Route path="/manager" element={<ManagerPage />} />
