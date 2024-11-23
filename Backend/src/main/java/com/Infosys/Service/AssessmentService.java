@@ -112,8 +112,26 @@ public class AssessmentService {
                 score++;
         }
 
-        if (score >= assessment.getPassingMarks())
+        if (score >= assessment.getPassingMarks()){
             result = "Congratulations!! Assessment Cleared Successfully!!";
+            Optional<CourseProgress> courseProgressOpt = courseProgressRepository.findByEmployeeEmployeeIdAndCourseCourseId(submissionDTO.getEmployeeId(), assessment.getCourse().getCourseId());
+            if(courseProgressOpt.isPresent()) {
+                CourseProgress courseProgress = courseProgressOpt.get();
+                courseProgress.setStatus("COMPLETED");
+                courseProgressRepository.save(courseProgress);
+                Optional<CourseAssignment> courseAssignmentOpt = courseAssignmentRepository.findByEmployeeEmployeeIdAndCourseCourseId(
+                        courseProgress.getEmployee().getEmployeeId(),
+                        courseProgress.getCourse().getCourseId()
+                );
+                if (courseAssignmentOpt.isPresent()){
+                    CourseAssignment courseAssignment = courseAssignmentOpt.get();
+                    courseAssignment.setStatus("COMPLETED");
+                    courseAssignmentRepository.save(courseAssignment);
+                } else
+                    throw new RuntimeException("CourseAssignment is not found");
+            } else
+                throw new RuntimeException("courseProgress is not found");
+        }
         else{
             result = "We're sorry!! You could not pass the Assessment";
             Optional<CourseProgress> courseProgressOpt = courseProgressRepository.findByEmployeeEmployeeIdAndCourseCourseId(submissionDTO.getEmployeeId(), assessment.getCourse().getCourseId());
@@ -129,11 +147,16 @@ public class AssessmentService {
         Optional<Employee> employeeOpt = employeeRepository.findById(submissionDTO.getEmployeeId());
         employeeOpt.ifPresent(employeeAssessment::setEmployee);
         employeeAssessment.setAssessment(assessment);
-        employeeAssessment.setResult(score > assessment.getPassingMarks() ? AssessmentResult.PASS : AssessmentResult.FAIL);
+        employeeAssessment.setResult(score >= assessment.getPassingMarks() ? AssessmentResult.PASS : AssessmentResult.FAIL);
         employeeAssessment.setScore(score);
         employeeAssessment.setAttemptedDate(LocalDateTime.now());
         employeeAssessmentRepository.save(employeeAssessment);
 
         return result;
+    }
+
+    public List<EmployeeAssessment> getAssessmentsByUsername(String username) {
+        Employee employee = employeeRepository.findByUsername(username);
+        return employeeAssessmentRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
     }
 }

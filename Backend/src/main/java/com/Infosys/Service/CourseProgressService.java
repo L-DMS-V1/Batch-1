@@ -44,20 +44,7 @@ public class CourseProgressService {
         if (courseProgressOpt.isPresent()) {
             CourseProgress courseProgress = courseProgressOpt.get();
             courseProgress.setProgressPercentage(courseProgressDTO.getProgressPercentage());
-            if(courseProgressDTO.getProgressPercentage() == 100L) {
-                courseProgress.setStatus("COMPLETED");
-                Optional<CourseAssignment> courseAssignmentOpt = courseAssignmentRepository.findByEmployeeEmployeeIdAndCourseCourseId(
-                        courseProgressDTO.getEmployeeId(),
-                        courseProgressDTO.getCourseId()
-                );
-                if (courseAssignmentOpt.isPresent()){
-                    CourseAssignment courseAssignment = courseAssignmentOpt.get();
-                    courseAssignment.setStatus("COMPLETED");
-                    courseAssignmentRepository.save(courseAssignment);
-                }
-            }
-            else
-                courseProgress.setStatus(courseProgressDTO.getStatus());
+            courseProgress.setStatus(courseProgressDTO.getStatus());
             courseProgress.setLastAccessedDate(LocalDateTime.now());
             courseProgressRepository.save(courseProgress);
         } else {

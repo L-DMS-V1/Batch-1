@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import Navbar from "./EmployeeNavbar";
-import { getAssignments, getCourseProgress, updateCourseProgress } from "../Api";
+import { useNavigate } from "react-router-dom";
+import { getAssignments, getCourseProgress, updateCourseProgress,getEmployeeAssessments } from "../Api";
 
 function EmployeePage() {
   const [isProgressDropdownOpen, setIsProgressDropdownOpen] = useState(false);
@@ -17,6 +18,9 @@ function EmployeePage() {
   const [ongoingAssignmentsCount, setongoingAssignmentsCount] = useState(0);
   const [completedAssignmentsCount, setcompletedAssignmentsCount] = useState(0);
   const [totalAssignmentsCount, settotalAssignmentsCount] = useState(0);
+  const [completedCourses, setCompletedCourses] = useState([]);
+
+  const navigator = useNavigate();
 
 
   const toggleProgressDropdown = () => {
@@ -81,9 +85,34 @@ function EmployeePage() {
     fetchCourseProgress();
   }, []);
 
+  useEffect(() => {
+    const fetchEmployeeAssessments = async () => {
+      try {
+        const EmployeeAssessments = await getEmployeeAssessments();
+
+        // Extract the course IDs where the result is "PASS"
+        const passedCourses = EmployeeAssessments
+          .filter((EmployeeAssessment) => EmployeeAssessment.result === "PASS")
+          .map((EmployeeAssessment) => EmployeeAssessment.assessment.course.courseId);
+
+        setCompletedCourses(passedCourses);
+      } catch (error) {
+        console.error("Error fetching employee assessments:", error);
+      }
+    };
+
+    fetchEmployeeAssessments();
+  }, []);
+
   const openUpdateModal = (progress) => {
     setSelectedProgress(progress);
     setIsUpdateModalOpen(true);
+  };
+
+  const takeAssessment = (progress) => {
+    // Logic for handling the assessment action
+    navigator('/takeassessment',{ state: { courseId: progress.course.courseId, employeeId: progress.employee.employeeId }});
+    console.log(`Taking assessment for: ${progress.course.courseName}`);
   };
 
   const closeUpdateModal = () => {
@@ -213,6 +242,8 @@ function EmployeePage() {
                 const progressColors = ["bg-green-500", "bg-blue-500", "bg-red-500", "bg-yellow-500", "bg-purple-500"];
                 const progressColor = progressColors[index % progressColors.length]; // Cycle through colors
 
+                const isCompleted = completedCourses.includes(progress.course.courseId);
+
                 return (
                   <div key={progress.progressId} className="mt-4">
                     <p className="text-sm font-semibold">
@@ -226,10 +257,22 @@ function EmployeePage() {
                         ></div>
                       </div>
                       <button
-                        className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                        onClick={() => openUpdateModal(progress)}
+                        className={`text-white px-4 py-1 rounded ${
+                          isCompleted
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : progress.progressPercentage === 100
+                            ? "bg-green-500 hover:bg-green-600"
+                            : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                        disabled={isCompleted}
+                        onClick={() =>
+                          !isCompleted &&
+                          (progress.progressPercentage === 100
+                            ? takeAssessment(progress)
+                            : openUpdateModal(progress))
+                        }
                       >
-                        Update
+                        {isCompleted ? "COMPLETED" : progress.progressPercentage === 100 ? "Take Assessment" : "Update"}
                       </button>
                     </div>
                   </div>

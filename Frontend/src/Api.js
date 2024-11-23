@@ -303,6 +303,37 @@ export const getAllAssessments = async () => {
   }
 };
 
+export const getAssessment = async (courseId) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL8}/getAssessment/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const submitAssessment = async (forData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL8}/submit`, forData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEmployeeAssessments = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL6}/get-employee-assessments`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 export const logout = () => {
   localStorage.removeItem('token');

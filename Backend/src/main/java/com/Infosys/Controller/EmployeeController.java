@@ -3,7 +3,9 @@ package com.Infosys.Controller;
 import com.Infosys.Entity.CourseAssignment;
 import com.Infosys.Entity.DTO.UserDTO;
 import com.Infosys.Entity.Employee;
+import com.Infosys.Entity.EmployeeAssessment;
 import com.Infosys.Repository.UserRepository;
+import com.Infosys.Service.AssessmentService;
 import com.Infosys.Service.CourseAssignmentService;
 import com.Infosys.Service.EmployeeService;
 import com.Infosys.Service.UserService;
@@ -31,6 +33,9 @@ public class EmployeeController {
     @Autowired
     private CourseAssignmentService courseAssignmentService;
 
+    @Autowired
+    private AssessmentService assessmentService;
+
 //    @PostMapping
 //    public ResponseEntity<String> createEmployee(@RequestBody UserDTO userDTO) {
 //        userService.createUser(userDTO);
@@ -48,4 +53,11 @@ public class EmployeeController {
           List<CourseAssignment> courseAssignmentList = courseAssignmentService.getAssignmentsByUsername(username);
           return new ResponseEntity<>(courseAssignmentList,HttpStatus.OK);
       }
+
+    @GetMapping("/get-employee-assessments")
+    public ResponseEntity<List<EmployeeAssessment>> getEmployeeAssessments() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<EmployeeAssessment> employeeAssessmentList = assessmentService.getAssessmentsByUsername(username);
+        return new ResponseEntity<>(employeeAssessmentList,HttpStatus.OK);
+    }
 }
