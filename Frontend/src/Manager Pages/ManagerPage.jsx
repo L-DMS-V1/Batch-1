@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import img from '../assets/images/anime1.jpg';
 import { useNavigate } from 'react-router-dom';
 import { getRequests } from '../Api';
 
@@ -45,11 +46,12 @@ function LearningHub() {
   };
 
   return (
-    <div className="p-6 bg-gray-300 min-h-screen relative">
-      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded shadow">
-        <h1 className="text-2xl font-semibold">Learning Hub</h1>
+    <div className=" bg-gray-300 min-h-screen relative">
+      <div className="flex justify-between items-center mb-6 bg-gray-800 p-4  shadow">
+        <h1 className="text-3xl font-semibold text-orange-600">Learning Hub</h1>
+        <img src={img} className='h-11 absolute left-48'/>
         <div className="flex items-center space-x-4">
-          <span className="text-lg">Hey Manager!</span>
+          <span className="text-lg text-white">Hey Manager!</span>
           <button 
             onClick={handleLogout}
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded flex items-center space-x-2"

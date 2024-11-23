@@ -46,7 +46,7 @@ const handleViewRequest = async (request) => {
 
       {/* Dashboard Content */}
       <div className="p-6">
-        <h2 className="text-2xl font-bold text-center mb-6">Dashboard</h2>
+        <h2 className="text-4xl font-bold text-center mb-6">Dashboard</h2>
 
         {/* Dashboard Summary */}
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -63,11 +63,6 @@ const handleViewRequest = async (request) => {
             <p>Requests</p>
           </div>
         </div>
-
-        {/* Add Employees Button */}
-        {/* <div className="flex justify-end mb-4">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">+ Add Employees</button>
-        </div> */}
 
         {/* Pending and Completed Requests */}
         <div className="grid grid-cols-2 gap-4">
