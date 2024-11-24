@@ -5,10 +5,11 @@ import { submitFeedback } from "../Api";
 const GiveFeedback = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { employeeId } = location.state || {};
+    const { courseId, employeeId } = location.state || {};
 
     const [formData, setFormData] = useState({
         employeeId: employeeId || null,
+        courseId: courseId || null, 
         rating: "",
         feedBackEnum: "",
         comment: "",
@@ -42,6 +43,7 @@ const GiveFeedback = () => {
 
         try {
             setError(""); // Clear any previous errors
+            console.log(formData)
             const response = await submitFeedback(formData);
             console.log("Feedback submitted successfully:", response);
             alert("Feedback submitted successfully!");

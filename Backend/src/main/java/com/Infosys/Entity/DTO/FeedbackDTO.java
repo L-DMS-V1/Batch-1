@@ -2,6 +2,7 @@ package com.Infosys.Entity.DTO;
 
 public class FeedbackDTO {
     private Long employeeId;
+    private Long courseId;
     private int rating;
     private String feedBackEnum;
     private String comment;
@@ -37,5 +38,13 @@ public class FeedbackDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 }

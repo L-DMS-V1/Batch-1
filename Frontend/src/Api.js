@@ -347,7 +347,7 @@ export const submitFeedback = async (formData) => {
 
 export const getAllFeedbacks = async () => {
   try {
-    const response = await axiosInstance.get(`${API_URL9}`,formData);
+    const response = await axiosInstance.get(`${API_URL9}`);
     console.log("Response Data\n", response.data);
     return response.data;
   } catch (error) {

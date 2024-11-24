@@ -13,6 +13,10 @@ public class Feedback {
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId")
     private Employee employee;
 
+    @ManyToOne
+    @JoinColumn(name = "courseId", referencedColumnName = "courseId")
+    private Course course;
+
     private int rating;
 
     private String feedBackEnum;
@@ -59,5 +63,13 @@ public class Feedback {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
