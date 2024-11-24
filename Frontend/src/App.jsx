@@ -20,6 +20,8 @@ import CourseAssignment from './Admin Pages/CourseAssignment';
 import DynamicForm from './Admin Pages/Createassesments';
 import UpdateAssessment from './Admin Pages/updateAssessment';
 import TakeAssessment from './Employee Pages/TakeAssessment';
+import GiveFeedback from './Employee Pages/GiveFeedback';
+import Thankyou from './Employee Pages/Thankyou';
 
 function App() {
 
@@ -49,6 +51,8 @@ function App() {
         <Route element={<ProtectedRoute allowedRole="ROLE_EMPLOYEE"/>}>
           <Route path="/employee" element={<EmployeePage />} />
           <Route path="/takeassessment" element={<TakeAssessment />} />
+          <Route path="/givefeedback" element={<GiveFeedback />} />
+          <Route path="/thankyou" element={<Thankyou />} />
         </Route>
         
       </Routes>

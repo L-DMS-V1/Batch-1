@@ -17,6 +17,7 @@ const TakeAssessment = () => {
   const [pauseModalOpen, setPauseModalOpen] = useState(false); // Pause modal state
 
   const timerRef = useRef(null); // Reference for the timer
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false); // To avoid duplicate submissions
 
   useEffect(() => {
     // Fetch the assessment on load
@@ -38,22 +39,28 @@ const TakeAssessment = () => {
     if (!isPaused) {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev <= 0) {
-            clearInterval(timerRef.current);
-            handleSubmit();
-            return 0;
+          if (prev > 0) {
+            return prev - 1;
           }
-          return prev - 1;
+          clearInterval(timerRef.current); // Ensure timer stops
+          return 0; // Prevent negative time
         });
       }, 1000);
     }
-
-    return () => clearInterval(timerRef.current); // Clear the timer on unmount
+  
+    return () => clearInterval(timerRef.current); // Cleanup on unmount
   }, [isPaused]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
+  
+    // If timer hits 0, trigger submission
+    if (seconds === 0 && !isAutoSubmitting) {
+      setIsAutoSubmitting(true); // Prevent duplicate submission
+      handleSubmit();
+    }
+  
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
@@ -147,7 +154,11 @@ const TakeAssessment = () => {
                       <p className="mt-4">Result : {resultData}</p>
                       {resultData === "PASS" ? (
                           <button
-                              onClick={() => navigate("/feedback")}
+                              onClick={() =>             
+                                navigate("/givefeedback", {
+                                state: { employeeId },
+                            })
+                          }
                               className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                           >
                               Give Feedback

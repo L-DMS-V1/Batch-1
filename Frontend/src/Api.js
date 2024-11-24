@@ -10,6 +10,7 @@ const API_URL5 = 'http://localhost:8080/api/course-assignments';
 const API_URL6 = 'http://localhost:8080/api/employees';
 const API_URL7 = 'http://localhost:8080/api/course-progress';
 const API_URL8 = 'http://localhost:8080/api/assessments';
+const API_URL9 = 'http://localhost:8080/api/feedbacks';
 
 export const registerUser = async (userData) => {
   try {
@@ -333,6 +334,26 @@ export const getEmployeeAssessments = async () => {
   }
 };
 
+// Feedbacks related API
+export const submitFeedback = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL9}/submit`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllFeedbacks = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL9}`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export const logout = () => {
