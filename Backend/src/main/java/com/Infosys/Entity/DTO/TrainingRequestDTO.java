@@ -1,6 +1,9 @@
 package com.Infosys.Entity.DTO;
 
+import com.Infosys.Entity.Employee;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
 
 public class TrainingRequestDTO {
 
@@ -20,7 +23,7 @@ public class TrainingRequestDTO {
     private String employeePosition;
 
 //    @NotBlank(message = "Required Employees is mandatory")
-    private int requiredEmployees;
+    private List<EmployeeDTO> requiredEmployees;
 
     public @NotBlank(message = "Course name is mandatory") String getCourseName() {
         return courseName;
@@ -62,11 +65,11 @@ public class TrainingRequestDTO {
         this.employeePosition = employeePosition;
     }
 
-    public int getRequiredEmployees() {
+    public List<EmployeeDTO> getRequiredEmployees() {
         return requiredEmployees;
     }
 
-    public void setRequiredEmployees(int requiredEmployees) {
+    public void setRequiredEmployees(List<EmployeeDTO> requiredEmployees) {
         this.requiredEmployees = requiredEmployees;
     }
 

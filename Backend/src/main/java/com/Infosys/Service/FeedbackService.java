@@ -28,7 +28,7 @@ public class FeedbackService {
     @Autowired
     private CourseRepository courseRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(FeedbackService.class);
 
     public Feedback submitFeedback(FeedbackDTO feedbackDTO) {
         Feedback feedback = new Feedback();

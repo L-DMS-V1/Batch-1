@@ -211,7 +211,20 @@ export const editCourse = async (courseId, formData) => {
 };
 
 // Course Assignment realated API requests
+// For manager
 export const getAllEmployees = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL2}/getAllEmployees`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// For admin
+export const getAllEmployeesAdmin = async () => {
   try {
     const response = await axiosInstance.get(`${API_URL5}/getAllEmployees`);
     console.log("Response Data\n", response.data);
@@ -234,6 +247,16 @@ export const assignCourse = async (formData) => {
 export const getAssignedEmployees = async (courseId) => {
   try {
     const response = await axiosInstance.get(`${API_URL5}/assigned-employees/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const changeAssignment = async (progressId, courseId) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL5}/${progressId}/${courseId}`);
     console.log("Response Data\n", response.data);
     return response.data;
   } catch (error) {

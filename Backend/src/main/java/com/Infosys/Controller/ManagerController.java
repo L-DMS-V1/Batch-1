@@ -1,7 +1,9 @@
 package com.Infosys.Controller;
 
 import com.Infosys.Entity.DTO.TrainingRequestDTO;
+import com.Infosys.Entity.Employee;
 import com.Infosys.Entity.TrainingRequest;
+import com.Infosys.Service.EmployeeService;
 import com.Infosys.Service.ManagerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
+    @Autowired
+    private EmployeeService employeeService;
+
     @PostMapping("/createRequest")
     public ResponseEntity<String> createRequest(@Valid @RequestBody TrainingRequestDTO trainingRequestDTO) {
         managerService.requestForm(trainingRequestDTO);
@@ -40,6 +45,11 @@ public class ManagerController {
     public ResponseEntity<TrainingRequest> getRequest(@PathVariable("id") Long requestId) {
         TrainingRequest trainingRequest = managerService.getRequestByRequestId(requestId);
         return ResponseEntity.ok(trainingRequest);
+    }
+
+    @GetMapping("/getAllEmployees")
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
 }

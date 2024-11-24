@@ -1,6 +1,9 @@
 package com.Infosys.Entity;
 
+import com.Infosys.Entity.DTO.EmployeeDTO;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "TrainingRequestTable1")
@@ -24,8 +27,13 @@ public class TrainingRequest {
     @Column(name = "employee_Position")
     private String employeePosition;
 
-    @Column(name = "required_Employees")
-    private int requiredEmployees;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "training_request_employee", // Join table name
+            joinColumns = @JoinColumn(name = "training_request_id"), // Foreign key for TrainingRequest
+            inverseJoinColumns = @JoinColumn(name = "employee_id")  // Foreign key for Employee
+    )
+    private List<Employee> requiredEmployees;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -82,11 +90,11 @@ public class TrainingRequest {
         this.employeePosition = employeePosition;
     }
 
-    public int getRequiredEmployees() {
+    public List<Employee> getRequiredEmployees() {
         return requiredEmployees;
     }
 
-    public void setRequiredEmployees(int requiredEmployees) {
+    public void setRequiredEmployees(List<Employee> requiredEmployees) {
         this.requiredEmployees = requiredEmployees;
     }
 
