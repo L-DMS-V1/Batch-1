@@ -10,37 +10,41 @@ function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await loginUser(username, password);
-      if (response) {
-        console.log("Login Successful");
-        toast.success(response.message || 'Logged in successfully');
-        
-        // Add a 2-second delay before navigating
-        setTimeout(() => {
-          navigator('/dashboard');
-        }, 2000);
-      } else {
-        console.log("Error : " + response.data);
-        toast.error('Invalid credentials');
-        navigator('/');
-      }
+  
+      // Extract role from response
+      const role = response.role || localStorage.getItem('role'); // Fallback to localStorage
+      toast.success('Login successful!');
+  
+      // Navigate based on role
+      setTimeout(() => {
+        if (role === 'ROLE_ADMIN') {
+          navigate('/admin');
+        } else if (role === 'ROLE_MANAGER') {
+          navigate('/manager');
+        } else if (role === 'ROLE_EMPLOYEE') {
+          navigate('/employee');
+        } else {
+          navigate('/'); // Default fallback
+        }
+      }, 2000);
     } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.message || 'Invalid Username or Password', {
+      console.error("Login failed:", error);
+      toast.error(error.response?.data?.message || 'Invalid username or password', {
         position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
       });
     }
   };
@@ -69,7 +73,10 @@ function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
           />
-          <button type="submit" className="bg-green-500 text-white py-2 px-6 rounded-full hover:bg-green-600 transition duration-200">
+          <button
+            type="submit"
+            className="bg-green-500 text-white py-2 px-6 rounded-full hover:bg-green-600 transition duration-200"
+          >
             Sign In
           </button>
         </form>

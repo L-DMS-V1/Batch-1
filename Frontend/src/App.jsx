@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Welcome from './Welcome';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import Dashboard from './Dashboard';
 import AdminPage from './Admin Pages/Admin';
 import EmployeePage from './Employee Pages/EmployeePage';
 import ManagerPage from './Manager Pages/ManagerPage';
@@ -31,7 +30,6 @@ function App() {
         <Route path="/forbidden" element={<Forbidden />}/>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route element={<ProtectedRoute allowedRole="ROLE_ADMIN" />}>
           <Route path="/admin" element={<AdminPage />} />
           <Route path='/courselist' element={<CourseList/>}/>
