@@ -19,13 +19,18 @@ const TakeAssessment = () => {
   const timerRef = useRef(null); // Reference for the timer
   const [isAutoSubmitting, setIsAutoSubmitting] = useState(false); // To avoid duplicate submissions
 
+  // Update handleback function to navigate to /employee
+  const handleback = () => {
+    navigate('/employee'); // Redirect to the employee home page
+  };
+
   useEffect(() => {
     // Fetch the assessment on load
     const fetchAssessment = async () => {
       try {
         const data = await getAssessment(courseId);
         setAssessment(data);
-        setAnswers(new Array(data.questions.length).fill(""));
+        setAnswers(new Array(data.questions.length).fill("")); // Initialize answers
         setTimeLeft(data.duration * 60); // Convert minutes to seconds
       } catch (error) {
         console.error("Error fetching assessment:", error);
@@ -165,7 +170,7 @@ const TakeAssessment = () => {
                           </button>
                       ) : (
                           <button
-                              onClick={() => navigate("/employee")}
+                              onClick={() => navigate('/employee')}
                               className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                           >
                               Return to Home
@@ -193,6 +198,12 @@ const TakeAssessment = () => {
                               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                           >
                               End Test
+                          </button>
+                          <button
+                              onClick={handleback}
+                              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                          >
+                              Return to Home
                           </button>
                       </div>
                   </div>

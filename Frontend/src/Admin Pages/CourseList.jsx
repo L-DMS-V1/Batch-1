@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAllCourses, getCourse, getAllAssessments } from '../Api';
-import Navbar from './AdminNavbar';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAllCourses, getAllAssessments } from "../Api";
+import Navbar from "./AdminNavbar";
 
 const CourseList = () => {
   const [allCourses, setAllCourses] = useState([]);
@@ -15,14 +15,16 @@ const CourseList = () => {
         const mockAllCourses = await getAllCourses();
         const mockAllAssessments = await getAllAssessments();
         setAllCourses(mockAllCourses);
-        // Map assessments by courseId
-        const assessmentMap = mockAllAssessments.data.reduce((acc, assessment) => {
-          acc[assessment.course.courseId] = assessment;
-          return acc;
-        }, {});
+        const assessmentMap = mockAllAssessments.data.reduce(
+          (acc, assessment) => {
+            acc[assessment.course.courseId] = assessment;
+            return acc;
+          },
+          {}
+        );
         setAssessments(assessmentMap);
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error("Error fetching courses:", error);
       }
     };
 
@@ -30,51 +32,58 @@ const CourseList = () => {
   }, []);
 
   const handleBack = () => {
-    navigator('/admin');
+    navigator("/admin");
   };
 
   const handleAddCourse = () => {
-    navigator('/addcourse');
+    navigator("/addcourse");
   };
 
   const handleCreateCourse = () => {
-    navigator('/createCourse', { state: { requestId: requestData.requestId } });
+    navigator("/createCourse");
   };
 
-  const handleEditCourse = async (course) => {
+  const handleEditCourse = (course) => {
     try {
-      navigator('/editCourse', { state: { course } }); // Pass data to the route
+      navigator("/editCourse", { state: { course } });
     } catch (error) {
-      console.error('Failed to fetch course details:', error);
+      console.error("Failed to fetch course details:", error);
     }
   };
 
   const handleAddLearners = (course) => {
     try {
-      navigator('/courseassign', { state: { course } }); // Pass data to the route
+      navigator("/courseassign", { state: { course } });
     } catch (error) {
-      console.error('Failed to fetch course details:', error);
+      console.error("Failed to fetch course details:", error);
     }
   };
 
-  const handleViewCourse = (course) => {
-    setSelectedCourse(course);
+  const handleAssessment = (course, assessmentExists) => {
+    if (assessmentExists) {
+      const assessmentDetails = assessments[course.courseId];
+      navigator("/updateassessment", { state: { assessmentDetails } });
+    } else {
+      navigator("/createassessment", { state: { course } });
+    }
   };
 
   const closeCard = () => {
     setSelectedCourse(null);
   };
 
-  const handleassessment = (course, assessmentExists) => {
-    if (assessmentExists) {
-      // Redirect to Update Assessment page with assessment details
-      const assessmentDetails = assessments[course.courseId]; // Retrieve assessment details for the course
-      navigator('/updateassessment', {
-        state: { assessmentDetails }, // Passing details via state
-      });
-    } else {
-      // Redirect to Create Assessment page
-      navigator('/createassessment',{ state: { course } }); // Passing course data
+  const extractYouTubeId = (url) => {
+    try {
+      const youtubeUrl = new URL(url);
+      if (youtubeUrl.hostname === "youtu.be") {
+        return youtubeUrl.pathname.slice(1);
+      } else if (youtubeUrl.hostname.includes("youtube.com")) {
+        return youtubeUrl.searchParams.get("v");
+      }
+      return null;
+    } catch (error) {
+      console.error("Invalid YouTube URL:", url);
+      return null;
     }
   };
 
@@ -91,54 +100,89 @@ const CourseList = () => {
         >
           Back to Dashboard
         </button>
+        <button
+          onClick={handleAddCourse}
+          className="mb-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        >
+          Add Course
+        </button>
+        <button
+          onClick={handleCreateCourse}
+          className="mb-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+        >
+          Create Course
+        </button>
       </div>
 
       {/* Course List */}
       <div className="p-6 bg-white shadow-lg rounded-lg">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Course List</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          Course List
+        </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {allCourses.map((course, index) => {
+            const videoId = extractYouTubeId(course.resourceLinks);
             const assessmentExists = assessments[course.courseId] !== undefined;
 
             return (
               <div
                 key={index}
-                className="p-4 bg-gray-100 rounded-md shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
+                className="p-4 bg-gray-100 rounded-md shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 cursor-pointer"
+                onClick={() => setSelectedCourse(course)} // Make card clickable
               >
                 <h4 className="text-lg font-medium text-gray-800 mb-2">
                   {course.courseName}
                 </h4>
                 <p className="text-gray-600">{course.keyConcepts}</p>
                 <p className="text-gray-600">{course.duration}</p>
+
+                {/* Embed YouTube Video */}
+                {videoId && (
+                  <div className="mt-4 aspect-w-16 aspect-h-9">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${videoId}`}
+                      title={`Video for ${course.courseName}`}
+                      allowFullScreen
+                      frameBorder="0"
+                      className="w-full h-52 rounded-md"
+                    ></iframe>
+                  </div>
+                )}
+
                 <div className="mt-4 flex space-x-2">
                   <button
-                    onClick={() => handleEditCourse(course)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click from triggering
+                      handleEditCourse(course);
+                    }}
+                    className="px-4 py-2 max-h-10 w-24 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleAddLearners(course)}
-                    className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click from triggering
+                      handleAddLearners(course);
+                    }}
+                    className="px-4 py-2 max-h-10  bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
                   >
                     Add Learners
                   </button>
                   <button
-                    onClick={() => handleViewCourse(course)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition-colors"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleassessment(course, assessmentExists)}
-                    className={`px-4 py-2 ${
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click from triggering
+                      handleAssessment(course, assessmentExists);
+                    }}
+                    className={`px-4 py-1 max-h-10  ${
                       assessmentExists
-                        ? 'bg-yellow-500 hover:bg-yellow-700'
-                        : 'bg-emerald-600 hover:bg-emerald-800'
+                        ? "bg-yellow-500 hover:bg-yellow-700"
+                        : "bg-emerald-600 hover:bg-emerald-800"
                     } text-white rounded-md transition-colors`}
                   >
-                    {assessmentExists ? 'Update Assessment' : 'Create Assessment'}
+                    {assessmentExists
+                      ? "Update Assessment"
+                      : "Create Assessment"}
                   </button>
                 </div>
               </div>
@@ -149,16 +193,15 @@ const CourseList = () => {
 
       {selectedCourse && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 shadow-lg rounded-md w-11/12 md:w-2/3 lg:w-1/2 transform translate-y-0 transition-transform duration-300 relative">
+          <div className="bg-white p-6 shadow-lg rounded-md w-11/12 md:w-2/3 lg:w-1/2 relative">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
               onClick={closeCard}
             >
               &times;
             </button>
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">Course Details</h2>
-            </div>
+
+            <h2 className="text-xl font-semibold">Course Details</h2>
             <p>
               <strong>Course Name:</strong> {selectedCourse.courseName}
             </p>
@@ -169,13 +212,22 @@ const CourseList = () => {
               <strong>Duration:</strong> {selectedCourse.duration}
             </p>
             <p>
-              <strong>Resource Links:</strong> {selectedCourse.resourceLinks}
-            </p>
-            <p>
-              <strong>Other Links:</strong> {selectedCourse.otherLinks}
-            </p>
-            <p>
               <strong>Outcomes:</strong> {selectedCourse.outcomes}
+              {selectedCourse.resourceLinks &&
+                extractYouTubeId(selectedCourse.resourceLinks) && (
+                  <div className="mt-4 aspect-w-16 aspect-h-9">
+                    {" "}
+                    <iframe
+                      src={`https://www.youtube.com/embed/${extractYouTubeId(
+                        selectedCourse.resourceLinks
+                      )}`}
+                      title="Course Video"
+                      allowFullScreen
+                      frameBorder="0"
+                      className="w-full h-96 rounded-md"
+                    ></iframe>{" "}
+                  </div>
+                )}
             </p>
           </div>
         </div>

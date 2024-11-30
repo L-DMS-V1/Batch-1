@@ -17,9 +17,9 @@ function EmployeePage() {
   const [selectedProgress, setSelectedProgress] = useState(null);
   const [newProgressPercentage, setNewProgressPercentage] = useState("");
   const [selectedAssignment, setSelectedAssignment] = useState(null);
-  const [ongoingAssignmentsCount, setongoingAssignmentsCount] = useState(0);
-  const [completedAssignmentsCount, setcompletedAssignmentsCount] = useState(0);
-  const [totalAssignmentsCount, settotalAssignmentsCount] = useState(0);
+  const [ongoingAssignmentsCount, setOngoingAssignmentsCount] = useState(0);
+  const [completedAssignmentsCount, setCompletedAssignmentsCount] = useState(0);
+  const [totalAssignmentsCount, setTotalAssignmentsCount] = useState(0);
   const [completedCourses, setCompletedCourses] = useState([]);
 
   const navigator = useNavigate();
@@ -37,18 +37,17 @@ function EmployeePage() {
       try {
         const mockAssignments = await getAssignments();
         setAssignments(mockAssignments);
-        settotalAssignmentsCount(mockAssignments.length);
-        setongoingAssignmentsCount(
+        setTotalAssignmentsCount(mockAssignments.length);
+        setOngoingAssignmentsCount(
           mockAssignments.filter(
             (assignment) => assignment.status === "ASSIGNED"
           ).length
         );
-        setcompletedAssignmentsCount(
+        setCompletedAssignmentsCount(
           mockAssignments.filter(
             (assignment) => assignment.status === "COMPLETED"
           ).length
         );
-        console.log(completedAssignmentsCount);
       } catch (error) {
         console.error("Error fetching assigned courses:", error);
       }
@@ -74,8 +73,6 @@ function EmployeePage() {
     const fetchEmployeeAssessments = async () => {
       try {
         const EmployeeAssessments = await getEmployeeAssessments();
-
-        // Extract the course IDs where the result is "PASS"
         const passedCourses = EmployeeAssessments.filter(
           (EmployeeAssessment) => EmployeeAssessment.result === "PASS"
         ).map(
@@ -97,14 +94,12 @@ function EmployeePage() {
   };
 
   const takeAssessment = (progress) => {
-    // Logic for handling the assessment action
     navigator("/takeassessment", {
       state: {
         courseId: progress.course.courseId,
         employeeId: progress.employee.employeeId,
       },
     });
-    console.log(`Taking assessment for: ${progress.course.courseName}`);
   };
 
   const closeUpdateModal = () => {
@@ -131,7 +126,6 @@ function EmployeePage() {
       alert("Progress updated successfully!");
       closeUpdateModal();
 
-      // Refresh the progress data
       const updatedData = await getCourseProgress();
       setProgressData(updatedData);
     } catch (error) {
@@ -148,54 +142,46 @@ function EmployeePage() {
     setSelectedAssignment(null);
   };
 
+  const getYouTubeEmbedUrl = (url) => {
+    const videoIdMatch =
+      url.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)/) ||
+      url.match(/(?:https?:\/\/)?(?:www\.)?youtu\.be\/([^?&]+)/);
+    return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
+  };
+
   return (
     <div className="min-h-screen bg-gray-300">
-      {/* Navbar */}
       <Navbar />
-
-      {/* Dashboard Title */}
-      <h2 className="text-center text-3xl font-bold mt-8">
-        Employee Dashboard
-      </h2>
-
-      {/* Stats Boxes */}
+      <h2 className="text-center text-3xl font-bold mt-8">Employee Dashboard</h2>
       <div className="flex justify-center mt-8 space-x-4">
-        <div className="bg-blue-300 p-6 rounded-3xl w-1/4 text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+        <div className="bg-blue-300 p-6 rounded-3xl w-1/4 text-center transform hover:-translate-y-2">
           <h3 className="text-lg font-semibold">Total Courses Assigned</h3>
           <p className="text-4xl font-bold">{totalAssignmentsCount}</p>
         </div>
-        <div className="bg-green-300 p-6 rounded-3xl w-1/3 text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+        <div className="bg-green-300 p-6 rounded-3xl w-1/3 text-center transform hover:-translate-y-2">
           <h3 className="text-lg font-semibold">Total Courses OnGoing</h3>
           <p className="text-4xl font-bold">{ongoingAssignmentsCount}</p>
         </div>
-        <div className="bg-yellow-300 p-6 rounded-3xl w-1/4 text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl cursor-pointer">
+        <div className="bg-yellow-300 p-6 rounded-3xl w-1/4 text-center transform hover:-translate-y-2">
           <h3 className="text-lg font-semibold">Total Courses Completed</h3>
           <p className="text-4xl font-bold">{completedAssignmentsCount}</p>
         </div>
       </div>
 
-      {/* Sections */}
       <div className="mt-8 space-y-4 px-8">
-        {/* My Learning Dropdown */}
         <div
-          className="bg-purple-400 p-6 rounded-lg text-xl font-semibold cursor-pointer transform transition-transform hover:-translate-y-2 hover:shadow-xl"
+          className="bg-purple-400 p-6 rounded-lg text-xl font-semibold cursor-pointer transform"
           onClick={toggleLearningDropdown}
         >
           My Learning
         </div>
-
-        {/* Learning Dropdown Content */}
         {isLearningDropdownOpen && (
           <div className="bg-white p-4 rounded-lg shadow-lg mt-2">
-            <h4 className="text-lg font-semibold">Assigned Courses</h4>
             <ul className="list-disc list-inside mt-4 space-y-2">
               {assignments.map((assignment, index) => (
-                <li
-                  key={index}
-                  className="flex justify-between items-center" // Flexbox for alignment
-                >
+                <li key={index} className="flex justify-between items-center">
                   <span>
-                    Course {String.fromCharCode(65 + index)} :{" "}
+                    Course {index + 1} :{" "}
                     {assignment.course.courseName}
                   </span>
                   <button
@@ -210,20 +196,16 @@ function EmployeePage() {
           </div>
         )}
 
-        {/* My Progress Dropdown */}
         <div
-          className="bg-blue-400 p-6 rounded-lg text-xl font-semibold cursor-pointer transform transition-transform hover:-translate-y-2 hover:shadow-xl"
+          className="bg-blue-400 p-6 rounded-lg text-xl font-semibold cursor-pointer transform"
           onClick={toggleProgressDropdown}
         >
           My Progress
         </div>
-
-        {/* Progress Dropdown Content */}
         {isProgressDropdownOpen && (
           <div className="bg-white p-4 rounded-lg shadow-lg mt-2 space-y-4">
             <h4 className="text-lg font-semibold">Course Progress</h4>
             {progressData.map((progress, index) => {
-              // Define a set of colors for progress bars
               const progressColors = [
                 "bg-green-500",
                 "bg-blue-500",
@@ -232,7 +214,7 @@ function EmployeePage() {
                 "bg-purple-500",
               ];
               const progressColor =
-                progressColors[index % progressColors.length]; // Cycle through colors
+                progressColors[index % progressColors.length];
 
               const isCompleted = completedCourses.includes(
                 progress.course.courseId
@@ -241,7 +223,7 @@ function EmployeePage() {
               return (
                 <div key={progress.progressId} className="mt-4">
                   <p className="text-sm font-semibold">
-                    {String.fromCharCode(65 + index)}:{" "}
+                    {index + 1}:{" "}
                     {progress.course.courseName}
                   </p>
                   <div className="flex items-center space-x-2">
@@ -281,65 +263,70 @@ function EmployeePage() {
         )}
       </div>
 
-      {/* Update Modal */}
       {isUpdateModalOpen && selectedProgress && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h3 className="text-2xl font-semibold mb-4">
-              Update Progress: {selectedProgress.course.courseName}
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-lg font-semibold mb-4">
+              Update Progress for {selectedProgress.course.courseName}
             </h3>
             <input
               type="number"
               placeholder="Enter new progress percentage"
-              className="border border-gray-300 p-2 w-full rounded mb-4"
               value={newProgressPercentage}
               onChange={(e) => setNewProgressPercentage(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
             />
             <div className="flex justify-end space-x-4">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                onClick={handleUpdateProgress}
+                onClick={closeUpdateModal}
+                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
               >
-                Update
+                Cancel
               </button>
               <button
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                onClick={closeUpdateModal}
+                onClick={handleUpdateProgress}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
-                Close
+                Update
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Pop-Up for Course Details */}
       {selectedAssignment && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
             <h3 className="text-lg font-semibold mb-4">
               {selectedAssignment.course.courseName}
             </h3>
             <p>
-              <strong>KeyConcepts:</strong>{" "}
-              {selectedAssignment.course.keyConcepts}
+              <strong>KeyConcepts:</strong> {selectedAssignment.course.keyConcepts}
             </p>
             <p>
               <strong>Duration:</strong> {selectedAssignment.course.duration}
             </p>
             <p>
               <strong>Resource Links:</strong>{" "}
-              {selectedAssignment.course.resourceLinks}
-            </p>
-            <p>
-              <strong>Other Links:</strong>{" "}
-              {selectedAssignment.course.otherLinks}
-            </p>
-            <p>
-              <strong>Outcomes:</strong> {selectedAssignment.course.outcomes}
-            </p>
-            <p>
-              <strong>Deadline:</strong> {selectedAssignment.deadline}
+              {selectedAssignment.course.resourceLinks.includes("youtube.com") ||
+              selectedAssignment.course.resourceLinks.includes("youtu.be") ? (
+                <iframe
+                  className="w-full h-60 rounded-md"
+                  src={getYouTubeEmbedUrl(selectedAssignment.course.resourceLinks)}
+                  title={`YouTube video for ${selectedAssignment.course.courseName}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <a
+                  href={selectedAssignment.course.resourceLinks}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {selectedAssignment.course.resourceLinks}
+                </a>
+              )}
             </p>
             <button
               onClick={handleClosePopup}
