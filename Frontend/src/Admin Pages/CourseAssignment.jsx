@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from "sweetalert2";
 import Navbar from './AdminNavbar';
-import { getAllEmployees, assignCourse, getAssignedEmployees } from '../Api';
+import { getAllEmployeesAdmin, assignCourse, getAssignedEmployees } from '../Api';
 
 const CourseAssignment = () => {
   const [allEmployees, setallEmployees] = useState([]);
@@ -21,7 +22,7 @@ const CourseAssignment = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const mockAllEmployees = await getAllEmployees();
+        const mockAllEmployees = await getAllEmployeesAdmin();
         setallEmployees(mockAllEmployees);
         const mockAssignedEmployees = await getAssignedEmployees(course.courseId);  // Replace with your API call
         setAssignedEmployees(mockAssignedEmployees);  // Set the assigned employees
@@ -83,10 +84,12 @@ const CourseAssignment = () => {
         await assignCourse(dto); // Call the backend API for each DTO
       }
 
-      alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
+      // alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
+      Swal.fire("Success!", `Course assigned to: ${selectedEmployees.join(', ')}`, "success");
       navigate('/courselist');
     } catch (error) {
       console.error("Error assigning course:", error);
+      Swal.fire("Error!", "Failed to assigning the score.", "error");
     }
   };
 
@@ -115,6 +118,18 @@ const CourseAssignment = () => {
             <p className="text-gray-600"><b>Course Name:</b> {course.courseName}</p>
             <p className="text-gray-600"><b>Key Concepts:</b> {course.keyConcepts}</p>
             <p className="text-gray-600"><b>Duration:</b> {course.duration}</p>
+            <strong>Required Employees:</strong>
+            {course.trainingRequest.requiredEmployees && course.trainingRequest.requiredEmployees.length > 0 ? (
+              <ul className="list-disc ml-5 mt-2">
+                {course.trainingRequest.requiredEmployees.map((employee, index) => (
+                  <li key={index} className="text-gray-700">
+                    {employee.username} {/* Update this field based on the actual structure of your employee object */}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 mt-2">No employees assigned.</p>
+            )}
           </div>
 
           <div>

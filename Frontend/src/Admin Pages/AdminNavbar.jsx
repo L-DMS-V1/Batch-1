@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../App.css'
+import img from '../assets/images/anime1.jpg';
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
@@ -10,8 +12,8 @@ const AdminNavbar = () => {
   };
 
   // Handle navigating to course assignment page
-  const handleCourseassign = () => {
-    navigate('/courseassign');
+  const handleFeedbacks = () => {
+    navigate('/feedbacks');
   };
 
   // Handle navigating to employee progress page
@@ -26,7 +28,8 @@ const AdminNavbar = () => {
 
   return (
     <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <h1 className="text-lg font-semibold">Learning Hub</h1>
+      <h1 className="text-3xl font-semibold text-orange-600">Learning Hub</h1>
+      <img src={img} className='h-11 absolute left-48'/>
       <div className="flex items-center space-x-4">
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -34,17 +37,19 @@ const AdminNavbar = () => {
         >
           Course List
         </button>
-        {/* <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          onClick={handleCourseassign}
-        >
-          Course Assignment
-        </button> */}
+        
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           onClick={handleEmployeeProgress}
         >
           Employee Progresses
+        </button>
+
+        <button
+          className="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition"
+          onClick={handleFeedbacks}
+        >
+          Feedbacks
         </button>
         <span className="mr-4">Hey Admin!</span>
         

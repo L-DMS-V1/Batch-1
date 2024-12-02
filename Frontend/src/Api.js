@@ -9,6 +9,8 @@ const API_URL4 = 'http://localhost:8080/api/courses';
 const API_URL5 = 'http://localhost:8080/api/course-assignments';
 const API_URL6 = 'http://localhost:8080/api/employees';
 const API_URL7 = 'http://localhost:8080/api/course-progress';
+const API_URL8 = 'http://localhost:8080/api/assessments';
+const API_URL9 = 'http://localhost:8080/api/feedbacks';
 
 export const registerUser = async (userData) => {
   try {
@@ -23,25 +25,37 @@ export const loginUser = async (username, password) => {
   try {
     const response = await axios.post(`${API_URL1}/login`, { username, password });
 
-   // Check for Authorization header specifically
-  //  console.log(response.headers)
-  //  const authHeader = response.headers['Authorization'];
-   if (response) {
-    //  const token = authHeader.split(' ')[1]; // Extract token
-    //  console.log("JWT Token:", token);
-    const token = response.data;
-     localStorage.setItem('token', response.data);
-       // Decode the token to extract the role
-       const decodedToken = jwtDecode(token);
-       localStorage.setItem('role', decodedToken.role);
-   } else {
-     console.log("Token Generation Failed.");
-   }
+    if (response.data) {
+      console.log("Login Response Data:", response.data);
+
+      // Assuming response.data contains the JWT token
+      const token = response.data;
+
+      // Store token in localStorage
+      localStorage.setItem('token', token);
+      console.log("JWT Token stored in localStorage:", token);
+
+      // Decode token to extract role
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded Token:", decodedToken);
+
+      if (decodedToken.role) {
+        localStorage.setItem('role', decodedToken.role);
+        console.log("Role stored in localStorage:", decodedToken.role);
+      } else {
+        console.error("Role not found in decoded token.");
+      }
+    } else {
+      console.error("Response does not contain token.");
+    }
+
     return response;
   } catch (error) {
+    console.error("Login Error:", error.message);
     throw error;
   }
 };
+
 
 // Function to retrieve the token from localStorage
 export const getAuthToken = () => localStorage.getItem('token');
@@ -197,7 +211,20 @@ export const editCourse = async (courseId, formData) => {
 };
 
 // Course Assignment realated API requests
+// For manager
 export const getAllEmployees = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL2}/getAllEmployees`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// For admin
+export const getAllEmployeesAdmin = async () => {
   try {
     const response = await axiosInstance.get(`${API_URL5}/getAllEmployees`);
     console.log("Response Data\n", response.data);
@@ -220,6 +247,16 @@ export const assignCourse = async (formData) => {
 export const getAssignedEmployees = async (courseId) => {
   try {
     const response = await axiosInstance.get(`${API_URL5}/assigned-employees/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const changeAssignment = async (progressId, courseId) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL5}/${progressId}/${courseId}`);
     console.log("Response Data\n", response.data);
     return response.data;
   } catch (error) {
@@ -252,6 +289,88 @@ export const getCourseProgress = async () => {
 export const updateCourseProgress = async (formData) => {
   try {
     const response = await axiosInstance.put(`${API_URL7}/update`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Assessment related API endpoints
+export const createAssessmet = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL8}/create`,formData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAssessment = async (formData) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL8}/update`,formData);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllAssessments = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL8}/getAllAssessments`);
+    console.log("Response Data\n", response.data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAssessment = async (courseId) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL8}/getAssessment/${courseId}`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const submitAssessment = async (forData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL8}/submit`, forData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEmployeeAssessments = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL6}/get-employee-assessments`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Feedbacks related API
+export const submitFeedback = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL9}/submit`,formData);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllFeedbacks = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL9}`);
     console.log("Response Data\n", response.data);
     return response.data;
   } catch (error) {

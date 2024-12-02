@@ -2,12 +2,20 @@ package com.Infosys.Entity;
 
 import jakarta.persistence.*;
 
+<<<<<<< HEAD
 @Entity
+=======
+import java.util.List;
+
+@Entity
+@Table(name = "assessment_table1")
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
 public class Assessment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assessmentId;
 
+<<<<<<< HEAD
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
@@ -21,6 +29,27 @@ public class Assessment {
 
     // New fields
     private String assessmentType;  // Add assessment type
+=======
+    @OneToOne
+    @JoinColumn(name = "courseId", referencedColumnName = "courseId")
+    private Course course;
+
+    // ManyToMany relationship
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "question_mapping",  // Join table name
+            joinColumns = @JoinColumn(name = "assessment_id"),  // Foreign key for TrainingRequest
+            inverseJoinColumns = @JoinColumn(name = "question_id")   // Foreign key for Employee
+    )
+    private List<AssessmentQuestion> questions;
+
+    private int totalMarks;
+    private int passingMarks;
+//    private int score;  // Add score field
+
+    // New fields
+//    private String assessmentType;  // Add assessment type
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
     private int duration;  // Add duration
 
     // Getters and Setters
@@ -40,12 +69,21 @@ public class Assessment {
         this.course = course;
     }
 
+<<<<<<< HEAD
     public Employee getEmployee() {
         return employee;
     }
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+=======
+    public List<AssessmentQuestion> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<AssessmentQuestion> questions) {
+        this.questions = questions;
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
     }
 
     public int getTotalMarks() {
@@ -56,6 +94,7 @@ public class Assessment {
         this.totalMarks = totalMarks;
     }
 
+<<<<<<< HEAD
     public int getPassPercentage() {
         return passPercentage;
     }
@@ -79,6 +118,14 @@ public class Assessment {
 
     public void setAssessmentType(String assessmentType) {
         this.assessmentType = assessmentType;
+=======
+    public int getPassingMarks() {
+        return passingMarks;
+    }
+
+    public void setPassingMarks(int passingMarks) {
+        this.passingMarks = passingMarks;
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
     }
 
     public int getDuration() {

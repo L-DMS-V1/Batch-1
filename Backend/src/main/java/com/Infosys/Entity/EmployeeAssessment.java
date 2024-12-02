@@ -10,6 +10,7 @@ public class EmployeeAssessment {
     private Long employeeAssessmentId;
 
     @ManyToOne
+<<<<<<< HEAD
     private Employee employee;
 
     @ManyToOne
@@ -17,6 +18,20 @@ public class EmployeeAssessment {
 
     private int score;
     private String status;
+=======
+    @JoinColumn(name = "employeeId", referencedColumnName = "employeeId")
+    private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "assessmentId", referencedColumnName = "assessmentId")
+    private Assessment assessment;
+
+    private int score;
+
+    @Enumerated(EnumType.STRING)
+    private AssessmentResult result;
+
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
     private LocalDateTime attemptedDate;
 
     // Getters and Setters
@@ -52,12 +67,21 @@ public class EmployeeAssessment {
         this.score = score;
     }
 
+<<<<<<< HEAD
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+=======
+    public AssessmentResult getResult() {
+        return result;
+    }
+
+    public void setResult(AssessmentResult result) {
+        this.result = result;
+>>>>>>> c8e912b9ec6699b22d587ac7d819a2657c6e0f8a
     }
 
     public LocalDateTime getAttemptedDate() {

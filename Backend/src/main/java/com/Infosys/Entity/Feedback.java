@@ -7,27 +7,38 @@ import jakarta.persistence.*;
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int feedbackId;
+    private Long feedbackId;
+
+    @ManyToOne
+    @JoinColumn(name = "employeeId", referencedColumnName = "employeeId")
+    private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "courseId", referencedColumnName = "courseId")
+    private Course course;
+
+    private int rating;
+
+    private String feedBackEnum;
 
     private String comment;
-    private int rating;
-    private int employeeId;
 
     // Getters and Setters
-    public int getFeedbackId() {
+
+    public Long getFeedbackId() {
         return feedbackId;
     }
 
-    public void setFeedbackId(int feedbackId) {
+    public void setFeedbackId(Long feedbackId) {
         this.feedbackId = feedbackId;
     }
 
-    public String getComment() {
-        return comment;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public int getRating() {
@@ -38,11 +49,27 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public String getFeedBackEnum() {
+        return feedBackEnum;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setFeedBackEnum(String feedBackEnum) {
+        this.feedBackEnum = feedBackEnum;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

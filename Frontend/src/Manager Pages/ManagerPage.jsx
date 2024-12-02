@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import img from '../assets/images/anime1.jpg';
 import { useNavigate } from 'react-router-dom';
 import { getRequests } from '../Api';
 
@@ -45,11 +46,12 @@ function LearningHub() {
   };
 
   return (
-    <div className="p-6 bg-gray-300 min-h-screen relative">
-      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded shadow">
-        <h1 className="text-2xl font-semibold">Learning Hub</h1>
+    <div className=" bg-gray-300 min-h-screen relative">
+      <div className="flex justify-between items-center mb-6 bg-gray-800 p-4  shadow">
+        <h1 className="text-3xl font-semibold text-orange-600">Learning Hub</h1>
+        <img src={img} className='h-11 absolute left-48'/>
         <div className="flex items-center space-x-4">
-          <span className="text-lg">Hey Manager!</span>
+          <span className="text-lg text-white">Hey Manager!</span>
           <button 
             onClick={handleLogout}
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded flex items-center space-x-2"
@@ -88,9 +90,9 @@ function LearningHub() {
           <thead>
             <tr className="bg-gray-200 text-left">
               <th className="py-2 px-4 border-b">Training Program</th>
-              <th className="py-2 px-4 border-b">Position</th>
+              <th className="py-2 px-4 border-b">Request Id</th>
               <th className="py-2 px-4 border-b">Status</th>
-              <th className="py-2 px-4 border-b">Required Employees</th>
+              <th className="py-2 px-4 border-b">Position</th>
               <th className="py-2 px-4 border-b">Actions</th>
             </tr>
           </thead>
@@ -98,9 +100,9 @@ function LearningHub() {
             {requests.map((request, index) => (
               <tr key={index} className="hover:bg-gray-100 text-left">
                 <td className="py-2 px-4 border-b">{request.courseName}</td>
-                <td className="py-2 px-4 border-b">{request.employeePosition}</td>
+                <td className="py-2 px-4 border-b">{request.requestId}</td>
                 <td className="py-2 px-4 border-b">{request.status}</td>
-                <td className="py-2 px-4 border-b">{request.requiredEmployees}</td>
+                <td className="py-2 px-4 border-b">{request.employeePosition}</td>
                 <td className="py-2 px-4 border-b">
                   <button
                     className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
@@ -132,8 +134,21 @@ function LearningHub() {
             <p><strong>Concepts:</strong> {selectedRequest.concepts}</p>
             <p><strong>Duration:</strong> {selectedRequest.duration}</p>
             <p><strong>Position:</strong> {selectedRequest.employeePosition}</p>
-            <p><strong>Required Employees:</strong> {selectedRequest.requiredEmployees}</p>
             <p><strong>Status:</strong> {selectedRequest.status}</p>
+            <div className="mt-4">
+            <strong>Required Employees:</strong>
+            {selectedRequest.requiredEmployees && selectedRequest.requiredEmployees.length > 0 ? (
+              <ul className="list-disc ml-5 mt-2">
+                {selectedRequest.requiredEmployees.map((employee, index) => (
+                  <li key={index} className="text-gray-700">
+                    {employee.username} {/* Update this field based on the actual structure of your employee object */}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 mt-2">No employees assigned.</p>
+            )}
+          </div>
           </div>
         </div>
       )}

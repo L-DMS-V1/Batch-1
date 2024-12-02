@@ -1,6 +1,6 @@
-
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { editCourse } from "../Api";
 
 
@@ -31,10 +31,10 @@ function EditCourse() {
       if (response.data == "Course Updated Successfully") {
         console.log(response.data);
         setMessage(response.message || "Course Updated Successfully");
-        alert("Course Updated Successfully");
+        Swal.fire("Success!", "Changes submitted successfully.", "success");
         navigator("/courselist");
       } else {
-        alert("Failed to update selected Course");
+        Swal.fire("Error!", "Failed to update the selected course.", "error");
         console.log("Error : " + response.data);
         navigator("/admin");
       }
@@ -45,7 +45,7 @@ function EditCourse() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-400 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-gradient-to-r from-blue-200 via-blue-100 to-blue-50 flex items-center justify-center p-8">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
         <h2 className="text-center text-2xl font-bold mb-6">Edit a Course</h2>
         <form onSubmit={handleSubmit}>

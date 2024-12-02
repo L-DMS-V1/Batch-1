@@ -1,18 +1,22 @@
 package com.Infosys.Service;
 
+import com.Infosys.Entity.*;
+import com.Infosys.Entity.DTO.AssessmentQuestionDTO;
+import com.Infosys.Entity.DTO.EmployeeDTO;
 import com.Infosys.Entity.DTO.TrainingRequestDTO;
 import com.Infosys.Entity.DTO.UserDTO;
-import com.Infosys.Entity.Manager;
-import com.Infosys.Entity.TrainingRequest;
-import com.Infosys.Entity.RequestStatus;
+import com.Infosys.Repository.EmployeeRepository;
 import com.Infosys.Repository.ManagerRepository;
 import com.Infosys.Repository.TrainingRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ManagerService {
@@ -25,6 +29,9 @@ public class ManagerService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public void addManager(UserDTO userDTO) {
         // Add manager logic
@@ -47,7 +54,16 @@ public class ManagerService {
         trainingRequest.setConcepts(trainingRequestDTO.getConcepts());
         trainingRequest.setDuration(trainingRequestDTO.getDuration());
         trainingRequest.setEmployeePosition(trainingRequestDTO.getEmployeePosition());
-        trainingRequest.setRequiredEmployees(trainingRequestDTO.getRequiredEmployees());
+
+        // Convert DTO list of employee IDs or usernames to Employee entities
+        List<Employee> employees = new ArrayList<>();
+        for (EmployeeDTO employeeDTO : trainingRequestDTO.getRequiredEmployees()) {
+            Employee employee = employeeRepository.findByUsername(employeeDTO.getUsername());
+//                    .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + employeeDTO.getEmployeeId()));
+            employees.add(employee);
+        }
+
+        trainingRequest.setRequiredEmployees(employees);
         trainingRequest.setStatus(RequestStatus.PENDING);
         trainingRequest.setManagerUsername(username);
         trainingRepository.save(trainingRequest);
