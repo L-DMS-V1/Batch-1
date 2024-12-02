@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./EmployeeNavbar";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import {
   getAssignments,
@@ -123,14 +124,14 @@ function EmployeePage() {
 
     try {
       await updateCourseProgress(updatedProgress);
-      alert("Progress updated successfully!");
+      Swal.fire("Success!", "Progress updated successfully!", "success");
       closeUpdateModal();
 
       const updatedData = await getCourseProgress();
       setProgressData(updatedData);
     } catch (error) {
       console.error("Error updating progress:", error);
-      alert("Failed to update progress!");
+      Swal.fire("Error!", "Error updating progress:", "error")
     }
   };
 

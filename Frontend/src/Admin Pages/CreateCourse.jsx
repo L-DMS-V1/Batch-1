@@ -1,7 +1,6 @@
-
-
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { createCourse } from "../Api";
 
 
@@ -32,10 +31,10 @@ function CreateCourse() {
       if (response.data == "Course Created Successfully") {
         console.log(response.data);
         setMessage(response.message || "Course Created Successfully");
-        alert("Course Created Successfully");
+        Swal.fire("Success!", "Course Created Successfully!", "success");
         navigator("/courselist");
       } else {
-        alert("Failed to create requested Course");
+        Swal.fire("Error!", "Failed to create requested Course", "error");
         console.log("Error : " + response.data);
         navigator("/admin");
       }

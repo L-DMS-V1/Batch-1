@@ -35,10 +35,6 @@ const CourseList = () => {
     navigator("/admin");
   };
 
-  const handleAddCourse = () => {
-    navigator("/addcourse");
-  };
-
   const handleCreateCourse = () => {
     navigator("/createCourse");
   };
@@ -101,12 +97,6 @@ const CourseList = () => {
           Back to Dashboard
         </button>
         <button
-          onClick={handleAddCourse}
-          className="mb-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-        >
-          Add Course
-        </button>
-        <button
           onClick={handleCreateCourse}
           className="mb-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
         >
@@ -128,10 +118,10 @@ const CourseList = () => {
             return (
               <div
                 key={index}
-                className="p-4 bg-gray-100 rounded-md shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 cursor-pointer"
+                className="p-4 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-50 rounded-md shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 cursor-pointer"
                 onClick={() => setSelectedCourse(course)} // Make card clickable
               >
-                <h4 className="text-lg font-medium text-gray-800 mb-2">
+                <h4 className="text-xl font-medium text-black mb-2">
                   {course.courseName}
                 </h4>
                 <p className="text-gray-600">{course.keyConcepts}</p>

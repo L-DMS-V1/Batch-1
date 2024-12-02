@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { updateAssessment } from '../Api';
 
 const UpdateAssessment = () => {
@@ -66,7 +67,11 @@ const UpdateAssessment = () => {
     );
 
     if (!isValid) {
-      alert('Please fill out all questions, options, and select a correct answer.');
+      // alert('Please fill out all questions, options, and select a correct answer.');
+      Swal.fire({
+        title:'Please fill out all questions, options, and select a correct answer.',
+        icon: "question"
+      })
       return;
     }
 
@@ -90,11 +95,12 @@ const UpdateAssessment = () => {
     try {
       const response = await updateAssessment(payload);
       console.log('Assessment updated successfully:', response.data);
-      alert('Assessment updated successfully!');
+      Swal.fire("Success!", "Assessment updated successfully!", "success");
       navigate('/courselist');
     } catch (error) {
       console.error('Error updating assessment:', error);
-      alert('Failed to update assessment. Please try again.');
+      Swal.fire("Error!", "Failed to update assessment. Please try again.", "error");
+
     }
   };
 

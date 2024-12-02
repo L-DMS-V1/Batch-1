@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { createAssessmet } from '../Api';
 
 const DynamicForm = () => {
@@ -89,11 +90,11 @@ const DynamicForm = () => {
     try {
       const response = await createAssessmet(payload);
       console.log("Assessment created successfully:", response.data);
-      alert("Assessment created successfully!");
+      Swal.fire("Success!", "Assessment created successfully!", "success");
       navigator('/courselist');
     } catch (error) {
       console.error("Error creating assessment:", error);
-      alert("Failed to create assessment. Please try again.");
+      Swal.fire("Error!", "Failed to create assessment. Please try again.", "error");
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { createRequest, getAllEmployees } from "../Api";
 
 function Managerrequest() {
@@ -64,12 +65,16 @@ function Managerrequest() {
       const response = await createRequest(formData);
       if (response.data === "Request created successfully") {
         setMessage("Request created successfully");
+        Swal.fire("Success!", "Request created successfully", "success");
         navigate("/manager");
       } else {
         setMessage(response.data || "Request creation failed");
+        Swal.fire("Error!", "Request creation failed", "error");
+
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Request creation failed");
+      Swal.fire("Error!", "Request creation failed", "error");
     }
   };
 

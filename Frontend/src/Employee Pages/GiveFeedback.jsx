@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { submitFeedback } from "../Api";
 import { FaStar } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const GiveFeedback = () => {
     const location = useLocation();
@@ -56,7 +57,7 @@ const GiveFeedback = () => {
             console.log(formData);
             const response = await submitFeedback(formData);
             console.log("Feedback submitted successfully:", response);
-            alert("Feedback submitted successfully!");
+            Swal.fire("Success!", "Feedback submitted successfully!", "success");
             navigate("/thankyou"); // Redirect to a thank-you page
         } catch (err) {
             console.error("Error submitting feedback:", err);

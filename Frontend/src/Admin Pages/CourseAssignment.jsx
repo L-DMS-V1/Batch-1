@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from "sweetalert2";
 import Navbar from './AdminNavbar';
 import { getAllEmployeesAdmin, assignCourse, getAssignedEmployees } from '../Api';
 
@@ -83,10 +84,12 @@ const CourseAssignment = () => {
         await assignCourse(dto); // Call the backend API for each DTO
       }
 
-      alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
+      // alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
+      Swal.fire("Success!", `Course assigned to: ${selectedEmployees.join(', ')}`, "success");
       navigate('/courselist');
     } catch (error) {
       console.error("Error assigning course:", error);
+      Swal.fire("Error!", "Failed to assigning the score.", "error");
     }
   };
 
