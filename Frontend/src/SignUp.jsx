@@ -12,6 +12,7 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
   const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
 
@@ -19,6 +20,15 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match", {
+        autoClose: 2000,
+      });
+      return;
+    }
+
     try {
       const response = await registerUser({
         accountId,
@@ -35,7 +45,7 @@ function SignUp() {
         toast.success("Registered successfully!", {
           autoClose: 2000, // auto close after 2 seconds
         });
-        
+
         setTimeout(() => {
           navigator("/signin"); // Navigate after 2 seconds
         }, 2000);
@@ -101,6 +111,13 @@ function SignUp() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password" // New Confirm Password field
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
           />
           <select
