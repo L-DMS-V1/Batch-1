@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { registerUser } from "./Api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import img from "../src/assets/images/back2.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import StarsCanvas from "./Welcome Page/Bgwelcome";
+import { motion } from "framer-motion";
+import { slideInFromTop } from "./utils/motion"; // Import motion variants
+import Navbar from "./Welcome Page/Navwelcome"; // Import Navbar
 
 function SignUp() {
   const [accountId, setAccountId] = useState("");
@@ -12,7 +15,7 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
 
@@ -21,11 +24,8 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match", {
-        autoClose: 2000,
-      });
+      toast.error("Passwords do not match", { autoClose: 2000 });
       return;
     }
 
@@ -41,115 +41,146 @@ function SignUp() {
       console.log({ accountId, accountName, username, email, password, role });
 
       if (response.data === "User registered successfully") {
-        // Display success toast with delay of 2 seconds
-        toast.success("Registered successfully!", {
-          autoClose: 2000, // auto close after 2 seconds
-        });
-
-        setTimeout(() => {
-          navigator("/signin"); // Navigate after 2 seconds
-        }, 2000);
+        toast.success("Registered successfully!", { autoClose: 2000 });
+        setTimeout(() => navigator("/signin"), 2000);
       } else {
-        // Error handling
-        toast.error("Error: " + response.data, {
-          autoClose: 2000,
-        });
-        navigator("/");
+        toast.error("Error: " + response.data, { autoClose: 2000 });
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed");
-      toast.error("Registration failed", {
-        autoClose: 2000,
-      });
+      toast.error("Registration failed", { autoClose: 2000 });
     }
   };
 
   return (
-    <div className="relative flex justify-center items-center h-screen bg-cover bg-fixed bg-center">
-      {/* Background image */}
-      <img
-        className="w-full h-full object-cover absolute top-0 left-0"
-        src={img}
-        alt="Background"
-      />
-      {/* Card inside the image */}
-      <div className="relative bg-transparent border-2 border-white/20 backdrop-blur-lg p-6 rounded-lg shadow-lg w-[400px] mx-4 z-10">
-        <h2 className="text-center text-4xl font-medium text-green-500 mb-4">
+    <div className="relative flex justify-center items-center h-screen">
+      <Navbar /> {/* Include Navbar */}
+      <div className="absolute inset-0 -z-10">
+        <StarsCanvas />
+      </div>
+      {/* Animated Sign Up Form */}
+      <motion.div
+        className="relative bg-transparent border-2 border-white/20 backdrop-blur-lg p-6 rounded-lg shadow-lg w-[400px] mx-4 z-10 mt-11"
+        initial="hidden"
+        animate="visible"
+        variants={slideInFromTop}
+      >
+        <motion.h2
+          className="text-center text-4xl font-medium text-green-500 mb-4"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
           Sign Up
-        </h2>
+        </motion.h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-          <input
+          <motion.input
             type="text"
             placeholder="Account ID"
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
           />
-          <input
+          <motion.input
             type="text"
             placeholder="Account Name"
             value={accountName}
             onChange={(e) => setAccountName(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
           />
-          <input
+          <motion.input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
           />
-          <input
+          <motion.input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
           />
-          <input
+          <motion.input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
           />
-          <input
+          <motion.input
             type="password"
-            placeholder="Confirm Password" // New Confirm Password field
+            placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
           />
-          <select
+          <motion.select
             value={role}
             onChange={(e) => setRole(e.target.value)}
             className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.5 }}
           >
             <option value="">--Select Role--</option>
             <option value="ADMIN">ADMIN</option>
             <option value="MANAGER">MANAGER</option>
             <option value="EMPLOYEE">EMPLOYEE</option>
-          </select>
-          <button
+          </motion.select>
+          <motion.button
             type="submit"
             className="bg-green-500 text-white py-2 px-6 rounded-full max-w-15 hover:bg-green-600 transition duration-200"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
           >
             Sign Up
-          </button>
+          </motion.button>
         </form>
         <div className="mt-4 text-center">
-          <p className="text-white text-sm">
+          <motion.p
+            className="text-white text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.5 }}
+          >
             Already have an account?{" "}
             <Link to="/signin" className="text-blue-400">
               Sign In
             </Link>
-          </p>
+          </motion.p>
         </div>
-        <p className="mt-4 text-center text-white">{message}</p>
-      </div>
-
-      {/* Toast container to show notifications */}
-      <ToastContainer />
+        <motion.p
+          className="mt-4 text-center text-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.5 }}
+        >
+          {message && <span>{message}</span>}
+        </motion.p>
+      </motion.div>
+      {/* Toast Notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
