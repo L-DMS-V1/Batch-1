@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from './AdminNavbar';
 import { useNavigate } from 'react-router-dom';
 import { getAllCourseProgress } from "../Api";
@@ -26,42 +26,39 @@ const EmployeeProgresses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-teal-200">
       {/* Navbar */}
       <Navbar />
 
-      <div className="flex items-center justify-between px-4 mb-4">
-        <button
-          onClick={handleBack}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Back to Dashboard
-        </button>
-        <h2 className="text-3xl font-bold flex-grow text-center">Detailed Employee Progress</h2>
-      </div>
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-4xl font-semibold text-gray-800 text-center">Employee Progress Overview</h2>
+        </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-gray-800 text-white text-left">
-              <th className="py-3 px-6">Employee Name</th>
-              <th className="py-3 px-6">Course Name</th>
-              <th className="py-3 px-6">Progress (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ProgressData.map((item, index) => (
-              <tr
-                key={index}
-                className={`border-b ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}`}
-              >
-                <td className="py-3 px-6">{item.employee.username}</td>
-                <td className="py-3 px-6">{item.course.courseName}</td>
-                <td className="py-3 px-6">{item.progressPercentage}%</td>
+        {/* Table Container */}
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
+          <table className="min-w-full text-left table-auto">
+            <thead>
+              <tr className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white text-center">
+                <th className="py-3 px-6">Employee Name</th>
+                <th className="py-3 px-6">Course Name</th>
+                <th className="py-3 px-6">Progress (%)</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {ProgressData.map((item, index) => (
+                <tr
+                  key={index}
+                  className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"} hover:bg-gray-200 transition text-center`}
+                >
+                  <td className="py-3 px-6 font-medium ">{item.employee.username}</td>
+                  <td className="py-3 px-6 text-black">{item.course.courseName}</td>
+                  <td className="py-3 px-6 text-black">{item.progressPercentage}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

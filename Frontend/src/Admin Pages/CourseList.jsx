@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllCourses, getAllAssessments } from "../Api";
 import Navbar from "./AdminNavbar";
+import { FaEdit, FaUserPlus, FaGraduationCap } from "react-icons/fa"; // Importing icons
 
 const CourseList = () => {
   const [allCourses, setAllCourses] = useState([]);
@@ -30,10 +31,6 @@ const CourseList = () => {
 
     fetchCourses();
   }, []);
-
-  const handleBack = () => {
-    navigator("/admin");
-  };
 
   const handleCreateCourse = () => {
     navigator("/createCourse");
@@ -91,24 +88,16 @@ const CourseList = () => {
       {/* Back and Add Course Buttons */}
       <div className="p-6 space-x-4">
         <button
-          onClick={handleBack}
-          className="mb-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Back to Dashboard
-        </button>
-        <button
           onClick={handleCreateCourse}
-          className="mb-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+          className="mb-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center justify-center"
         >
-          Create Course
+          <FaUserPlus className="mr-2" /> Create Course
         </button>
       </div>
 
       {/* Course List */}
       <div className="p-6 bg-white shadow-lg rounded-lg">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">
-          Course List
-        </h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Course List</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {allCourses.map((course, index) => {
@@ -121,9 +110,7 @@ const CourseList = () => {
                 className="p-4 bg-gradient-to-r from-blue-200 via-blue-100 to-blue-50 rounded-md shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 cursor-pointer"
                 onClick={() => setSelectedCourse(course)} // Make card clickable
               >
-                <h4 className="text-xl font-medium text-black mb-2">
-                  {course.courseName}
-                </h4>
+                <h4 className="text-xl font-medium text-black mb-2">{course.courseName}</h4>
                 <p className="text-gray-600">{course.keyConcepts}</p>
                 <p className="text-gray-600">{course.duration}</p>
 
@@ -146,33 +133,32 @@ const CourseList = () => {
                       e.stopPropagation(); // Prevent card click from triggering
                       handleEditCourse(course);
                     }}
-                    className="px-4 py-2 max-h-10 w-24 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 max-h-10 w-24 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
                   >
-                    Edit
+                    <FaEdit className="mr-2" /> Edit
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent card click from triggering
                       handleAddLearners(course);
                     }}
-                    className="px-4 py-2 max-h-10  bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 max-h-10 w-36 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors flex items-center justify-center"
                   >
-                    Add Learners
+                    <FaUserPlus className="mr-2" /> Add Learners
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent card click from triggering
                       handleAssessment(course, assessmentExists);
                     }}
-                    className={`px-4 py-1 max-h-10  ${
+                    className={`px-4 py-2 max-h-10 w-44 ${
                       assessmentExists
                         ? "bg-yellow-500 hover:bg-yellow-700"
                         : "bg-emerald-600 hover:bg-emerald-800"
-                    } text-white rounded-md transition-colors`}
+                    } text-white rounded-md transition-colors flex items-center justify-center`}
                   >
-                    {assessmentExists
-                      ? "Update Assessment"
-                      : "Create Assessment"}
+                    <FaGraduationCap className="mr-2" />
+                    {assessmentExists ? "Update Assessment" : "Create Assessment"}
                   </button>
                 </div>
               </div>
@@ -206,7 +192,6 @@ const CourseList = () => {
               {selectedCourse.resourceLinks &&
                 extractYouTubeId(selectedCourse.resourceLinks) && (
                   <div className="mt-4 aspect-w-16 aspect-h-9">
-                    {" "}
                     <iframe
                       src={`https://www.youtube.com/embed/${extractYouTubeId(
                         selectedCourse.resourceLinks
@@ -215,7 +200,7 @@ const CourseList = () => {
                       allowFullScreen
                       frameBorder="0"
                       className="w-full h-96 rounded-md"
-                    ></iframe>{" "}
+                    ></iframe>
                   </div>
                 )}
             </p>
