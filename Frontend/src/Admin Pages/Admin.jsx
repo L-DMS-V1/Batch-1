@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './AdminNavbar';
 import { getAllRequests, getRequestById } from '../Api';
@@ -28,65 +28,63 @@ function Admin() {
     fetchRequests();
   }, []);
 
-  // Button handler
-const handleViewRequest = async (request) => {
-  try {
-    const requestData = await getRequestById(request.requestId); // Call API handler with requestId
-    navigator('/viewRequest', { state: { requestData } }); // Pass data to the route
-  } catch (error) {
-    console.error("Failed to fetch request details:", error);
-  }
-};
-
+  const handleViewRequest = async (request) => {
+    try {
+      const requestData = await getRequestById(request.requestId);
+      navigator('/viewRequest', { state: { requestData } });
+    } catch (error) {
+      console.error("Failed to fetch request details:", error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-300">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0eafc] to-[#cfdef3]">
       {/* Navbar */}
       <Navbar />
 
       {/* Dashboard Content */}
-      <div className="p-6">
-        <h2 className="text-4xl font-bold text-center mb-6">Dashboard</h2>
+      <div className="p-8">
+        <h2 className="text-4xl font-extrabold text-center text-[#4A47A3] mb-10">Admin Dashboard</h2>
 
         {/* Dashboard Summary */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
-            <p className="text-3xl font-bold">{completedRequests}</p>
-            <p>Courses Created</p>
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
+            <p className="text-5xl font-bold text-center">{completedRequests}</p>
+            <p className="text-xl font-medium text-center">Courses Created</p>
           </div>
-          <div className="bg-green-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
-            <p className="text-3xl font-bold">1</p>
-            <p>Employees</p>
+          <div className="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
+            <p className="text-5xl font-bold text-center">1</p>
+            <p className="text-xl font-medium text-center">Employees</p>
           </div>
-          <div className="bg-purple-500 text-white p-4 rounded-lg text-center transform transition-transform hover:-translate-y-2 hover:shadow-xl">
-            <p className="text-3xl font-bold">{totalRequestsCount}</p>
-            <p>Requests</p>
+          <div className="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
+            <p className="text-5xl font-bold text-center">{totalRequestsCount}</p>
+            <p className="text-xl font-medium text-center">Requests</p>
           </div>
         </div>
 
         {/* Pending and Completed Requests */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           {/* Pending Requests */}
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-2">Pending Requests</h3>
-            <table className="w-full">
+          <div className="bg-white shadow-lg rounded-lg p-6 border-t-4 border-yellow-500">
+            <h3 className="text-xl font-semibold mb-4 text-yellow-600">Pending Requests</h3>
+            <table className="w-full text-left">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="p-2 text-left">Sl No</th>
-                  <th className="p-2 text-left">Manager Name</th>
-                  <th className="p-2 text-left">Training Program</th>
-                  <th className="p-2 text-left">Actions</th>
+                <tr className="bg-gray-100">
+                  <th className="p-3">Sl No</th>
+                  <th className="p-3">Manager Name</th>
+                  <th className="p-3">Training Program</th>
+                  <th className="p-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                  {pendingRequests.map((request, index) => (
-                  <tr key={index} className="hover:bg-gray-100 text-left">
-                    <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
-                    <td className="py-2 px-4 border-b">{request.managerUsername}</td>
-                    <td className="py-2 px-4 border-b">{request.courseName}</td>
-                    <td className="py-2 px-4 border-b">
+                {pendingRequests.map((request, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-50">
+                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3">{request.managerUsername}</td>
+                    <td className="p-3">{request.courseName}</td>
+                    <td className="p-3">
                       <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                        className="bg-yellow-500 text-white py-1 px-4 rounded hover:bg-yellow-600"
                         onClick={() => handleViewRequest(request)}
                       >
                         View
@@ -99,33 +97,33 @@ const handleViewRequest = async (request) => {
           </div>
 
           {/* Completed Requests */}
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-2">Completed Requests</h3>
-            <table className="w-full">
+          <div className="bg-white shadow-lg rounded-lg p-6 border-t-4 border-green-500">
+            <h3 className="text-xl font-semibold mb-4 text-green-600">Completed Requests</h3>
+            <table className="w-full text-left">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="p-2 text-left">Sl No</th>
-                  <th className="p-2 text-left">Manager Name</th>
-                  <th className="p-2 text-left">Training Program</th>
-                  <th className="p-2 text-left">Actions</th>
+                <tr className="bg-gray-100">
+                  <th className="p-3">Sl No</th>
+                  <th className="p-3">Manager Name</th>
+                  <th className="p-3">Training Program</th>
+                  <th className="p-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {respondedRequests.map((request, index) => (
-                    <tr key={index} className="hover:bg-gray-100 text-left">
-                      <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
-                      <td className="py-2 px-4 border-b">{request.managerUsername}</td>
-                      <td className="py-2 px-4 border-b">{request.courseName}</td>
-                      <td className="py-2 px-4 border-b">
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-                          onClick={() => handleViewRequest(request)}
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  <tr key={index} className="border-b hover:bg-gray-50">
+                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3">{request.managerUsername}</td>
+                    <td className="p-3">{request.courseName}</td>
+                    <td className="p-3">
+                      <button
+                        className="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600"
+                        onClick={() => handleViewRequest(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
