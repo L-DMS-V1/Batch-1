@@ -1,30 +1,33 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import img from '../assets/images/anime1.jpg';
-// import { logout } from '../Api'; // Assuming you have the logout function in your Api.js file
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import img from "../assets/images/anime1.jpg";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   // Handle logout
   const handleLogout = () => {
-    // logout();  // Call the logout function to clear localStorage
-    navigate('/signin');  // Redirect to login page after logout
+    navigate("/"); // Redirect to login page after logout
   };
 
   return (
-    <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <h1 className="text-3xl font-semibold text-orange-600">Learning Hub</h1>
-      <img src={img} className='h-11 absolute left-48'/>
+    <header className="bg-gradient-to-r from-[#2A0E61] to-[#150d3f] text-white p-2 flex items-center justify-between shadow-lg">
+      {/* Logo Section */}
       <div className="flex items-center space-x-4">
-        <span className="mr-4">Hey Employee!</span>
-        
-        {/* Logout Button */}
+        <img src={img} alt="Logo" className="h-12 w-12 rounded-full" />
+        <h1 className="text-3xl font-bold text-white">Learning Hub</h1>
+      </div>
+
+      {/* User Greeting and Logout */}
+      <div className="flex items-center space-x-6">
+        <span className="text-lg">Hey, Employee!</span>
         <button
-          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
           onClick={handleLogout}
+          className="flex items-center space-x-2 bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition"
         >
-          Logout
+          <FaSignOutAlt className="text-xl" />
+          <span>Logout</span>
         </button>
       </div>
     </header>
