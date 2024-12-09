@@ -51,27 +51,14 @@ const FeedbackPage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const handleBack = () => {
-    navigator('/admin');
-  };
 
   return (
-    <div className="min-h-screen bg-gray-300">
+    <div className="min-h-screen bg-gradient-to-r from-blue-200 via-blue-100 to-blue-50">
       {/* Navbar */}
       <Navbar />
 
-      {/* Back and Add Course Buttons */}
-        <div className="p-6 space-x-4">
-        <button
-          onClick={handleBack}
-          className="mb-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Back to Dashboard
-        </button>
-      </div>
-
       <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Feedbacks:</h1>
+      <h1 className='text-4xl font-bold py-2'>Feedbacks:</h1>
       <table
         style={{
           width: '100%',
@@ -80,17 +67,17 @@ const FeedbackPage = () => {
         }}
       >
         <thead>
-          <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
+          <tr className='bg-gray-800 text-white text-center'>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Feedback ID</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Feedback</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Rating</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Feedbacks</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Ratings</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Submitted By</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Course</th>
           </tr>
         </thead>
         <tbody>
           {feedbacks.map((feedback) => (
-            <tr key={feedback.feedbackId}>
+            <tr className='text-center bg-white' key={feedback.feedbackId}>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{feedback.feedbackId}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{feedback.comment}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{feedback.rating}</td>
@@ -101,7 +88,7 @@ const FeedbackPage = () => {
         </tbody>
       </table>
 
-      <h2>Feedback Rating Distribution</h2>
+      <h2 className='text-3xl font-bold'>Feedback Rating Distribution</h2>
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
         {chartData && <Pie data={chartData} />}
       </div>
