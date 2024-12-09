@@ -16,12 +16,9 @@ import java.util.Optional;
 public class CourseService {
 
     @Autowired
-    private TrainingRepository trainingRepository;
-
-    @Autowired
     private CourseRepository courseRepository;
 
-    public Course createCourse(Long requestId, CourseDTO courseDTO) {
+    public Course createCourse(CourseDTO courseDTO) {
         Course course = new Course();
         course.setCourseName(courseDTO.getCourseName());
         course.setKeyConcepts(courseDTO.getKeyConcepts());
@@ -29,9 +26,6 @@ public class CourseService {
         course.setResourceLinks(courseDTO.getResourceLinks());
         course.setOtherLinks(courseDTO.getOtherLinks());
         course.setOutcomes(courseDTO.getOutcomes());
-
-        TrainingRequest trainingRequest = trainingRepository.findByRequestId(requestId);
-        course.setTrainingRequest(trainingRequest);
         courseRepository.save(course);
         return course;
     }

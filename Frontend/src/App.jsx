@@ -22,6 +22,7 @@ import UpdateAssessment from './Admin Pages/updateAssessment';
 import TakeAssessment from './Employee Pages/TakeAssessment';
 import GiveFeedback from './Employee Pages/GiveFeedback';
 import Thankyou from './Employee Pages/Thankyou';
+import CompleteRequest from './Admin Pages/CompleteRequest';
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
           <Route path='/feedbacks' element={<Feedbacks/>}/>
           <Route path='/createassessment' element={<DynamicForm/>}/>
           <Route path='/updateassessment' element={<UpdateAssessment/>}/>
+          <Route path='/completerequest' element={<CompleteRequest/>}/>
         </Route>
         <Route element={<ProtectedRoute allowedRole="ROLE_MANAGER"/>}>
           <Route path="/manager" element={<ManagerPage />} />

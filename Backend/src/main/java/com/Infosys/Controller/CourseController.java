@@ -23,10 +23,9 @@ public class CourseController {
     @Autowired
     private TrainingRequestService trainingRequestService;
 
-    @PostMapping("/{requestId}")
-    public ResponseEntity<String> createCourse(@PathVariable("requestId") Long requestId, @RequestBody CourseDTO courseDTO) {
-        courseService.createCourse(requestId,courseDTO);
-        trainingRequestService.updateRequest(requestId);
+    @PostMapping()
+    public ResponseEntity<String> createCourse(@RequestBody CourseDTO courseDTO) {
+        courseService.createCourse(courseDTO);
         return new ResponseEntity<>("Course Created Successfully", HttpStatus.CREATED);
     }
 

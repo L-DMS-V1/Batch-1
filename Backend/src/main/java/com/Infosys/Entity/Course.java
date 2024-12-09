@@ -28,10 +28,6 @@ public class Course {
     @Column(name = "outcomes")
     private String outcomes;
 
-    @ManyToOne
-    @JoinColumn(name = "requestId", referencedColumnName = "requestId")
-    private TrainingRequest trainingRequest;
-
     public long getCourseId() {
         return courseId;
     }
@@ -86,14 +82,6 @@ public class Course {
 
     public void setOutcomes(String outcomes) {
         this.outcomes = outcomes;
-    }
-
-    public TrainingRequest getTrainingRequest() {
-        return trainingRequest;
-    }
-
-    public void setTrainingRequest(TrainingRequest trainingRequest) {
-        this.trainingRequest = trainingRequest;
     }
 
     @Override

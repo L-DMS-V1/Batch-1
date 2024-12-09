@@ -102,6 +102,16 @@ export const getRequests = async () => {
   }
 };
 
+export const getAllCoursesMan = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL2}/getAllCourses`);
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createRequest = async (requestData) => {
   try {
     const response = await axiosInstance.post(`${API_URL2}/createRequest`,requestData);
@@ -134,6 +144,9 @@ export const getRequestById = async (requestId) => {
   }
 };
 
+
+
+
 // Accept Request
 export const acceptRequest = async (requestId) => {
   try {
@@ -151,6 +164,18 @@ export const rejectRequest = async (requestId) => {
   try {
     const response = await axiosInstance.put(`${API_URL3}/rejectRequest/${requestId}`);
     console.log("Reject Request Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error rejecting request:", error);
+    throw error;
+  }
+};
+
+// Complete Request
+export const completeRequest = async (requestId, formData) => {
+  try {
+    const response = await axiosInstance.post(`${API_URL3}/completeRequest/${requestId}`,formData);
+    console.log("Completed Request Response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error rejecting request:", error);

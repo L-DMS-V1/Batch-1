@@ -1,9 +1,11 @@
 package com.Infosys.Controller;
 
 import com.Infosys.Entity.CourseProgress;
+import com.Infosys.Entity.DTO.RequestCompletionDTO;
 import com.Infosys.Entity.TrainingRequest;
 import com.Infosys.Service.CourseProgressService;
 import com.Infosys.Service.TrainingRequestService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,12 @@ public class AdminController {
     public ResponseEntity<String> rejectRequest(@PathVariable("id") Long requestId) {
         trainingRequestService.rejectRequest(requestId);
         return ResponseEntity.ok("Request rejected successfully");
+    }
+
+    @PostMapping("/completeRequest/{id}")
+    public ResponseEntity<String> completeRequest(@PathVariable("id") Long requestId,@Valid @RequestBody RequestCompletionDTO requestCompletionDTO) {
+        trainingRequestService.completeRequest(requestId, requestCompletionDTO);
+        return ResponseEntity.ok("Request Completed successfully");
     }
 
     @GetMapping("/getAllRequests")

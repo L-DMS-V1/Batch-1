@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { createRequest, getAllEmployees } from "../Api";
 
 function Managerrequest() {
-  const [formData, setFormData] = useState({
-    courseName: "",
-    description: "",
-    concepts: "",
-    duration: "",
-    employeePosition: "",
-    requiredEmployees: [], // To store selected employee objects
-  });
 
   const [employees, setEmployees] = useState([]); // Store fetched employee data
   const [message, setMessage] = useState(""); // For success/error messages
   const navigate = useNavigate(); // Navigation hook
+  const location = useLocation();
+  const { course } = location.state || {};
+
+  const [formData, setFormData] = useState({
+    courseId : course.courseId,
+    managerId : 0, // will be filled from the backend
+    employeePosition: "",
+    requiredEmployees: [], // To store selected employee objects
+  });
 
   // Fetch all employees on component mount
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
+        console.log("HI : ", course)
         const response = await getAllEmployees();
         setEmployees(response); // Assuming response.data contains the employee list
         console.log("From Manger request page" + employees);
@@ -81,7 +83,7 @@ function Managerrequest() {
   return (
     <div className="min-h-screen bg-gray-400 flex items-center justify-center p-8">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
-        <h2 className="text-center text-2xl font-bold mb-6">Create Request</h2>
+        <h2 className="text-center text-2xl font-bold mb-6"> Request for {course.courseName}</h2>
         {message && (
           <p
             className={`text-center font-medium mb-4 ${
@@ -93,7 +95,7 @@ function Managerrequest() {
         )}
         <form onSubmit={handleSubmit}>
           {/* Input Fields */}
-          {["courseName", "description", "concepts", "duration", "employeePosition"].map((field) => (
+          {["employeePosition"].map((field) => (
             <div className="mb-4" key={field}>
               <input
                 type="text"

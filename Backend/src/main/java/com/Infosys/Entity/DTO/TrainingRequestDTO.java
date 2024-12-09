@@ -1,60 +1,40 @@
 package com.Infosys.Entity.DTO;
 
+import com.Infosys.Entity.Course;
 import com.Infosys.Entity.Employee;
+import com.Infosys.Entity.Manager;
+import com.Infosys.Entity.RequestStatus;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
 public class TrainingRequestDTO {
 
-    @NotBlank(message = "Course name is mandatory")
-    private String courseName;
+    private Long courseId;
 
-    @NotBlank(message = "Description is mandatory")
-    private String description;
-
-    @NotBlank(message = "Concepts is mandatory")
-    private String concepts;
-
-    @NotBlank(message = "Duration is mandatory")
-    private String duration;
+    private Long managerId;
 
     @NotBlank(message = "Employee Position is mandatory")
     private String employeePosition;
 
-//    @NotBlank(message = "Required Employees is mandatory")
     private List<EmployeeDTO> requiredEmployees;
 
-    public @NotBlank(message = "Course name is mandatory") String getCourseName() {
-        return courseName;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setCourseName(@NotBlank(message = "Course name is mandatory") String courseName) {
-        this.courseName = courseName;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
-    public @NotBlank(message = "Description is mandatory") String getDescription() {
-        return description;
+    public Long getManagerId() {
+        return managerId;
     }
 
-    public void setDescription(@NotBlank(message = "Description is mandatory") String description) {
-        this.description = description;
-    }
-
-    public @NotBlank(message = "Concepts is mandatory") String getConcepts() {
-        return concepts;
-    }
-
-    public void setConcepts(@NotBlank(message = "Concepts is mandatory") String concepts) {
-        this.concepts = concepts;
-    }
-
-    public @NotBlank(message = "Duration is mandatory") String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(@NotBlank(message = "Duration is mandatory") String duration) {
-        this.duration = duration;
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 
     public @NotBlank(message = "Employee Position is mandatory") String getEmployeePosition() {
@@ -69,17 +49,15 @@ public class TrainingRequestDTO {
         return requiredEmployees;
     }
 
-    public void setRequiredEmployees(List<EmployeeDTO> requiredEmployees) {
+    public void setRequiredEmployees( List<EmployeeDTO> requiredEmployees) {
         this.requiredEmployees = requiredEmployees;
     }
 
     @Override
     public String toString() {
         return "TrainingRequestDTO{" +
-                "courseName='" + courseName + '\'' +
-                ", description='" + description + '\'' +
-                ", concepts='" + concepts + '\'' +
-                ", duration='" + duration + '\'' +
+                "courseId=" + courseId +
+                ", managerId=" + managerId +
                 ", employeePosition='" + employeePosition + '\'' +
                 ", requiredEmployees=" + requiredEmployees +
                 '}';

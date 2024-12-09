@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import img from '../assets/images/anime1.jpg';
 import { useNavigate } from 'react-router-dom';
-import { getRequests } from '../Api';
+import { getRequests, getAllCoursesMan } from '../Api';
 
 function LearningHub() {
   const [requests, setRequests] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [totalRequests, setTotalRequests] = useState(0);
   const [completedRequests, setCompletedRequests] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
@@ -27,8 +28,22 @@ function LearningHub() {
     fetchRequests();
   }, []);
 
-  const handleNewRequest = () => {
-    navigator('/newrequest');
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const courses = await getAllCoursesMan();
+        setCourses(courses);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleNewRequest = (course) => {
+    console.log(course)
+    navigator('/newrequest', { state: { course } });
   };
 
   const handleLogout = () => {
@@ -61,7 +76,7 @@ function LearningHub() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-6">
         <div className="bg-white p-4 rounded shadow text-center">
           <h3 className="text-lg font-medium">Total Requests</h3>
           <p className="text-2xl font-bold">{totalRequests}</p>
@@ -76,16 +91,31 @@ function LearningHub() {
         </div>
       </div>
 
-      <div className='flex justify-center mb-4 ml-15'>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded mb-4"
-          onClick={handleNewRequest}
-        >
-          Create New Request
-        </button>
-      </div>
+      <h2 className="text-2xl font-bold text-gray-800 text-center mt-8 mb-6">
+        Course List
+      </h2>
 
-      <div className="overflow-x-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 pt-6 pr-6 pl-6 pb-6">
+        {courses.map((course, index) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-xl font-semibold text-gray-800">{course.courseName}</h2>
+            <p className="mt-2 text-gray-600"><strong>Duration:</strong> {course.duration}</p>
+            <p className="mt-2 text-gray-600"><strong>Key Concepts:</strong> {course.keyConcepts}</p>
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-4"
+              onClick={() => handleNewRequest(course)}
+            >
+              Create New Request
+            </button>
+          </div>
+        ))}
+      </div>
+      
+      <h2 className="text-2xl font-bold text-gray-800 text-center mt-8 mb-6">
+        Requests
+      </h2>
+
+      <div className="overflow-x-auto pt-6 pl-6 pr-6 pb-6">
         <table className="min-w-full bg-white rounded shadow">
           <thead>
             <tr className="bg-gray-200 text-left">
@@ -97,22 +127,30 @@ function LearningHub() {
             </tr>
           </thead>
           <tbody>
-            {requests.map((request, index) => (
-              <tr key={index} className="hover:bg-gray-100 text-left">
-                <td className="py-2 px-4 border-b">{request.courseName}</td>
-                <td className="py-2 px-4 border-b">{request.requestId}</td>
-                <td className="py-2 px-4 border-b">{request.status}</td>
-                <td className="py-2 px-4 border-b">{request.employeePosition}</td>
-                <td className="py-2 px-4 border-b">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-                    onClick={() => handleViewRequest(request)}
-                  >
-                    View
-                  </button>
+            {requests.length > 0 ? (
+              requests.map((request, index) => (
+                <tr key={index} className="hover:bg-gray-100 text-left">
+                  <td className="py-2 px-4 border-b">{request.course.courseName}</td>
+                  <td className="py-2 px-4 border-b">{request.requestId}</td>
+                  <td className="py-2 px-4 border-b">{request.status}</td>
+                  <td className="py-2 px-4 border-b">{request.employeePosition}</td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                      onClick={() => handleViewRequest(request)}
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="py-4 text-center text-gray-600">
+                  No requests Created Yet
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -129,10 +167,9 @@ function LearningHub() {
             <div className="mb-4">
               <h2 className="text-xl font-semibold">Request Details</h2>
             </div>
-            <p><strong>Course Name:</strong> {selectedRequest.courseName}</p>
-            <p><strong>Description:</strong> {selectedRequest.description}</p>
-            <p><strong>Concepts:</strong> {selectedRequest.concepts}</p>
-            <p><strong>Duration:</strong> {selectedRequest.duration}</p>
+            <p><strong>Course Name:</strong> {selectedRequest.course.courseName}</p>
+            <p><strong>Key Concepts:</strong> {selectedRequest.course.keyConcepts}</p>
+            <p><strong>Duration:</strong> {selectedRequest.course.duration}</p>
             <p><strong>Position:</strong> {selectedRequest.employeePosition}</p>
             <p><strong>Status:</strong> {selectedRequest.status}</p>
             <div className="mt-4">
@@ -152,6 +189,7 @@ function LearningHub() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

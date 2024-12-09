@@ -1,8 +1,10 @@
 package com.Infosys.Controller;
 
+import com.Infosys.Entity.Course;
 import com.Infosys.Entity.DTO.TrainingRequestDTO;
 import com.Infosys.Entity.Employee;
 import com.Infosys.Entity.TrainingRequest;
+import com.Infosys.Service.CourseService;
 import com.Infosys.Service.EmployeeService;
 import com.Infosys.Service.ManagerService;
 import jakarta.validation.Valid;
@@ -27,6 +29,9 @@ public class ManagerController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private CourseService courseService;
+
     @PostMapping("/createRequest")
     public ResponseEntity<String> createRequest(@Valid @RequestBody TrainingRequestDTO trainingRequestDTO) {
         managerService.requestForm(trainingRequestDTO);
@@ -50,6 +55,12 @@ public class ManagerController {
     @GetMapping("/getAllEmployees")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/getAllCourses")
+    public ResponseEntity<List<Course>> getAllCourses() {
+        List<Course> allCourses = courseService.getAllCourses();
+        return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
 }

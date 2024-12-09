@@ -12,18 +12,6 @@ public class TrainingRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long requestId;
 
-    @Column(name = "course_Name")
-    private String courseName;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "concepts")
-    private String concepts;
-
-    @Column(name = "duration")
-    private String duration;
-
     @Column(name = "employee_Position")
     private String employeePosition;
 
@@ -39,8 +27,13 @@ public class TrainingRequest {
     @Column(name = "status")
     private RequestStatus status;
 
-    @Column(name = "manager_Username")
-    private String managerUsername;
+    @ManyToOne
+    @JoinColumn(name = "courseId", referencedColumnName = "courseId")
+    private Course course;
+
+    @ManyToOne
+    @JoinColumn(name = "managerId", referencedColumnName = "managerId")
+    private Manager manager;
 
     public long getRequestId() {
         return requestId;
@@ -48,38 +41,6 @@ public class TrainingRequest {
 
     public void setRequestId(long requestId) {
         this.requestId = requestId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getConcepts() {
-        return concepts;
-    }
-
-    public void setConcepts(String concepts) {
-        this.concepts = concepts;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 
     public String getEmployeePosition() {
@@ -106,26 +67,31 @@ public class TrainingRequest {
         this.status = status;
     }
 
-    public String getManagerUsername() {
-        return managerUsername;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setManagerUsername(String managerUsername) {
-        this.managerUsername = managerUsername;
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     @Override
     public String toString() {
         return "TrainingRequest{" +
                 "requestId=" + requestId +
-                ", courseName='" + courseName + '\'' +
-                ", description='" + description + '\'' +
-                ", concepts='" + concepts + '\'' +
-                ", duration='" + duration + '\'' +
                 ", employeePosition='" + employeePosition + '\'' +
                 ", requiredEmployees=" + requiredEmployees +
                 ", status=" + status +
-                ", managerUsername='" + managerUsername + '\'' +
+                ", course=" + course +
+                ", manager=" + manager +
                 '}';
     }
 }

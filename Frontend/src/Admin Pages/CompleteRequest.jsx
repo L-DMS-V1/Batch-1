@@ -2,29 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Navbar from './AdminNavbar';
-import { getAllEmployeesAdmin, assignCourse, getAssignedEmployees } from '../Api';
+import { getAllEmployeesAdmin, getAssignedEmployees, completeRequest } from '../Api';
 
-const CourseAssignment = () => {
+const CompleteRequest = () => {
   const [allEmployees, setallEmployees] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);  // To store employees already assigned to the course
   const [unassignedEmployees, setUnAssignedEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [deadline, setDeadline] = useState("");
 
-  const location = useLocation();
-  const { course } = location.state || {};
   const navigate = useNavigate();
+  const location = useLocation();
+  const requestData = location.state || {};
 
   const handleBack = () => {
     navigate('/courselist');
   };
 
   useEffect(() => {
+    console.log("Received location state:", location.state); // Log the entire state
+    console.log("Extracted course:", requestData); // Log the extracted course
+  }, [location.state, requestData]);
+
+  useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const mockAllEmployees = await getAllEmployeesAdmin();
         setallEmployees(mockAllEmployees);
-        const mockAssignedEmployees = await getAssignedEmployees(course.courseId);  // Replace with your API call
+        const mockAssignedEmployees = await getAssignedEmployees(requestData.course.courseId);  // Replace with your API call
         setAssignedEmployees(mockAssignedEmployees);  // Set the assigned employees
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -66,32 +71,39 @@ const CourseAssignment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create and send the courseAssignmentDTO for each selected employee
+  
     try {
-      const courseAssignments = selectedEmployees.map((employeeUsername) => {
+      // Prepare the form data in the required format
+      const courseAssignmentDTOS = selectedEmployees.map((employeeUsername) => {
+        const employee = allEmployees.find(emp => emp.username === employeeUsername);
         return {
-          employeeId: allEmployees.find(emp => emp.username === employeeUsername).employeeId,
-          courseId: course.courseId,
+          employeeId: employee.employeeId,
+          courseId: requestData.course.courseId,
           status: "ASSIGNED",
-          deadline: deadline, // The deadline from input field
+          deadline: deadline,
         };
       });
-
-      // Call assignCourse API for each employee
-      for (let dto of courseAssignments) {
-        console.log("Selected Deadline:", deadline); // This will log the value of the deadline.
-        await assignCourse(dto); // Call the backend API for each DTO
+  
+      const formData = {
+        requestId: requestData.requestId,
+        courseAssignmentDTOS: courseAssignmentDTOS,
+      };
+  
+      // Call the `completeRequest` API
+      const response = await completeRequest(requestData.requestId, formData);
+      if (response == "Request Completed successfully") { 
+        Swal.fire("Success!", `Request completed successfully for employees: ${selectedEmployees.join(', ')}`, "success");
+        navigate('/courselist');
+      }else {
+        Swal.fire("Unalbe to process request", "success");
+        navigate('/courselist');
       }
-
-      // alert(`Course assigned to: ${selectedEmployees.join(', ')}`);
-      Swal.fire("Success!", `Course assigned to: ${selectedEmployees.join(', ')}`, "success");
-      navigate('/courselist');
     } catch (error) {
-      console.error("Error assigning course:", error);
-      Swal.fire("Error!", "Failed to assigning the score.", "error");
+      console.error("Error completing request:", error);
+      Swal.fire("Error!", "Failed to complete the request.", "error");
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-300">
@@ -112,13 +124,33 @@ const CourseAssignment = () => {
       <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto mt-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-4">Assign Course to Employees</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Request Details:</label>
+            <p className="text-gray-600"><b>Request Id:</b> {requestData.requestId}</p>
+            <p className="text-gray-600"><b>Course Name:</b> {requestData.course.courseName}</p>
+            <p className="text-gray-600"><b>Manager Name:</b> {requestData.manager.username}</p>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Course Details:</label>
-            <p className="text-gray-600"><b>Course Id:</b> {course.courseId}</p>
-            <p className="text-gray-600"><b>Course Name:</b> {course.courseName}</p>
-            <p className="text-gray-600"><b>Key Concepts:</b> {course.keyConcepts}</p>
-            <p className="text-gray-600"><b>Duration:</b> {course.duration}</p>
+            <p className="text-gray-600"><b>Course Id:</b> {requestData.course.courseId}</p>
+            <p className="text-gray-600"><b>Course Name:</b> {requestData.course.courseName}</p>
+            <p className="text-gray-600"><b>Key Concepts:</b> {requestData.course.keyConcepts}</p>
+            <p className="text-gray-600"><b>Duration:</b> {requestData.course.duration}</p>
           </div>
+
+          <label className="block text-sm font-medium text-gray-700 mb-1">Required Employees:</label>
+            {requestData.requiredEmployees && requestData.requiredEmployees.length > 0 ? (
+              <ul className="list-disc ml-5 mt-2">
+                {requestData.requiredEmployees.map((employee, index) => (
+                  <li key={index} className="text-gray-700">
+                    {employee.username} {/* Update this field based on the actual structure of your employee object */}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500 mt-2">No employees assigned.</p>
+            )}
 
           <div>
             <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">Dead Line:</label>
@@ -162,4 +194,4 @@ const CourseAssignment = () => {
   );
 };
 
-export default CourseAssignment;
+export default CompleteRequest;

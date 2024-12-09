@@ -31,8 +31,9 @@ const ViewRequest = () => {
     }
   };
 
-  const handleCreateCourse = () => {
-    navigator('/createCourse', { state: { requestId: requestData.requestId } });
+  const handleCompleteRequest = () => {
+    console.log("From ViewRequestPage: ", requestData)
+    navigator('/completerequest', { state : requestData });
   };
 
   if (!requestData) {
@@ -44,10 +45,7 @@ const ViewRequest = () => {
       <div className="p-10 bg-white shadow-md rounded-lg max-w-md">
         <h2 className="text-2xl font-bold mb-4">Request Details</h2>
         <p><strong>Request ID:</strong> {requestData.requestId}</p>
-        <p><strong>Course Name:</strong> {requestData.courseName}</p>
-        <p><strong>Description:</strong> {requestData.description}</p>
-        <p><strong>Concepts:</strong> {requestData.concepts}</p>
-        <p><strong>Duration:</strong> {requestData.duration}</p>
+        <p><strong>Course Name:</strong> {requestData.course.courseName}</p>
         <p><strong>Employee Position:</strong> {requestData.employeePosition}</p>
         <strong>Required Employees:</strong>
         {requestData.requiredEmployees && requestData.requiredEmployees.length > 0 ? (
@@ -62,20 +60,20 @@ const ViewRequest = () => {
           <p className="text-gray-500 mt-2">No employees assigned.</p>
         )}
         <p><strong>Status:</strong> {requestData.status}</p>
-        <p><strong>Manager Username:</strong> {requestData.managerUsername}</p>
+        <p><strong>Manager Username:</strong> {requestData.manager.username}</p>
 
         <div className="mt-4">
           {requestData.status === 'ACCEPTED' ? (
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-              onClick={handleCreateCourse}
+              onClick={handleCompleteRequest}
             >
-              Create Course
+              Complete Request
             </button>
           ) : requestData.status === 'REJECTED' ? (
             <p className="text-red-500 font-bold">The Request has been REJECTED.</p>
           ) : requestData.status === 'COMPLETED' ? (
-            <p className="text-green-500 font-bold">The Request has been ACCEPTED, and Course is CREATED</p>
+            <p className="text-green-500 font-bold">The Request has been ACCEPTED and COMPLETED</p>
           ) : (
             <>
               <button

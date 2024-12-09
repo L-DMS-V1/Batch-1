@@ -79,21 +79,29 @@ const handleViewRequest = async (request) => {
                 </tr>
               </thead>
               <tbody>
-                  {pendingRequests.map((request, index) => (
-                  <tr key={index} className="hover:bg-gray-100 text-left">
-                    <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
-                    <td className="py-2 px-4 border-b">{request.managerUsername}</td>
-                    <td className="py-2 px-4 border-b">{request.courseName}</td>
-                    <td className="py-2 px-4 border-b">
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-                        onClick={() => handleViewRequest(request)}
-                      >
-                        View
-                      </button>
+                {pendingRequests.length > 0 ? (
+                  pendingRequests.map((request, index) => (
+                    <tr key={index} className="hover:bg-gray-100 text-left">
+                      <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
+                      <td className="py-2 px-4 border-b">{request.manager.username}</td>
+                      <td className="py-2 px-4 border-b">{request.course.courseName}</td>
+                      <td className="py-2 px-4 border-b">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                          onClick={() => handleViewRequest(request)}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="py-4 text-center text-gray-600">
+                      No pending requests
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -111,21 +119,29 @@ const handleViewRequest = async (request) => {
                 </tr>
               </thead>
               <tbody>
-                {respondedRequests.map((request, index) => (
-                    <tr key={index} className="hover:bg-gray-100 text-left">
-                      <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
-                      <td className="py-2 px-4 border-b">{request.managerUsername}</td>
-                      <td className="py-2 px-4 border-b">{request.courseName}</td>
-                      <td className="py-2 px-4 border-b">
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
-                          onClick={() => handleViewRequest(request)}
-                        >
-                          View
-                        </button>
+                {respondedRequests.length > 0 ? (
+                    respondedRequests.map((request, index) => (
+                      <tr key={index} className="hover:bg-gray-100 text-left">
+                        <td className="py-2 px-4 border-b">{index + 1}</td> {/* Serial Number */}
+                        <td className="py-2 px-4 border-b">{request.manager.username}</td>
+                        <td className="py-2 px-4 border-b">{request.course.courseName}</td>
+                        <td className="py-2 px-4 border-b">
+                          <button
+                            className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                            onClick={() => handleViewRequest(request)}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="py-4 text-center text-gray-600">
+                        No responded requests
                       </td>
                     </tr>
-                  ))}
+                )}
               </tbody>
             </table>
           </div>
