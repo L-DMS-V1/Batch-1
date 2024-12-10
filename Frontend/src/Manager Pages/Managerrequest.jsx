@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { createRequest, getAllEmployees } from "../Api";
+import { createRequest, getAllEmployeesUnderMe } from "../Api";
 
 function Managerrequest() {
 
@@ -23,7 +23,7 @@ function Managerrequest() {
     const fetchEmployees = async () => {
       try {
         console.log("HI : ", course)
-        const response = await getAllEmployees();
+        const response = await getAllEmployeesUnderMe();
         setEmployees(response); // Assuming response.data contains the employee list
         console.log("From Manger request page" + employees);
       } catch (error) {
@@ -64,6 +64,7 @@ function Managerrequest() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(formData);
       const response = await createRequest(formData);
       if (response.data === "Request created successfully") {
         setMessage("Request created successfully");
@@ -122,7 +123,7 @@ function Managerrequest() {
             
                 {employees.map((employee) => (
                   <option key={employee.employeeId} value={employee.employeeId}>
-                    {employee.accountName} - {employee.email}
+                    {employee.users.accountName} - {employee.users.email}
                   </option>
                 ))}
             </select>
@@ -137,11 +138,11 @@ function Managerrequest() {
                   key={emp.employeeId}
                   className="flex justify-between items-center bg-gray-200 p-2 rounded-lg mt-2"
                 >
-                  <span>{emp.accountName}</span>
+                  <span>{emp.users.accountName}</span>
                   <button
                     type="button"
                     className="text-red-500 hover:text-red-700"
-                    onClick={() => handleRemoveEmployee(emp.employeeId)}
+                    onClick={() => handleRemoveEmployee(emp.users.employeeId)}
                   >
                     Remove
                   </button>

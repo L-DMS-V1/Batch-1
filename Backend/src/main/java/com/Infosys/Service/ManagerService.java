@@ -1,15 +1,15 @@
 package com.Infosys.Service;
 
 import com.Infosys.Entity.*;
-import com.Infosys.Entity.DTO.AssessmentQuestionDTO;
 import com.Infosys.Entity.DTO.EmployeeDTO;
 import com.Infosys.Entity.DTO.TrainingRequestDTO;
-import com.Infosys.Entity.DTO.UserDTO;
+import com.Infosys.Filter.JWTFilter;
 import com.Infosys.Repository.CourseRepository;
 import com.Infosys.Repository.EmployeeRepository;
 import com.Infosys.Repository.ManagerRepository;
 import com.Infosys.Repository.TrainingRepository;
-import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,21 +37,19 @@ public class ManagerService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public void addManager(UserDTO userDTO) {
+    private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
+
+    public void addManager(Users user) {
         // Add manager logic
         Manager manager = new Manager();
-        manager.setAccountId(userDTO.getAccountId());
-        manager.setAccountName(userDTO.getAccountName());
-        manager.setUsername(userDTO.getUsername());
-        manager.setEmail(userDTO.getEmail());
-        manager.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Hashing password
+        manager.setUsers(user);
         managerRepository.save(manager);
     }
 
     public void requestForm(TrainingRequestDTO trainingRequestDTO) {
         // Get the username of the authenticated user
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Manager manager = managerRepository.findByUsername(username);
+        Manager manager = managerRepository.findByUsersUsername(username);
         trainingRequestDTO.setManagerId(manager.getManagerId());
 
         TrainingRequest trainingRequest = new TrainingRequest();
@@ -59,8 +57,8 @@ public class ManagerService {
 
         // Convert DTO list of employee IDs or usernames to Employee entities
         List<Employee> employees = new ArrayList<>();
-        for (EmployeeDTO employeeDTO : trainingRequestDTO.getRequiredEmployees()) {
-            Employee employee = employeeRepository.findByUsername(employeeDTO.getUsername());
+        for (Employee employeeTemp : trainingRequestDTO.getRequiredEmployees()) {
+            Employee employee = employeeRepository.findByUsersUsername(employeeTemp.getUsers().getUsername());
 //                    .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + employeeDTO.getEmployeeId()));
             employees.add(employee);
         }
@@ -73,15 +71,20 @@ public class ManagerService {
         Optional<Manager> managerOpt = managerRepository.findById(trainingRequestDTO.getManagerId());
         managerOpt.ifPresent(trainingRequest::setManager);
 
+        logger.info("Hello");
         trainingRepository.save(trainingRequest);
     }
 
     public List<TrainingRequest> getRequestByManagerName(String managerName) {
-        return trainingRepository.findByManagerUsername(managerName);
+        return trainingRepository.findByManagerUsersUsername(managerName);
     }
 
     public TrainingRequest getRequestByRequestId(Long requestId) {
         return trainingRepository.findByRequestId(requestId);
+    }
+
+    public List<Manager> getAllManagers() {
+        return managerRepository.findAll();
     }
 
 }

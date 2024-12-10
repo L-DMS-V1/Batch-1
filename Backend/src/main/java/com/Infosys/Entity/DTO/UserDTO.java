@@ -21,6 +21,8 @@ public class UserDTO {
 
     private String role;
 
+    private Long managerId;
+
     // Getters and setters
 
     public long getAccountId() {
@@ -71,6 +73,14 @@ public class UserDTO {
         this.role = role;
     }
 
+    public Long getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -80,6 +90,7 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", managerId='" + managerId + '\'' +
                 '}';
     }
 }

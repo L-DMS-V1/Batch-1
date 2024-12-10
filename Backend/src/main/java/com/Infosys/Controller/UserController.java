@@ -50,6 +50,18 @@ public class UserController {
         }
     }
 
+    @PutMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestParam String username,
+                                                 @RequestParam String previousPassword,
+                                                 @RequestParam String newPassword) {
+        String result = userService.changePassword(username, previousPassword, newPassword);
+        if (result.equals("Password changed successfully")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public String adminAccess() {

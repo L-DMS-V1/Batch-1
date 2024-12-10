@@ -51,7 +51,7 @@ const EmployeeProgresses = () => {
                   key={index}
                   className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"} hover:bg-gray-200 transition text-center`}
                 >
-                  <td className="py-3 px-6 font-medium ">{item.employee.username}</td>
+                  <td className="py-3 px-6 font-medium ">{item.employee.users.username}</td>
                   <td className="py-3 px-6 text-black">{item.course.courseName}</td>
                   <td className="py-3 px-6 text-black">{item.progressPercentage}%</td>
                 </tr>

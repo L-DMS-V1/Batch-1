@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Navbar from './AdminNavbar';
-import { getAllEmployeesAdmin, getAssignedEmployees, completeRequest } from '../Api';
+import { getEmployeesUnderManager, getAssignedEmployees, completeRequest } from '../Api';
 
 const CompleteRequest = () => {
   const [allEmployees, setallEmployees] = useState([]);
@@ -27,8 +27,9 @@ const CompleteRequest = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const mockAllEmployees = await getAllEmployeesAdmin();
+        const mockAllEmployees = await getEmployeesUnderManager(requestData.manager.users.username);
         setallEmployees(mockAllEmployees);
+        console.log(mockAllEmployees)
         const mockAssignedEmployees = await getAssignedEmployees(requestData.course.courseId);  // Replace with your API call
         setAssignedEmployees(mockAssignedEmployees);  // Set the assigned employees
       } catch (error) {
@@ -75,7 +76,7 @@ const CompleteRequest = () => {
     try {
       // Prepare the form data in the required format
       const courseAssignmentDTOS = selectedEmployees.map((employeeUsername) => {
-        const employee = allEmployees.find(emp => emp.username === employeeUsername);
+        const employee = allEmployees.find(emp => emp.users.username === employeeUsername);
         return {
           employeeId: employee.employeeId,
           courseId: requestData.course.courseId,
@@ -90,6 +91,7 @@ const CompleteRequest = () => {
       };
   
       // Call the `completeRequest` API
+      console.log(formData);
       const response = await completeRequest(requestData.requestId, formData);
       if (response == "Request Completed successfully") { 
         Swal.fire("Success!", `Request completed successfully for employees: ${selectedEmployees.join(', ')}`, "success");
@@ -128,7 +130,7 @@ const CompleteRequest = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Request Details:</label>
             <p className="text-gray-600"><b>Request Id:</b> {requestData.requestId}</p>
             <p className="text-gray-600"><b>Course Name:</b> {requestData.course.courseName}</p>
-            <p className="text-gray-600"><b>Manager Name:</b> {requestData.manager.username}</p>
+            <p className="text-gray-600"><b>Manager Name:</b> {requestData.manager.users.username}</p>
           </div>
 
           <div>
@@ -144,7 +146,7 @@ const CompleteRequest = () => {
               <ul className="list-disc ml-5 mt-2">
                 {requestData.requiredEmployees.map((employee, index) => (
                   <li key={index} className="text-gray-700">
-                    {employee.username} {/* Update this field based on the actual structure of your employee object */}
+                    {employee.users.username} {/* Update this field based on the actual structure of your employee object */}
                   </li>
                 ))}
               </ul>
@@ -172,11 +174,11 @@ const CompleteRequest = () => {
                   <input
                     type="checkbox"
                     id="emp3"
-                    value={employee.username}
+                    value={employee.users.username}
                     onChange={handleEmployeeChange}
                     className="mr-2"
                   />
-                  <label htmlFor="emp3" className="text-gray-700">{employee.username} ({employee.email})</label>
+                  <label htmlFor="emp3" className="text-gray-700">{employee.users.username} ({employee.users.email})</label>
                 </div>
               ))}
             </div>

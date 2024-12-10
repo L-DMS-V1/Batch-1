@@ -23,6 +23,7 @@ import TakeAssessment from './Employee Pages/TakeAssessment';
 import GiveFeedback from './Employee Pages/GiveFeedback';
 import Thankyou from './Employee Pages/Thankyou';
 import CompleteRequest from './Admin Pages/CompleteRequest';
+import ChangePassword from './ChangePassword';
 
 function App() {
 
@@ -32,8 +33,9 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/forbidden" element={<Forbidden />}/>
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/changePassword" element={<ChangePassword />} />
         <Route element={<ProtectedRoute allowedRole="ROLE_ADMIN" />}>
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path='/courselist' element={<CourseList/>}/>
           <Route path='/employeeprogress' element={<EmployeeProgresses/>}/>

@@ -5,16 +5,13 @@ import com.Infosys.Entity.DTO.AssessmentDTO;
 import com.Infosys.Entity.DTO.AssessmentQuestionDTO;
 import com.Infosys.Entity.DTO.AssessmentSubmissionDTO;
 import com.Infosys.Repository.*;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AssessmentService {
@@ -156,7 +153,7 @@ public class AssessmentService {
     }
 
     public List<EmployeeAssessment> getAssessmentsByUsername(String username) {
-        Employee employee = employeeRepository.findByUsername(username);
+        Employee employee = employeeRepository.findByUsersUsername(username);
         return employeeAssessmentRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
     }
 }

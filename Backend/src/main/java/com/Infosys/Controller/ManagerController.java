@@ -52,9 +52,11 @@ public class ManagerController {
         return ResponseEntity.ok(trainingRequest);
     }
 
-    @GetMapping("/getAllEmployees")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    @GetMapping("/getAllEmployeesUnderMe")
+    public ResponseEntity<List<Employee>> getAllEmployeesUnderMe() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Employee> employeeList = employeeService.getEmployeesByManagerName(username);
+        return ResponseEntity.ok(employeeList);
     }
 
     @GetMapping("/getAllCourses")

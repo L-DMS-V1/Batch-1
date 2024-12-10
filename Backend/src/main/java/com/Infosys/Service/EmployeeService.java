@@ -3,13 +3,17 @@ package com.Infosys.Service;
 import com.Infosys.Entity.DTO.UserDTO;
 import com.Infosys.Entity.Employee;
 import com.Infosys.Entity.Manager;
+import com.Infosys.Entity.Users;
 import com.Infosys.Repository.EmployeeRepository;
+import com.Infosys.Repository.ManagerRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -20,14 +24,15 @@ public class EmployeeService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void addEmployee(@Valid UserDTO userDTO) {
+    @Autowired
+
+    private ManagerRepository managerRepository;
+    public void addEmployee(Users user, Long managerId) {
         // Add employee Logic
         Employee employee = new Employee();
-        employee.setAccountId(userDTO.getAccountId());
-        employee.setAccountName(userDTO.getAccountName());
-        employee.setUsername(userDTO.getUsername());
-        employee.setEmail(userDTO.getEmail());
-        employee.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Hashing password
+        employee.setUsers(user);
+        Optional<Manager> manager = managerRepository.findById(managerId);
+        manager.ifPresent(employee::setManager);
         employeeRepository.save(employee);
     }
 
@@ -35,4 +40,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public List<Employee> getEmployeesByManagerName(String username) {
+        return employeeRepository.findByManagerUsersUsername(username);
+    }
 }

@@ -19,7 +19,7 @@ public class TrainingRequestDTO {
     @NotBlank(message = "Employee Position is mandatory")
     private String employeePosition;
 
-    private List<EmployeeDTO> requiredEmployees;
+    private List<Employee> requiredEmployees;
 
     public Long getCourseId() {
         return courseId;
@@ -45,11 +45,11 @@ public class TrainingRequestDTO {
         this.employeePosition = employeePosition;
     }
 
-    public List<EmployeeDTO> getRequiredEmployees() {
+    public List<Employee> getRequiredEmployees() {
         return requiredEmployees;
     }
 
-    public void setRequiredEmployees( List<EmployeeDTO> requiredEmployees) {
+    public void setRequiredEmployees(List<Employee> requiredEmployees) {
         this.requiredEmployees = requiredEmployees;
     }
 

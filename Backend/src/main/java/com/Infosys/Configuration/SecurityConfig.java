@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/users/signup").permitAll()  // Allow signup without authentication
                         .requestMatchers("/api/users/login").permitAll()   // Allow login without authentication
+                        .requestMatchers("/api/users/changePassword").permitAll()
                         // Role-based access control
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")    // Only ADMINs can access /api/users/admin/**
                         .requestMatchers("/api/users/manager/**").hasRole("MANAGER")  // Only MANAGER can access /api/users/manager/**

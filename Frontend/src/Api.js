@@ -92,6 +92,18 @@ export const getResource = async (role) => {
   }
 };
 
+export const changePasswordAPI = async ({ username, previousPassword, newPassword }) => {
+  try {
+    const response = await axiosInstance.put(`${API_URL1}/changePassword`, null, {
+      params: { username, previousPassword, newPassword },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error changing password:", error);
+    throw error;
+  }
+};
+
 export const getRequests = async () => {
   try {
     const response = await axiosInstance.get(`${API_URL2}/getRequests`);
@@ -194,6 +206,17 @@ export const getAllCourseProgress = async () => {
   }
 };
 
+export const getAllManagers = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_URL3}/getAllManagers`);
+    console.log("Managers List:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error Fetching Manager List:", error);
+    throw error;
+  }
+};
+
 // Course related API request handlers
 export const getAllCourses = async () => {
   try {
@@ -207,7 +230,7 @@ export const getAllCourses = async () => {
 
 export const createCourse = async (requestId, formData) => {
   try {
-    const response = await axiosInstance.post(`${API_URL4}/${requestId}`,formData);
+    const response = await axiosInstance.post(`${API_URL4}`,formData);
     console.log("Response Data\n", response.data);
     return response;
   } catch (error) {
@@ -237,9 +260,9 @@ export const editCourse = async (courseId, formData) => {
 
 // Course Assignment realated API requests
 // For manager
-export const getAllEmployees = async () => {
+export const getAllEmployeesUnderMe = async () => {
   try {
-    const response = await axiosInstance.get(`${API_URL2}/getAllEmployees`);
+    const response = await axiosInstance.get(`${API_URL2}/getAllEmployeesUnderMe`);
     console.log("Response Data\n", response.data);
     return response.data;
   } catch (error) {
@@ -258,6 +281,20 @@ export const getAllEmployeesAdmin = async () => {
     throw error;
   }
 };
+
+export const getEmployeesUnderManager = async (managerUsername) => {
+  try {
+    const response = await axiosInstance.get(`${API_URL3}/getAllEmployeesByManagerUsername`, {
+      params: { managerUsername }, 
+    });
+    console.log("Response Data\n", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching employees\n", error);
+    throw error;
+  }
+};
+
 
 export const assignCourse = async (formData) => {
   try {

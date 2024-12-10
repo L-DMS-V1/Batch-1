@@ -34,7 +34,7 @@ public class FeedbackService {
         Feedback feedback = new Feedback();
 
         // Find employee and set to feedback
-        Optional<Employee> employeeOpt = employeeRepository.findByEmployeeId(feedbackDTO.getEmployeeId());
+        Optional<Employee> employeeOpt = employeeRepository.findById(feedbackDTO.getEmployeeId());
         employeeOpt.ifPresent(feedback::setEmployee);
 
         // Find course and set to feedback, log details

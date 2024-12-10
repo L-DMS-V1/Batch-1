@@ -38,7 +38,7 @@ public class CourseAssignmentService {
         courseOpt.ifPresent(courseAssignment::setCourse);
         courseOpt.ifPresent(course -> courseAssignment.setCourseDuration(course.getDuration()));
 
-        Optional<Employee> employeeOpt = employeeRepository.findByEmployeeId(courseAssignmentDTO.getEmployeeId());
+        Optional<Employee> employeeOpt = employeeRepository.findById(courseAssignmentDTO.getEmployeeId());
         employeeOpt.ifPresent(courseAssignment::setEmployee);
 
         courseAssignment.setStatus(courseAssignmentDTO.getStatus());
@@ -69,7 +69,7 @@ public class CourseAssignmentService {
     }
 
     public List<CourseAssignment> getAssignmentsByUsername(String username) {
-        Employee employee = employeeRepository.findByUsername(username);
+        Employee employee = employeeRepository.findByUsersUsername(username);
         return courseAssignmentRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
     }
 

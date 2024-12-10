@@ -2,8 +2,12 @@ package com.Infosys.Controller;
 
 import com.Infosys.Entity.CourseProgress;
 import com.Infosys.Entity.DTO.RequestCompletionDTO;
+import com.Infosys.Entity.Employee;
+import com.Infosys.Entity.Manager;
 import com.Infosys.Entity.TrainingRequest;
 import com.Infosys.Service.CourseProgressService;
+import com.Infosys.Service.EmployeeService;
+import com.Infosys.Service.ManagerService;
 import com.Infosys.Service.TrainingRequestService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,12 @@ public class AdminController {
 
     @Autowired
     private CourseProgressService courseProgressService;
+
+    @Autowired
+    private ManagerService managerService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @PutMapping("/acceptRequest/{id}")
     public ResponseEntity<String> acceptRequest(@PathVariable("id") Long requestId) {
@@ -61,4 +71,18 @@ public class AdminController {
         List<CourseProgress> courseProgressList = courseProgressService.getAllCourseProgress();
         return new ResponseEntity<>(courseProgressList, HttpStatus.OK);
     }
+
+    @GetMapping("/getAllManagers")
+    public ResponseEntity<List<Manager>> getAllManagers() {
+        List<Manager> managerList = managerService.getAllManagers();
+        return new ResponseEntity<>(managerList, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllEmployeesByManagerUsername")
+    public ResponseEntity<List<Employee>> getAllEmpsByManUsername(@RequestParam String managerUsername) {
+        List<Employee> employeeList = employeeService.getEmployeesByManagerName(managerUsername);
+        return ResponseEntity.ok(employeeList);
+    }
+
+
 }

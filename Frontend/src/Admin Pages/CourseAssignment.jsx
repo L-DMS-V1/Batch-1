@@ -71,7 +71,7 @@ const CourseAssignment = () => {
     try {
       const courseAssignments = selectedEmployees.map((employeeUsername) => {
         return {
-          employeeId: allEmployees.find(emp => emp.username === employeeUsername).employeeId,
+          employeeId: allEmployees.find(emp => emp.users.username === employeeUsername).employeeId,
           courseId: course.courseId,
           status: "ASSIGNED",
           deadline: deadline, // The deadline from input field
@@ -140,11 +140,11 @@ const CourseAssignment = () => {
                   <input
                     type="checkbox"
                     id="emp3"
-                    value={employee.username}
+                    value={employee.users.username}
                     onChange={handleEmployeeChange}
                     className="mr-2"
                   />
-                  <label htmlFor="emp3" className="text-gray-700">{employee.username} ({employee.email})</label>
+                  <label htmlFor="emp3" className="text-gray-700">{employee.users.username} ({employee.users.email})</label>
                 </div>
               ))}
             </div>

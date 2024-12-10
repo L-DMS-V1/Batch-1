@@ -9,20 +9,13 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
 
-    @Column(name = "username", unique = true)
-    private String username;
+    @OneToOne
+    @JoinColumn(name = "user_Id", referencedColumnName = "id")
+    private Users users;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email", unique = true)
-    private String email;
-
-    @Column(name = "account_Id")
-    private long accountId;
-
-    @Column(name = "account_Name")
-    private String accountName;
+    @ManyToOne
+    @JoinColumn(name = "manager_Id", referencedColumnName = "managerId")
+    private Manager manager;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -32,55 +25,28 @@ public class Employee {
         this.employeeId = employeeId;
     }
 
-    public String getUsername() {
-        return username;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
-    public String getPassword() {
-        return password;
+    public Manager getManager() {
+        return manager;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
                 "employeeId=" + employeeId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", accountId=" + accountId +
-                ", accountName='" + accountName + '\'' +
+                ", users=" + users +
+                ", manager=" + manager +
                 '}';
     }
 }

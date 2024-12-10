@@ -121,10 +121,16 @@ function SignIn() {
             initial="hidden"
             animate="visible"
           >
-            <p className="text-white text-sm">
+            {/* <p className="text-white text-sm">
               Don't have an account?{' '}
               <Link to="/signup" className="text-blue-400">
                 Sign Up Now!
+              </Link>
+            </p> */}
+            <p className="text-white text-sm">
+              Wanna change password?{' '}
+              <Link to="/changePassword" className="text-blue-400">
+                Change Now!
               </Link>
             </p>
           </motion.div>

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './AdminNavbar';
-import { getAllRequests, getRequestById } from '../Api';
+import { getAllCourses, getAllEmployeesAdmin, getAllRequests, getRequestById } from '../Api';
+import { FaEdit, FaUserPlus, FaGraduationCap } from "react-icons/fa"; // Importing icons
+
 
 function Admin() {
   const [allrequests, setAllRequests] = useState([]);
+  const [employeesCount, setemployeesCount] = useState(0);
+  const [coursesCount, setcoursesCount] = useState(0);
   const [totalRequestsCount, setTotalRequestsCount] = useState(0);
   const [respondedRequests, setRespondedRequests] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -15,11 +19,15 @@ function Admin() {
     const fetchRequests = async () => {
       try {
         const mockAllRequests = await getAllRequests();
+        const employees = await getAllEmployeesAdmin();
+        const courses = await getAllCourses();
         setAllRequests(mockAllRequests);
         setTotalRequestsCount(mockAllRequests.length);
         setRespondedRequests(mockAllRequests.filter(r => r.status !== 'PENDING'));
         setPendingRequests(mockAllRequests.filter(r => r.status === 'PENDING'));
         setCompletedRequests(mockAllRequests.filter(r => r.status === 'COMPLETED').length);
+        setemployeesCount(employees.length);
+        setcoursesCount(courses.length);
       } catch (error) {
         console.error("Error fetching requests:", error);
       }
@@ -37,6 +45,10 @@ function Admin() {
     }
   };
 
+  const handleAddEmployee = () => {
+    navigator("/signup");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e0eafc] to-[#cfdef3]">
       {/* Navbar */}
@@ -49,17 +61,27 @@ function Admin() {
         {/* Dashboard Summary */}
         <div className="grid grid-cols-3 gap-6 mb-8">
           <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
-            <p className="text-5xl font-bold text-center">{completedRequests}</p>
+            <p className="text-5xl font-bold text-center">{coursesCount}</p>
             <p className="text-xl font-medium text-center">Courses Created</p>
           </div>
           <div className="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
-            <p className="text-5xl font-bold text-center">1</p>
+            <p className="text-5xl font-bold text-center">{employeesCount}</p>
             <p className="text-xl font-medium text-center">Employees</p>
           </div>
           <div className="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-6 rounded-full shadow-md transform transition hover:scale-105">
             <p className="text-5xl font-bold text-center">{totalRequestsCount}</p>
             <p className="text-xl font-medium text-center">Requests</p>
           </div>
+        </div>
+
+        {/*Add Employee or Manager */}
+        <div className="p-6 space-x-4">
+          <button
+            onClick={handleAddEmployee}
+            className="mb-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center justify-center"
+          >
+            <FaUserPlus className="mr-2" /> Add Employee/Manager
+          </button>
         </div>
 
         {/* Pending and Completed Requests */}
@@ -80,8 +102,8 @@ function Admin() {
                 {pendingRequests.map((request, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="p-3">{index + 1}</td>
-                    <td className="p-3">{request.managerUsername}</td>
-                    <td className="p-3">{request.courseName}</td>
+                    <td className="p-3">{request.manager.users.username}</td>
+                    <td className="p-3">{request.course.courseName}</td>
                     <td className="p-3">
                       <button
                         className="bg-yellow-500 text-white py-1 px-4 rounded hover:bg-yellow-600"
@@ -112,8 +134,8 @@ function Admin() {
                 {respondedRequests.map((request, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="p-3">{index + 1}</td>
-                    <td className="p-3">{request.managerUsername}</td>
-                    <td className="p-3">{request.courseName}</td>
+                    <td className="p-3">{request.manager.users.username}</td>
+                    <td className="p-3">{request.course.courseName}</td>
                     <td className="p-3">
                       <button
                         className="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600"

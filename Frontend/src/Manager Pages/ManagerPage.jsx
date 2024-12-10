@@ -178,7 +178,7 @@ function LearningHub() {
               <ul className="list-disc ml-5 mt-2">
                 {selectedRequest.requiredEmployees.map((employee, index) => (
                   <li key={index} className="text-gray-700">
-                    {employee.username} {/* Update this field based on the actual structure of your employee object */}
+                    {employee.users.username} {/* Update this field based on the actual structure of your employee object */}
                   </li>
                 ))}
               </ul>

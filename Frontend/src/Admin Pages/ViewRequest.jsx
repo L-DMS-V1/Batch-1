@@ -52,7 +52,7 @@ const ViewRequest = () => {
           <ul className="list-disc ml-5 mt-2">
             {requestData.requiredEmployees.map((employee, index) => (
               <li key={index} className="text-gray-700">
-                {employee.username}
+                {employee.users.username}
               </li>
             ))}
           </ul>
@@ -60,7 +60,7 @@ const ViewRequest = () => {
           <p className="text-gray-500 mt-2">No employees assigned.</p>
         )}
         <p><strong>Status:</strong> {requestData.status}</p>
-        <p><strong>Manager Username:</strong> {requestData.manager.username}</p>
+        <p><strong>Manager Username:</strong> {requestData.manager.users.username}</p>
 
         <div className="mt-4">
           {requestData.status === 'ACCEPTED' ? (

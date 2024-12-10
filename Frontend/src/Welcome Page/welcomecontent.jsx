@@ -41,13 +41,13 @@ const HeroContent = () => {
         </motion.p>
         
         <div className="flex gap-4">
-  <motion.a
+  {/* <motion.a
     href="/signup"
     variants={slideInFromLeft(1)}
     className="py-3 px-8 bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-center font-semibold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:from-purple-600 hover:to-cyan-600 ml-4" // Added margin-left
   >
     Signup
-  </motion.a>
+  </motion.a> */}
 
   <motion.a
     href="/signin"

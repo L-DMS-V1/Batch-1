@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { registerUser } from "./Api";
+import React, { useState, useEffect } from "react";
+import { registerUser, getAllManagers, getAllEmployeesAdmin } from "./Api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StarsCanvas from "./Welcome Page/Bgwelcome";
 import { motion } from "framer-motion";
-import { slideInFromTop } from "./utils/motion"; // Import motion variants
-import Navbar from "./Welcome Page/Navwelcome"; // Import Navbar
+import { slideInFromTop } from "./utils/motion";
+import Navbar from "./Welcome Page/Navwelcome";
 
 function SignUp() {
   const [accountId, setAccountId] = useState("");
@@ -17,9 +17,28 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
+  const [managerId, setManagerId] = useState("");
+  const [managers, setManagers] = useState([]);
   const [message, setMessage] = useState("");
 
   const navigator = useNavigate();
+
+  useEffect(() => {
+    const fetchManagers = async () => {
+      try {
+        const response = await getAllManagers();
+        console.log(response);
+        setManagers(Array.isArray(response) ? response : []);
+      } catch (error) {
+        console.error("Error fetching managers", error);
+        setManagers([]); // Fallback to an empty array in case of error
+      }
+    };
+
+    if (role === "EMPLOYEE") {
+      fetchManagers();
+    }
+  }, [role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,12 +56,14 @@ function SignUp() {
         email,
         password,
         role,
+        managerId,
       });
-      console.log({ accountId, accountName, username, email, password, role });
+      console.log({ accountId, accountName, username, email, password, role, managerId });
 
       if (response.data === "User registered successfully") {
         toast.success("Registered successfully!", { autoClose: 2000 });
-        setTimeout(() => navigator("/signin"), 2000);
+        // setTimeout(() => navigator("/signin"), 2000);
+        setTimeout(() => navigator("/admin"), 2000);
       } else {
         toast.error("Error: " + response.data, { autoClose: 2000 });
       }
@@ -54,11 +75,10 @@ function SignUp() {
 
   return (
     <div className="relative flex justify-center items-center h-screen">
-      <Navbar /> {/* Include Navbar */}
+      <Navbar />
       <div className="absolute inset-0 -z-10">
         <StarsCanvas />
       </div>
-      {/* Animated Sign Up Form */}
       <motion.div
         className="relative bg-transparent border-2 border-white/20 backdrop-blur-lg p-6 rounded-lg shadow-lg w-[400px] mx-4 z-10 mt-11"
         initial="hidden"
@@ -71,7 +91,7 @@ function SignUp() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          Sign Up
+          Add Employee / Manager
         </motion.h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <motion.input
@@ -84,7 +104,7 @@ function SignUp() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           />
-          <motion.input
+          <motion.input 
             type="text"
             placeholder="Account Name"
             value={accountName}
@@ -143,10 +163,26 @@ function SignUp() {
             transition={{ delay: 1.0, duration: 0.5 }}
           >
             <option value="">--Select Role--</option>
-            <option value="ADMIN">ADMIN</option>
             <option value="MANAGER">MANAGER</option>
             <option value="EMPLOYEE">EMPLOYEE</option>
           </motion.select>
+          {role === "EMPLOYEE" && Array.isArray(managers) && (
+          <motion.select
+            value={managerId}
+            onChange={(e) => setManagerId(e.target.value)}
+            className="px-4 py-2 rounded-full border border-white bg-white/90 focus:outline-none"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.5 }}
+          >
+            <option value="">--Select Manager--</option>
+            {managers.map((manager) => (
+              <option key={manager.managerId} value={manager.managerId}>
+                {manager.users.username} ({manager.users.email})
+              </option>
+            ))}
+          </motion.select>
+        )}
           <motion.button
             type="submit"
             className="bg-green-500 text-white py-2 px-6 rounded-full max-w-15 hover:bg-green-600 transition duration-200"
@@ -157,7 +193,7 @@ function SignUp() {
             Sign Up
           </motion.button>
         </form>
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <motion.p
             className="text-white text-sm"
             initial={{ opacity: 0 }}
@@ -169,7 +205,7 @@ function SignUp() {
               Sign In
             </Link>
           </motion.p>
-        </div>
+        </div> */}
         <motion.p
           className="mt-4 text-center text-white"
           initial={{ opacity: 0 }}
@@ -179,7 +215,6 @@ function SignUp() {
           {message && <span>{message}</span>}
         </motion.p>
       </motion.div>
-      {/* Toast Notifications */}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );

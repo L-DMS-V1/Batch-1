@@ -1,11 +1,9 @@
 package com.Infosys.Service;
 
 import com.Infosys.Entity.Course;
-import com.Infosys.Entity.CourseAssignment;
 import com.Infosys.Entity.CourseProgress;
 import com.Infosys.Entity.DTO.CourseProgressDTO;
 import com.Infosys.Entity.Employee;
-import com.Infosys.Filter.JWTFilter;
 import com.Infosys.Repository.CourseAssignmentRepository;
 import com.Infosys.Repository.CourseProgressRepository;
 import com.Infosys.Repository.CourseRepository;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +50,7 @@ public class CourseProgressService {
             Optional<Course> courseOpt = courseRepository.findByCourseId(courseProgressDTO.getCourseId());
             courseOpt.ifPresent(courseProgress::setCourse);
 
-            Optional<Employee> employeeOpt = employeeRepository.findByEmployeeId(courseProgressDTO.getEmployeeId());
+            Optional<Employee> employeeOpt = employeeRepository.findById(courseProgressDTO.getEmployeeId());
             employeeOpt.ifPresent(courseProgress::setEmployee);
 
             courseProgress.setProgressPercentage(courseProgressDTO.getProgressPercentage());
@@ -64,7 +61,7 @@ public class CourseProgressService {
     }
 
     public List<CourseProgress> getCourseProgress(String username) {
-        List<CourseProgress> courseProgressList = courseProgressRepository.findByEmployeeUsername(username);
+        List<CourseProgress> courseProgressList = courseProgressRepository.findByEmployeeUsersUsername(username);
         logger.info("Course progress retrieved: {}", courseProgressList);
         return courseProgressList;
     }
